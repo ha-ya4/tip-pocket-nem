@@ -1,6 +1,6 @@
 <template>
-  <div id="transfer">
-    <h1>transfer</h1>
+  <div id="pc-view">
+    <h1>pc-view</h1>
   </div>
 </template>
 

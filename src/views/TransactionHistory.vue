@@ -1,6 +1,6 @@
 <template>
-  <div id="transfer">
-    <h1>transfer</h1>
+  <div id="transaction-history">
+    <h1>history</h1>
   </div>
 </template>
 

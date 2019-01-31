@@ -1,6 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '@/views/Home.vue';
+
+import Config from '@/views/Config.vue';
+import TransactionHistory from '@/views/TransactionHistory.vue';
+import Transfer from '@/views/Transfer.vue';
+import Withdraw from '@/views/Withdraw.vue';
 
 Vue.use(Router);
 
@@ -9,9 +13,28 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: Home,
+      path: '/transfer',
+      name: 'transfer',
+      component: Transfer,
+    },
+    {
+      path: '/config',
+      name: 'config',
+      component: Config,
+    },
+    {
+      path: '/history',
+      name: 'history',
+      component: TransactionHistory,
+    },
+    {
+      path: '/withdraw',
+      name: 'withdraw',
+      component: Withdraw,
+    },
+    {
+      path: '*',
+      redirect: 'transfer',
     },
   ],
 });
