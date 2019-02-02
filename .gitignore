@@ -3,6 +3,8 @@ node_modules
 public/img
 src/firebase.ts
 /dist
+/tests
+jest.config.js
 
 # local env files
 .env.local
