@@ -9,7 +9,7 @@ import './registerServiceWorker';
 
 import config from '@/firebase.ts';
 
-Vue.use(Vuetify, {});
+Vue.use(Vuetify);
 
 Vue.config.productionTip = false;
 
