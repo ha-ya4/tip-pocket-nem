@@ -1,39 +1,19 @@
 <template>
   <div id="app">
 
-    <v-card color="#2182f1">
-      <v-layout justify-center>
-        <v-card-title style="font-size: 20px;">
-          amount
-        </v-card-title>
-      </v-layout>
-    </v-card>
+    <div id="nav">
+      <router-link to="/transfer">チップ</router-link>
+      <router-link to="/history">履歴</router-link>
+      <router-link to="/withdraw">出金</router-link>
+      <router-link to="/config">設定</router-link>
+    </div>
+
+    <div class="xem-amount">
+      amount
+    </div>
 
     <router-view/>
-    <div id="nav">
-      <span class="router-content">
-        <router-link to="/transfer"><span class="content-child">送金</span></router-link>
-      </span>
 
-      <span class="router-content">
-        <router-link to="/history">履歴</router-link>
-      </span>
-
-      <span class="router-content">
-        <router-link to="/withdraw">出金</router-link>
-      </span>
-
-      <span class="router-content">
-        <router-link to="/config">設定</router-link>
-      </span>
-      <!--
-      <v-btn color="blue" @click="routerTransfer">送金</v-btn>
-      <v-btn color="blue" @click="routerHistory">履歴</v-btn>
-      <v-btn color="blue" @click="routerWithdraw">出金</v-btn>
-      <v-btn color="blue" @click="routerConfig">設定</v-btn>
-      -->
-
-      </div>
   </div>
 </template>
 
@@ -42,53 +22,73 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Home extends Vue {
-  /*
-  // 送金画面
-  private routerTransfer() {
-    this.$router.push('transfer');
-  }
-
-  // 送受金の履歴画面
-  private routerHistory() {
-    this.$router.push('history');
-  }
-
-  // 出金画面
-  private routerWithdraw() {
-    this.$router.push('withdraw');
-  }
-
-  // アプリ設定画面
-  private routerConfig() {
-    this.$router.push('config');
-  }
-  */
 }
 </script>
 
 
 <style>
 body {
-  background-color: #63a9f8;
+  background-color: #b9d5f5;
   text-align: center;
 }
 
-@media screen and (max-width: 500px) {
-  /*width: 100%;でposition: fixed;中央寄せできる*/
-  #nav {
-    background-color: #2182f1;
+#nav {
+  background-color: #95c1f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+  flex-grow: 1;
+  color: black;
+}
+
+.xem-amount {
+  background-color: #95c1f3;
+}
+
+/*PC*/
+@media screen and (min-width: 701px) {
+  a {
+    border-bottom: 1px solid#c9ced4;
+    border-left: 0.5px solid#c9ced4;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .xem-amount {
     position: fixed;
     bottom: 0;
     width: 100%;
-    padding: 5px 5px;
     font-size: 20px;
+    border-top: 1px solid#c9ced4;
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+}
+
+/*スマホ*/
+@media screen and (max-width: 700px) {
+  #nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
   }
 
   a {
-    text-decoration: none;
-    color: black;
-    padding: 0.2em 0.5em 0.2em 0.5em;
-    box-shadow: 0px 1px 1px;
+    border-top: 1px solid#c9ced4;
+    border-left: 0.5px solid#c9ced4;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .xem-amount {
+    font-size: 20px;
+    border-bottom: 1px solid#c9ced4;
+    padding-top: 18px;
+    padding-bottom: 18px;
   }
 }
 </style>
