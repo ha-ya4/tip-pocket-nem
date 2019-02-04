@@ -11,7 +11,6 @@
     <div class="xem-amount">
       amount
     </div>
-
     <router-view/>
 
   </div>
