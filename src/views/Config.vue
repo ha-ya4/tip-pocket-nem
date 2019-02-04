@@ -17,7 +17,7 @@ export default class Home extends Vue {
   private message: string = this.$store.state.Config.message;
 
   private created() {
-   this.$store.commit('Config/amountRegister', {position: 'amount1', amount: 1000});
+   this.$store.commit('Config/registerAmount', {position: 'amount1', amount: 1000});
    console.log(this.$store.state.Config.amount.amount1);
   }
 }

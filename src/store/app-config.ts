@@ -50,12 +50,12 @@ export default {
 
     // 指定したkey名の値を書き換える
     // 連想配列の型はインターフェースで定義してあるがこれでいいのか？
-    amountRegister(state: any, payload: AmountRegisterPayLoad) {
+    registerAmount(state: any, payload: AmountRegisterPayLoad) {
       state.amount[payload.position] = payload.amount;
     },
 
     // 指定したkey名のメッセージを書き換える
-    messageRegister(state: any, payload: MessageRegisterPayLoad) {
+    registerMessage(state: any, payload: MessageRegisterPayLoad) {
       state.message[payload.position] = payload.message;
     },
   },
@@ -64,13 +64,13 @@ export default {
 };
 
 // 数量を書き換えるときに渡す引数の型
-interface AmountRegisterPayLoad {
+interface registerAmountPayLoad {
   position: string;
   amount: number;
 }
 
 // メッセージを書き換えるときに渡す引数の型
-interface MessageRegisterPayLoad {
+interface registerMessagePayLoad {
   position: string;
   message: string;
 }
