@@ -1,11 +1,26 @@
 <template>
   <div id="config">
 
+    <!-- offにするとQR読み込みで即送金（できるなら）-->
     <div id="send-button">
       <span class="config-item">送金ボタン:</span>
       <span class="radio-item"><input type="radio" name="send-radio">on</span>
       <span class="radio-item"><input type="radio" name="send-radio">off</span>
     </div>
+
+    <!-- 数量の登録とデフォルトを決めておける-->
+    <radio-button-group
+      :name="'数量'"
+      :defaultItem="defaultAmount"
+      :items="amount"
+    />
+
+    <!-- メッセージの登録とデフォルトを決めておける-->
+    <radio-button-group
+      :name="'メッセージ'"
+      :defaultItem="defaultMessage"
+      :items="message"
+    />
 
   </div>
 </template>
@@ -13,7 +28,13 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-@Component
+import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
+
+@Component({
+  components: {
+    RadioButtonGroup,
+  },
+})
 export default class Home extends Vue {
   private sendButton: boolean = this.$store.state.Config.sendButton;
   private defaultAmount: number = this.$store.getters['Config/defaultAmount'];
