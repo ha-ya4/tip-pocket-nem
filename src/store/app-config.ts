@@ -18,8 +18,8 @@ export default {
 
     defaultMessage: 'message1',
 
-    // 送金時に確認するかどうか
-    confirm: true,
+    // 送金buttonを押してから送金するかどうか
+    sendButton: true,
   },
 
   getters: {
@@ -39,23 +39,23 @@ export default {
   },
 
   mutations: {
-    // confirmをtrueならfalse、またはその逆に書き換える
-    changeConfirm(state: any) {
-      if (state.confirm === true) {
-        state.confirm = false;
+    // sendButtonをtrueならfalse、またはその逆に書き換える
+    changesendButton(state: any) {
+      if (state.sendButton === true) {
+        state.sendButton = false;
       } else {
-        state.confirm = true;
+        state.sendButton = true;
       }
     },
 
     // 指定したkey名の値を書き換える
     // 連想配列の型はインターフェースで定義してあるがこれでいいのか？
-    registerAmount(state: any, payload: AmountRegisterPayLoad) {
+    registerAmount(state: any, payload: RegisterAmountPayLoad) {
       state.amount[payload.position] = payload.amount;
     },
 
     // 指定したkey名のメッセージを書き換える
-    registerMessage(state: any, payload: MessageRegisterPayLoad) {
+    registerMessage(state: any, payload: RegisterMessagePayLoad) {
       state.message[payload.position] = payload.message;
     },
   },
@@ -64,13 +64,13 @@ export default {
 };
 
 // 数量を書き換えるときに渡す引数の型
-interface registerAmountPayLoad {
+interface RegisterAmountPayLoad {
   position: string;
   amount: number;
 }
 
 // メッセージを書き換えるときに渡す引数の型
-interface registerMessagePayLoad {
+interface RegisterMessagePayLoad {
   position: string;
   message: string;
 }

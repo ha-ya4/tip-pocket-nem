@@ -28,14 +28,11 @@ export default class Home extends Vue {
 <style>
 body {
   background-color: #b9d5f5;
-  text-align: center;
 }
 
 #nav {
   background-color: #95c1f3;
   display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 a {
@@ -69,8 +66,9 @@ a {
 }
 
 /*スマホ*/
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
   #nav {
+    text-align: center;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -84,6 +82,7 @@ a {
   }
 
   .xem-amount {
+    text-align: center;
     font-size: 20px;
     border-bottom: 1px solid#c9ced4;
     padding-top: 18px;
