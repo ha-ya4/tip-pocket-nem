@@ -1,9 +1,10 @@
 .DS_Store
+.firebase
 node_modules
 public/img
 src/firebase.ts
 /dist
-/tests
+tests
 jest.config.js
 
 # local env files
