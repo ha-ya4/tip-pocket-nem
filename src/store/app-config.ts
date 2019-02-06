@@ -3,27 +3,27 @@ export default {
 
   state: {
     amount: {
-      amount1: 0,
-      amount2: 10,
-      amount3: 100,
+      value1: '0',
+      value2: '10',
+      value3: '100',
     },
 
-    defaultAmount: 'amount1',
+    defaultAmount: 'value1',
 
     message: {
-      message1: '',
-      message2: '',
-      message3: '',
+      value1: '',
+      value2: '',
+      value3: '',
     },
 
-    defaultMessage: 'message1',
+    defaultMessage: 'value1',
 
     // 送金buttonを押してから送金するかどうか
     sendButton: true,
   },
 
   getters: {
-    defaultAmount(state: any): number {
+    defaultAmount(state: any): string {
       // デフォルトに設定しているkey名を取得
       const defaultAmountName = state.defaultAmount;
       // key名でデフオルト値を取得して返す
@@ -50,27 +50,22 @@ export default {
 
     // 指定したkey名の値を書き換える
     // 連想配列の型はインターフェースで定義してあるがこれでいいのか？
-    registerAmount(state: any, payload: RegisterAmountPayLoad) {
-      state.amount[payload.position] = payload.amount;
+    registerAmount(state: any, payload: PayLoad) {
+      state.amount[payload.position] = payload.value;
     },
 
     // 指定したkey名のメッセージを書き換える
-    registerMessage(state: any, payload: RegisterMessagePayLoad) {
-      state.message[payload.position] = payload.message;
+    registerMessage(state: any, payload: PayLoad) {
+      state.message[payload.position] = payload.value;
     },
   },
 
   actions: {},
 };
 
-// 数量を書き換えるときに渡す引数の型
-interface RegisterAmountPayLoad {
+interface PayLoad {
   position: string;
-  amount: number;
+  value: string;
 }
 
-// メッセージを書き換えるときに渡す引数の型
-interface RegisterMessagePayLoad {
-  position: string;
-  message: string;
-}
+
