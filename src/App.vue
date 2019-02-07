@@ -81,6 +81,13 @@ a {
     padding-bottom: 20px;
   }
 
+  .app-button {
+    background-color: #c8c9ca;
+    border: 0.3px solid #d8d9da;
+    border-radius: 15px;
+    padding: 8px;
+  }
+
   .xem-amount {
     text-align: center;
     font-size: 20px;

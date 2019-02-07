@@ -8,7 +8,7 @@ export default {
       value3: '100',
     },
 
-    defaultAmount: 'value1',
+    defaultAmount: '0',
 
     message: {
       value1: '',
@@ -16,31 +16,15 @@ export default {
       value3: '',
     },
 
-    defaultMessage: 'value1',
+    defaultMessage: '',
 
     // 送金buttonを押してから送金するかどうか
     sendButton: true,
   },
 
-  getters: {
-    defaultAmount(state: any): string {
-      // デフォルトに設定しているkey名を取得
-      const defaultAmountName = state.defaultAmount;
-      // key名でデフオルト値を取得して返す
-      return state.amount[defaultAmountName];
-    },
-
-    defaultMessage(state: any): string {
-      // デフォルトに設定しているkey名を取得
-      const defaultMessageName = state.defaultMessage;
-       // key名でデフオルトメッセージを取得して返す
-      return state.message[defaultMessageName];
-    },
-  },
-
   mutations: {
     // sendButtonをtrueならfalse、またはその逆に書き換える
-    changesendButton(state: any) {
+    changeSendButton(state: any) {
       if (state.sendButton === true) {
         state.sendButton = false;
       } else {

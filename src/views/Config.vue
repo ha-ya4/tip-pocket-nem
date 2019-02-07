@@ -23,6 +23,7 @@
       :name="'数量'"
       :defaultItem="defaultAmount"
       :receivedItems="amount"
+      :idName="'amount'"
     />
 
     <!-- メッセージの登録とデフォルトを決めておける-->
@@ -30,7 +31,12 @@
       :name="'メッセージ'"
       :defaultItem="defaultMessage"
       :receivedItems="message"
+      :idName="'message'"
     />
+
+    <div id="save-button">
+      <button type="button" class="app-button" @click="save">保存</button>
+    </div>
 
   </div>
 </template>
@@ -47,14 +53,16 @@ import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
 })
 export default class Home extends Vue {
   private sendButton: boolean = this.$store.state.Config.sendButton;
-  private defaultAmount: string = this.$store.getters['Config/defaultAmount'];
+  private defaultAmount: string = this.$store.state.Config.defaultAmount;
   private amount: string = this.$store.state.Config.amount;
-  private defaultMessage: string = this.$store.getters['Config/defaultMessage'];
+  private defaultMessage: string = this.$store.state.Config.defaultMessage;
   private message: string = this.$store.state.Config.message;
 
   private created() {
    this.$store.commit('Config/registerAmount', {position: 'value1', value: '1000'});
   }
+
+  private save() {}
 }
 </script>
 
@@ -68,6 +76,11 @@ export default class Home extends Vue {
   #send-button {
     padding-top: 5px;
     padding-bottom: 15px;
+  }
+
+  #save-button {
+    text-align:center;
+    margin-top: 20px;
   }
 
   .config-item {
