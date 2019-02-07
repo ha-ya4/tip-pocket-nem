@@ -20,6 +20,7 @@
 
     <!-- 数量の登録とデフォルトを決めておける-->
     <radio-button-group
+      ref="amountRadio"
       :name="'数量'"
       :defaultItem="defaultAmount"
       :receivedItems="amount"
@@ -28,6 +29,7 @@
 
     <!-- メッセージの登録とデフォルトを決めておける-->
     <radio-button-group
+      ref="messageRadio"
       :name="'メッセージ'"
       :defaultItem="defaultMessage"
       :receivedItems="message"
@@ -46,6 +48,12 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
 
+interface TypeConfigData {
+  sendButton: boolean,
+  amountData: object,
+  messageData: object,
+}
+
 @Component({
   components: {
     RadioButtonGroup,
@@ -62,7 +70,32 @@ export default class Home extends Vue {
    this.$store.commit('Config/registerAmount', {position: 'value1', value: '1000'});
   }
 
-  private save() {}
+  private updateLocalstorage(configData: TypeConfigData) {}
+
+  private updateStore(configData: TypeConfigData) {}
+
+  // 設定したデータを保存。ローカルストレージとVuexのstoreを更新する
+  // $refを使うとproperty dose not exsistが出てしまうがanyで対応
+  // type guardを使うのがよさそう？
+  private save() {
+    const sendButton = this.sendButton;
+    const refsAmount: any = this.$refs.amountRadio;
+    const amountData = refsAmount.passData();
+    const refsMessage: any = this.$refs.messageRadio;
+    const messageData = refsMessage.passData();
+
+    const configData = {
+      sendButton: this.sendButton,
+      amountData: refsAmount.passData(),
+      messageData: refsMessage.passData(),
+    };
+
+    this.updateLocalstorage(configData);
+
+    this.updateStore(configData);
+
+    console.log(configData);
+  }
 }
 </script>
 

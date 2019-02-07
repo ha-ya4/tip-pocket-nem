@@ -1,3 +1,8 @@
+interface PayLoad {
+  position: string;
+  value: string;
+}
+
 export default {
   namespaced: true,
 
@@ -46,10 +51,3 @@ export default {
 
   actions: {},
 };
-
-interface PayLoad {
-  position: string;
-  value: string;
-}
-
-

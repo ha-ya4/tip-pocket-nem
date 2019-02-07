@@ -56,7 +56,6 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 // このコンポーネントを複数個使ったとき動きがおかしくなるのでまずラジオボタンのID名をmountedで書き換える
 // ラジオボタンのチェック時とチェックされている項目が書き換えられたときにデフォルトの値も書き換えるようになってる
 // ラジオボタンの数を可変にできないか？
-// element.checkedの赤波線が消えないのなんで。
 
 @Component
 export default class RadioButtonGroup extends Vue {
@@ -79,37 +78,12 @@ export default class RadioButtonGroup extends Vue {
     this.setIdName('3', `radio-item3-${this.idName}`);
   }
 
-  // １つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
-  @Watch('receivedItems.value1')
-  private valueChanged1() {
-    const element = document.getElementById(`radio-item1-${this.idName}`);
-    if (element) {
-      if (element.checked) {
-        this.thisDefaultItem = this.receivedItems.value1;
-      }
-    }
-  }
-
-  // ２つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
-  @Watch('receivedItems.value2')
-  private valueChanged2() {
-    const element = document.getElementById(`radio-item2-${this.idName}`);
-    if (element) {
-      if (element.checked) {
-        this.thisDefaultItem = this.receivedItems.value2;
-      }
-    }
-  }
-
-  // ２つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
-  @Watch('receivedItems.value3')
-  private valueChanged3() {
-    const element = document.getElementById(`radio-item3-${this.idName}`);
-    if (element) {
-      if (element.checked) {
-        this.thisDefaultItem = this.receivedItems.value3;
-      }
-    }
+  // 設定値を返す。親から呼ぶ。
+  private passData() {
+    return {
+      defaultValue: this.thisDefaultItem,
+      values: this.receivedItems,
+    };
   }
 
   // 個々のラジオボタンのIDを取得してID名を書き換える
@@ -121,9 +95,36 @@ export default class RadioButtonGroup extends Vue {
     }
   }
 
-  // ラジオボタンでチェックされた値をデフォルトの値に書き換える
+  // ラジオボタンのチェックが変わったときにチェックされた値をデフォルトの値に書き換える
   private radioChanged(event: any) {
     this.thisDefaultItem = event.target.nextSibling.value;
+  }
+
+  // １つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
+  @Watch('receivedItems.value1')
+  private valueChanged1() {
+    const element =  document.getElementById(`radio-item1-${this.idName}`) as HTMLInputElement;
+    if (element.checked) {
+      this.thisDefaultItem = this.receivedItems.value1;
+    }
+  }
+
+  // ２つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
+  @Watch('receivedItems.value2')
+  private valueChanged2() {
+    const element =  document.getElementById(`radio-item2-${this.idName}`) as HTMLInputElement;
+    if (element.checked) {
+      this.thisDefaultItem = this.receivedItems.value2;
+    }
+  }
+
+  // ２つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
+  @Watch('receivedItems.value3')
+  private valueChanged3() {
+    const element = document.getElementById(`radio-item3-${this.idName}`) as HTMLInputElement;
+    if (element.checked) {
+      this.thisDefaultItem = this.receivedItems.value3;
+    }
   }
 }
 </script>
@@ -138,7 +139,6 @@ export default class RadioButtonGroup extends Vue {
   }
 
   input[type=radio] {
-    display: ;
   }
 
   textarea {
