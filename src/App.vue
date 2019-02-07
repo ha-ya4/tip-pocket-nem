@@ -19,8 +19,21 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
+import DataStorage from '@/class/data-storage';
+
 @Component
 export default class Home extends Vue {
+  private created() {
+    const storage = new DataStorage('configData');
+    const configData = storage.getData;
+
+    if (configData) {
+      this.$store.commit('Config/updateConfigData', configData);
+    } else {
+      const data = this.$store.state.Config;
+      storage.setData = data;
+    }
+  }
 }
 </script>
 

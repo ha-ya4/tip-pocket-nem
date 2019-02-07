@@ -48,29 +48,25 @@ import { Component, Vue } from 'vue-property-decorator';
 
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
 
-interface TypeConfigData {
-  sendButton: boolean,
-  amountData: object,
-  messageData: object,
-}
+import DataStorage from '@/class/data-storage';
+import { TypeConfigData } from '@/interface.ts';
 
 @Component({
   components: {
     RadioButtonGroup,
   },
 })
-export default class Home extends Vue {
+export default class AppConfig extends Vue {
   private sendButton: boolean = this.$store.state.Config.sendButton;
   private defaultAmount: string = this.$store.state.Config.defaultAmount;
   private amount: string = this.$store.state.Config.amount;
   private defaultMessage: string = this.$store.state.Config.defaultMessage;
   private message: string = this.$store.state.Config.message;
 
-  private created() {
-   this.$store.commit('Config/registerAmount', {position: 'value1', value: '1000'});
+  private updateLocalstorage(configData: TypeConfigData) {
+    const storage = new DataStorage('configData');
+    storage.setData = configData;
   }
-
-  private updateLocalstorage(configData: TypeConfigData) {}
 
   private updateStore(configData: TypeConfigData) {}
 
@@ -85,16 +81,15 @@ export default class Home extends Vue {
     const messageData = refsMessage.passData();
 
     const configData = {
+      amount: amountData.values,
+      defaultAmount: amountData.defaultValue,
+      message: messageData.values,
+      defaultMessage: messageData.defaultValue,
       sendButton: this.sendButton,
-      amountData: refsAmount.passData(),
-      messageData: refsMessage.passData(),
     };
 
     this.updateLocalstorage(configData);
-
     this.updateStore(configData);
-
-    console.log(configData);
   }
 }
 </script>

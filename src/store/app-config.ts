@@ -1,3 +1,5 @@
+import { TypeConfigData } from '@/interface.ts';
+
 interface PayLoad {
   position: string;
   value: string;
@@ -46,6 +48,14 @@ export default {
     // 指定したkey名のメッセージを書き換える
     registerMessage(state: any, payload: PayLoad) {
       state.message[payload.position] = payload.value;
+    },
+
+    updateConfigData(state: any, configData: TypeConfigData) {
+      state.amount = configData.amount;
+      state.defaultAmount = configData.defaultAmount;
+      state.message = configData.message;
+      state.defaultMessage = configData.defaultMessage;
+      state.sendButton = configData.sendButton;
     },
   },
 
