@@ -23,13 +23,18 @@ import DataStorage from '@/class/data-storage';
 
 @Component
 export default class Home extends Vue {
+  // アプリ起動時にローカルストレージからアプリ設定を読み込みvuex.storeを更新する
   private created() {
     const storage = new DataStorage('configData');
+    // ローカルストレージから設定を読み込む
     const configData = storage.getData;
 
+    // ローカルストレージに設定のデータがあったか確認。
     if (configData) {
-      this.$store.commit('Config/updateConfigData', configData);
+      // あればvuex.storeを更新
+      this.$store.commit('Config/UPDATE_CONFIG_DATA', configData);
     } else {
+      // なければアプリ設定の初期値をローカルストレージに登録
       const data = this.$store.state.Config;
       storage.setData = data;
     }

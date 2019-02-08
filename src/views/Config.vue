@@ -58,17 +58,25 @@ import { TypeConfigData } from '@/interface.ts';
 })
 export default class AppConfig extends Vue {
   private sendButton: boolean = this.$store.state.Config.sendButton;
+  // 送金画面で数量にセットされるデフォルトの数量
   private defaultAmount: string = this.$store.state.Config.defaultAmount;
+  // 予め登録しておいて送金画面で選択することができる数量
   private amount: string = this.$store.state.Config.amount;
+  // 送金画面でメッセージにセットされるデフォルトのメッセージ
   private defaultMessage: string = this.$store.state.Config.defaultMessage;
+  // 予め登録しておいて送金画面で選択することができるメッセージ
   private message: string = this.$store.state.Config.message;
 
-  private updateLocalstorage(configData: TypeConfigData) {
+  // ローカルストレージに保存してある設定を更新
+  private updateLocalStorage(configData: TypeConfigData) {
     const storage = new DataStorage('configData');
     storage.setData = configData;
   }
 
-  private updateStore(configData: TypeConfigData) {}
+  // vuex.storeのstateを更新する
+  private updateStore(configData: TypeConfigData) {
+   this.$store.commit('Config/UPDATE_CONFIG_DATA', configData);
+  }
 
   // 設定したデータを保存。ローカルストレージとVuexのstoreを更新する
   // $refを使うとproperty dose not exsistが出てしまうがanyで対応
@@ -88,7 +96,7 @@ export default class AppConfig extends Vue {
       sendButton: this.sendButton,
     };
 
-    this.updateLocalstorage(configData);
+    this.updateLocalStorage(configData);
     this.updateStore(configData);
   }
 }
