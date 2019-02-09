@@ -44,7 +44,7 @@ export default {
 
     // 指定したkey名の値を書き換える
     // 連想配列の型はインターフェースで定義してあるがこれでいいのか？
-    [REGISTER_AMOUNT](state:any, Registerpayload: RegisterPayLoad) {
+    [REGISTER_AMOUNT](state: any, Registerpayload: RegisterPayLoad) {
       state.amount[Registerpayload.position] = Registerpayload.value;
     },
 

@@ -12,3 +12,10 @@ export interface RegisterPayLoad {
   position: string;
   value: string;
 }
+
+// RadioButtonGroupに渡すアイテム
+export interface ReceivedItems {
+  value1: string;
+  value2: string;
+  value3: string;
+}

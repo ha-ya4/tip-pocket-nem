@@ -1,5 +1,9 @@
 <template>
-<!--数量と文字数の入力可能文字数を調べる-->
+<!--数量と文字数の入力可能文字数を調べる
+    テキストエリアのバリデーション？
+    自動で広がるテキストエリア
+    ラジオのなし
+    クリックで展開するメニュー-->
   <div id="radio-button-group">
     <span class="content-title">
       {{name}}:&ensp;{{thisDefaultItem}}
@@ -51,7 +55,8 @@
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
-// 全体的にイマイチ
+import { ReceivedItems } from '@/interface.ts';
+
 // ID,class名をわかりやすいのに変えたほうがいい？
 // このコンポーネントを複数個使ったとき動きがおかしくなるのでまずラジオボタンのID名をmountedで書き換える
 // ラジオボタンのチェック時とチェックされている項目が書き換えられたときにデフォルトの値も書き換えるようになってる
@@ -64,7 +69,7 @@ export default class RadioButtonGroup extends Vue {
   // デフォルトの値
   @Prop() private defaultItem: string;
   // 登録されている値。型を指定していたが、プロパティを使ったときに出る赤波線を消せなかったのでany
-  @Prop() private receivedItems: any;
+  @Prop() private receivedItems: ReceivedItems;
   // IDを書き換えるときに付与する名前
   @Prop() private idName: string;
   // propを書き換えるのはよくない(?)みたいなので別の変数にデフォルトの値を束縛しなおす
@@ -72,10 +77,26 @@ export default class RadioButtonGroup extends Vue {
 
   // 親コンポーネントで複数このコンポーネントを使う場合、ID名がかぶると@watchがうまく動かない
   // なので、最初にPropで渡されたidNameを元々個々のラジオボタンに振られているID名に付与する
+  // デフォルトの値のラジオボタンにチェックをつける
   private mounted() {
-    this.setIdName('1', `radio-item1-${this.idName}`);
-    this.setIdName('2', `radio-item2-${this.idName}`);
-    this.setIdName('3', `radio-item3-${this.idName}`);
+    // １〜３まで順番に数字を渡していく
+     for (let i = 1; i < 4; i++) {
+      this.setRadioIdName(i, `radio-item${i}-${this.idName}`);
+      this.defaultCheckedRadio(i);
+    }
+  }
+
+  private defaultCheckedRadio(idNumber: number) {
+    // id名のラジオボタンエレメント取得
+    const element = document.getElementById(`radio-item${idNumber}-${this.idName}`) as HTMLInputElement;
+    if (!element) { return; }
+    // 取得したラジオボタンの次のtextarea取得
+    const radioValue = element.nextSibling as HTMLInputElement;
+    if (!radioValue) { return; }
+    // デフォルト値とtextareaに入力されている値が一致したラジオボタンにチェックをつける
+    if (this.thisDefaultItem === radioValue.value) {
+      element.checked = true;
+    }
   }
 
   // 設定値を返す。親から呼ぶ。
@@ -87,7 +108,7 @@ export default class RadioButtonGroup extends Vue {
   }
 
   // 個々のラジオボタンのIDを取得してID名を書き換える
-  private setIdName(idNumber: string, rename: string) {
+  private setRadioIdName(idNumber: number, rename: string) {
     const idName = `radio-item${idNumber}-checked`;
     const element = document.getElementById(idName);
     if (element) {
@@ -103,7 +124,7 @@ export default class RadioButtonGroup extends Vue {
   // １つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
   @Watch('receivedItems.value1')
   private valueChanged1() {
-    const element =  document.getElementById(`radio-item1-${this.idName}`) as HTMLInputElement;
+    const element = document.getElementById(`radio-item1-${this.idName}`) as HTMLInputElement;
     if (element.checked) {
       this.thisDefaultItem = this.receivedItems.value1;
     }
