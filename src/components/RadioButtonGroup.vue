@@ -6,56 +6,56 @@
     クリックで展開するメニュー-->
   <div id="radio-button-group">
     <span class="content-title">
-      {{name}}:&ensp;{{thisDefaultItem}}
+      {{ name }}:&ensp; {{ defaultValue }}
     </span>
 
     <form id="target">
       <p class="radio-item">
         <input
-          id="radio-item1-checked"
+          :id="'radio-item1-' + radioIdName"
+          :checked="value1.defaultValue"
           type="radio"
-          name="radio-item" value="item1"
+          name="radio-item"
+          value="item1"
           @change="radioChanged"
         >
-        <textarea class="textarea" rows="1" cols="" v-model="receivedItems.value1">
-          receivedItems.value1
+        <textarea class="textarea" rows="1" cols="" v-model="value1.value">
         </textarea>
       </p>
 
       <p class="radio-item">
         <input
-          id="radio-item2-checked"
+          :id="'radio-item2-' + radioIdName"
+          :checked="value2.defaultValue"
           type="radio"
           name="radio-item"
           value="item2"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="" v-model="receivedItems.value2">
-          receivedItems.value2
+        <textarea rows="1" cols="" v-model="value2.value">
         </textarea>
       </p>
 
       <p class="radio-item">
         <input
-          id="radio-item3-checked"
+          :id="'radio-item3-' + radioIdName"
+          :checked="value3.defaultValue"
           type="radio"
           name="radio-item"
           value="item3"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="" v-model="receivedItems.value3">
-          receivedItems.value3
+        <textarea rows="1" cols="" v-model="value3.value">
         </textarea>
       </p>
     </form>
-
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
-import { ReceivedItems } from '@/interface.ts';
+import { RadioGroupValue } from '@/interface.ts';
 
 // ID,class名をわかりやすいのに変えたほうがいい？
 // このコンポーネントを複数個使ったとき動きがおかしくなるのでまずラジオボタンのID名をmountedで書き換える
@@ -66,85 +66,93 @@ import { ReceivedItems } from '@/interface.ts';
 export default class RadioButtonGroup extends Vue {
   // ラジオボタンのグループ名。
   @Prop() private name: string;
-  // デフォルトの値
-  @Prop() private defaultItem: string;
   // 登録されている値。型を指定していたが、プロパティを使ったときに出る赤波線を消せなかったのでany
-  @Prop() private receivedItems: ReceivedItems;
+  @Prop() private receivedItems: RadioGroupValue[];
   // IDを書き換えるときに付与する名前
-  @Prop() private idName: string;
-  // propを書き換えるのはよくない(?)みたいなので別の変数にデフォルトの値を束縛しなおす
-  private thisDefaultItem: string = this.defaultItem;
+  @Prop() private radioIdName: string;
 
-  // 親コンポーネントで複数このコンポーネントを使う場合、ID名がかぶると@watchがうまく動かない
-  // なので、最初にPropで渡されたidNameを元々個々のラジオボタンに振られているID名に付与する
-  // デフォルトの値のラジオボタンにチェックをつける
-  private mounted() {
-    // １〜３まで順番に数字を渡していく
-     for (let i = 1; i < 4; i++) {
-      this.setRadioIdName(i, `radio-item${i}-${this.idName}`);
-      this.defaultCheckedRadio(i);
-    }
-  }
+  private none: RadioGroupValue = this.receivedItems[0];
+  private value1: RadioGroupValue  = this.receivedItems[1];
+  private value2: RadioGroupValue = this.receivedItems[2];
+  private value3: RadioGroupValue = this.receivedItems[3];
+  private defaultValue: string | number = 0;
 
-  private defaultCheckedRadio(idNumber: number) {
-    // id名のラジオボタンエレメント取得
-    const element = document.getElementById(`radio-item${idNumber}-${this.idName}`) as HTMLInputElement;
-    if (!element) { return; }
-    // 取得したラジオボタンの次のtextarea取得
-    const radioValue = element.nextSibling as HTMLInputElement;
-    if (!radioValue) { return; }
-    // デフォルト値とtextareaに入力されている値が一致したラジオボタンにチェックをつける
-    if (this.thisDefaultItem === radioValue.value) {
-      element.checked = true;
+  // デフォルト値をセットする
+  private created() {
+    // defaultValueがtrueのものを探してthis.deFaultValueにセットする
+    const items = [this.none, this.value1, this.value2, this.value3];
+    for (const item of items) {
+      if (item.defaultValue === true) {
+        this.defaultValue = item.value;
+        break;
+      }
     }
   }
 
   // 設定値を返す。親から呼ぶ。
   private passData() {
     return {
-      defaultValue: this.thisDefaultItem,
-      values: this.receivedItems,
+      defaultValue: this.defaultValue,
+      values: [this.none, this.value1, this.value2, this.value3],
     };
   }
 
-  // 個々のラジオボタンのIDを取得してID名を書き換える
-  private setRadioIdName(idNumber: number, rename: string) {
-    const idName = `radio-item${idNumber}-checked`;
-    const element = document.getElementById(idName);
-    if (element) {
-      element.id = rename;
-    }
-  }
-
   // ラジオボタンのチェックが変わったときにチェックされた値をデフォルトの値に書き換える
+  // 手動でラジオボタンのチェックを変える
   private radioChanged(event: any) {
-    this.thisDefaultItem = event.target.nextSibling.value;
+    // デフォルト値をチェックされた値に変更
+    this.defaultValue = event.target.nextSibling.value;
+
+    // 前回どこがチェックされていたかわからないので全てのdefaultValueをfalseに変える
+    const items = [this.none, this.value1, this.value2, this.value3];
+    for (const item of items) {
+      item.defaultValue = false;
+    }
+
+    // target.valueの値を取得してifで対応する項目のdefaultValueをtrueに切り替える
+    const value = event.target.value;
+    if (value === 'none') {
+      this.none.defaultValue = true;
+      return;
+    }
+    if (value === 'item1') {
+      this.value1.defaultValue = true;
+      return;
+    }
+    if (value === 'item2') {
+      this.value2.defaultValue = true;
+      return;
+    }
+    if (value === 'item3') {
+      this.value3.defaultValue = true;
+      return;
+    }
   }
 
   // １つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
-  @Watch('receivedItems.value1')
+  @Watch('value1.value')
   private valueChanged1() {
-    const element = document.getElementById(`radio-item1-${this.idName}`) as HTMLInputElement;
+    const element = document.getElementById(`radio-item1-${this.radioIdName}`) as HTMLInputElement;
     if (element.checked) {
-      this.thisDefaultItem = this.receivedItems.value1;
+      this.defaultValue = this.value1.value;
     }
   }
 
   // ２つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
-  @Watch('receivedItems.value2')
+  @Watch('value2.value')
   private valueChanged2() {
-    const element =  document.getElementById(`radio-item2-${this.idName}`) as HTMLInputElement;
+    const element =  document.getElementById(`radio-item2-${this.radioIdName}`) as HTMLInputElement;
     if (element.checked) {
-      this.thisDefaultItem = this.receivedItems.value2;
+      this.defaultValue = this.value2.value;
     }
   }
 
-  // ２つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
-  @Watch('receivedItems.value3')
+  // 3つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
+  @Watch('value3.value')
   private valueChanged3() {
-    const element = document.getElementById(`radio-item3-${this.idName}`) as HTMLInputElement;
+    const element = document.getElementById(`radio-item3-${this.radioIdName}`) as HTMLInputElement;
     if (element.checked) {
-      this.thisDefaultItem = this.receivedItems.value3;
+      this.defaultValue = this.value3.value;
     }
   }
 }

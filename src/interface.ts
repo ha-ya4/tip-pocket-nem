@@ -1,9 +1,7 @@
 // vuex.store.stateに対応する設定値
 export interface TypeConfigData {
   amount: object;
-  defaultAmount: string;
   message: object;
-  defaultMessage: string;
   sendButton: boolean;
 }
 
@@ -13,9 +11,7 @@ export interface RegisterPayLoad {
   value: string;
 }
 
-// RadioButtonGroupに渡すアイテム
-export interface ReceivedItems {
-  value1: string;
-  value2: string;
-  value3: string;
+export interface RadioGroupValue {
+  value: string | number;
+  defaultValue: boolean;
 }

@@ -1,7 +1,7 @@
 import {
   CHANGE_SEND_BUTTON,
-  REGISTER_AMOUNT,
-  REGISTER_MESSAGE,
+  REGISTER_DEFAULT_AMOUNT,
+  REGISTER_DEFAULT_MESSAGE,
   UPDATE_CONFIG_DATA,
 } from '@/store/mutation-types.ts';
 import { TypeConfigData, RegisterPayLoad } from '@/interface.ts';
@@ -12,24 +12,24 @@ export default {
   namespaced: true,
 
   state: {
-    amount: {
-      value1: '0',
-      value2: '10',
-      value3: '100',
-    },
+    amount: [
+      { value: 0, defaultValue: false }, // valueの書き換え不可
+      { value: 1, defaultValue: true },
+      { value: 5, defaultValue: false },
+      { value: 10, defaultValue: false },
+    ],
 
-    defaultAmount: '0',
-
-    message: {
-      value1: '',
-      value2: '',
-      value3: '',
-    },
-
-    defaultMessage: '',
+    message: [
+      { value: '', defaultValue: false }, // 書き換え不可
+      { value: 'hello', defaultValue: false },
+      { value: 'world', defaultValue: true },
+      { value: 'hello world', defaultValue: false },
+    ],
 
     // 送金buttonを押してから送金するかどうか
     sendButton: true,
+
+    amountLimit: 1000,
   },
 
   mutations: {
@@ -42,23 +42,10 @@ export default {
       }
     },
 
-    // 指定したkey名の値を書き換える
-    // 連想配列の型はインターフェースで定義してあるがこれでいいのか？
-    [REGISTER_AMOUNT](state: any, Registerpayload: RegisterPayLoad) {
-      state.amount[Registerpayload.position] = Registerpayload.value;
-    },
-
-    // 指定したkey名のメッセージを書き換える
-    [REGISTER_MESSAGE](state: any, Registerpayload: RegisterPayLoad) {
-      state.message[Registerpayload.position] = Registerpayload.value;
-    },
-
     // 新たな設定を受け取ってstateを更新する
     [UPDATE_CONFIG_DATA](state: any, configData: TypeConfigData) {
       state.amount = configData.amount;
-      state.defaultAmount = configData.defaultAmount;
       state.message = configData.message;
-      state.defaultMessage = configData.defaultMessage;
       state.sendButton = configData.sendButton;
     },
   },

@@ -22,18 +22,16 @@
     <radio-button-group
       ref="amountRadio"
       :name="'数量'"
-      :defaultItem="defaultAmount"
       :receivedItems="amount"
-      :idName="'amount'"
+      :radioIdName="'amount'"
     />
 
     <!-- メッセージの登録とデフォルトを決めておける-->
     <radio-button-group
       ref="messageRadio"
       :name="'メッセージ'"
-      :defaultItem="defaultMessage"
       :receivedItems="message"
-      :idName="'message'"
+      :radioIdName="'message'"
     />
 
     <div id="save-button">
@@ -58,15 +56,13 @@ import { TypeConfigData } from '@/interface.ts';
 })
 export default class AppConfig extends Vue {
   private sendButton: boolean = this.$store.state.Config.sendButton;
-  // 送金画面で数量にセットされるデフォルトの数量
-  private defaultAmount: string = this.$store.state.Config.defaultAmount;
   // 予め登録しておいて送金画面で選択することができる数量
-  private amount: string = this.$store.state.Config.amount;
-  // 送金画面でメッセージにセットされるデフォルトのメッセージ
-  private defaultMessage: string = this.$store.state.Config.defaultMessage;
+  private amount: object[] = this.$store.state.Config.amount;
   // 予め登録しておいて送金画面で選択することができるメッセージ
-  private message: string = this.$store.state.Config.message;
+  private message: object[] = this.$store.state.Config.message;
 
+ /* created() {
+  }*/
   // ローカルストレージに保存してある設定を更新
   private updateLocalStorage(configData: TypeConfigData) {
     const storage = new DataStorage('configData');
@@ -90,9 +86,7 @@ export default class AppConfig extends Vue {
 
     const configData = {
       amount: amountData.values,
-      defaultAmount: amountData.defaultValue,
       message: messageData.values,
-      defaultMessage: messageData.defaultValue,
       sendButton: this.sendButton,
     };
 
