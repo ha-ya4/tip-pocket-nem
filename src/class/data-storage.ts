@@ -1,3 +1,5 @@
+import { TypeConfigData } from '@/interface.ts';
+
 export default class DataStorage {
   private storageName: string;
 
@@ -5,7 +7,7 @@ export default class DataStorage {
     this.storageName = storageName;
   }
 
-  get getData(): object | null {
+  get getData(): TypeConfigData | null {
     const item = localStorage.getItem(this.storageName);
     if (item !== null) {
       return JSON.parse(item);
@@ -14,7 +16,7 @@ export default class DataStorage {
     }
   }
 
-  set setData(data: object) {
+  set setData(data: TypeConfigData) {
     const configData = JSON.stringify(data);
     localStorage.setItem(this.storageName, configData);
   }

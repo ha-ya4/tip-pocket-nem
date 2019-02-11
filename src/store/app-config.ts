@@ -4,7 +4,7 @@ import {
   REGISTER_DEFAULT_MESSAGE,
   UPDATE_CONFIG_DATA,
 } from '@/store/mutation-types.ts';
-import { TypeConfigData, RegisterPayLoad } from '@/interface.ts';
+import { TypeConfigData } from '@/interface.ts';
 
 
 
@@ -29,7 +29,7 @@ export default {
     // 送金buttonを押してから送金するかどうか
     sendButton: true,
 
-    amountLimit: 1000,
+    amountLimit: 100,
   },
 
   mutations: {
@@ -47,6 +47,7 @@ export default {
       state.amount = configData.amount;
       state.message = configData.message;
       state.sendButton = configData.sendButton;
+      state.amountLimit = configData.amountLimit;
     },
   },
 

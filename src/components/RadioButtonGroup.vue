@@ -6,10 +6,22 @@
     クリックで展開するメニュー-->
   <div id="radio-button-group">
     <span class="content-title">
-      {{ name }}:&ensp; {{ defaultValue }}
+      <slot></slot>: {{ defaultValue }}
     </span>
 
     <form id="target">
+      <p class="radio-item">
+        <input
+          :id="'radio-item0-' + radioIdName"
+          :checked="none.defaultValue"
+          type="radio"
+          name="radio-item"
+          value="none"
+          @change="radioChanged"
+        >
+        <label>{{ none.value }}</label>
+      </p>
+
       <p class="radio-item">
         <input
           :id="'radio-item1-' + radioIdName"
@@ -19,8 +31,7 @@
           value="item1"
           @change="radioChanged"
         >
-        <textarea class="textarea" rows="1" cols="" v-model="value1.value">
-        </textarea>
+        <textarea rows="1" cols="" v-model="value1.value"></textarea>
       </p>
 
       <p class="radio-item">
@@ -32,8 +43,7 @@
           value="item2"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="" v-model="value2.value">
-        </textarea>
+        <textarea rows="1" cols="" v-model="value2.value"></textarea>
       </p>
 
       <p class="radio-item">
@@ -64,8 +74,6 @@ import { RadioGroupValue } from '@/interface.ts';
 
 @Component
 export default class RadioButtonGroup extends Vue {
-  // ラジオボタンのグループ名。
-  @Prop() private name: string;
   // 登録されている値。型を指定していたが、プロパティを使ったときに出る赤波線を消せなかったのでany
   @Prop() private receivedItems: RadioGroupValue[];
   // IDを書き換えるときに付与する名前
@@ -100,40 +108,39 @@ export default class RadioButtonGroup extends Vue {
   // ラジオボタンのチェックが変わったときにチェックされた値をデフォルトの値に書き換える
   // 手動でラジオボタンのチェックを変える
   private radioChanged(event: any) {
-    // デフォルト値をチェックされた値に変更
-    this.defaultValue = event.target.nextSibling.value;
-
     // 前回どこがチェックされていたかわからないので全てのdefaultValueをfalseに変える
     const items = [this.none, this.value1, this.value2, this.value3];
     for (const item of items) {
       item.defaultValue = false;
     }
 
-    // target.valueの値を取得してifで対応する項目のdefaultValueをtrueに切り替える
+    // target.valueの値を取得してifで対応する項目のdefaultValueをtrueに切り替え
     const value = event.target.value;
-    if (value === 'none') {
-      this.none.defaultValue = true;
-      return;
+    switch (value) {
+      case 'none':
+        this.none.defaultValue = true;
+        break;
+      case 'item1':
+        this.value1.defaultValue = true;
+        break;
+      case 'item2':
+        this.value2.defaultValue = true;
+        break;
+      case 'item3':
+        this.value3.defaultValue = true;
+        break;
+      default:
+        break;
     }
-    if (value === 'item1') {
-      this.value1.defaultValue = true;
-      return;
-    }
-    if (value === 'item2') {
-      this.value2.defaultValue = true;
-      return;
-    }
-    if (value === 'item3') {
-      this.value3.defaultValue = true;
-      return;
-    }
+
+    // デフォルト値をチェックされた値に変更
+    this.defaultValue = event.target.nextSibling.value;
   }
 
   // １つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
   @Watch('value1.value')
   private valueChanged1() {
-    const element = document.getElementById(`radio-item1-${this.radioIdName}`) as HTMLInputElement;
-    if (element.checked) {
+    if (this.value1.defaultValue) {
       this.defaultValue = this.value1.value;
     }
   }
@@ -141,8 +148,7 @@ export default class RadioButtonGroup extends Vue {
   // ２つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
   @Watch('value2.value')
   private valueChanged2() {
-    const element =  document.getElementById(`radio-item2-${this.radioIdName}`) as HTMLInputElement;
-    if (element.checked) {
+    if (this.value2.defaultValue) {
       this.defaultValue = this.value2.value;
     }
   }
@@ -150,8 +156,7 @@ export default class RadioButtonGroup extends Vue {
   // 3つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
   @Watch('value3.value')
   private valueChanged3() {
-    const element = document.getElementById(`radio-item3-${this.radioIdName}`) as HTMLInputElement;
-    if (element.checked) {
+    if (this.value3.defaultValue) {
       this.defaultValue = this.value3.value;
     }
   }
@@ -164,7 +169,6 @@ export default class RadioButtonGroup extends Vue {
   /*全体*/
   #radio-button-group {
     padding-top: 10px;
-    padding-bottom: 5px;
   }
 
   input[type=radio] {
@@ -178,7 +182,7 @@ export default class RadioButtonGroup extends Vue {
 
   /*設定する項目とデフォルトの値*/
   .content-title {
-    font-size: 22px;
+    font-size: 20px;
     margin-left: 5px;
   }
 
