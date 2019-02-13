@@ -1,7 +1,5 @@
 import {
-  CHANGE_SEND_BUTTON,
-  REGISTER_DEFAULT_AMOUNT,
-  REGISTER_DEFAULT_MESSAGE,
+  UPDATE_SEND_BUTTON,
   UPDATE_CONFIG_DATA,
 } from '@/store/mutation-types.ts';
 import { TypeConfigData } from '@/interface.ts';
@@ -34,7 +32,7 @@ export default {
 
   mutations: {
     // sendButtonをtrueならfalse、またはその逆に書き換える
-    [CHANGE_SEND_BUTTON](state: any) {
+    [UPDATE_SEND_BUTTON](state: any) {
       if (state.sendButton === true) {
         state.sendButton = false;
       } else {

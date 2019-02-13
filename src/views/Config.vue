@@ -6,12 +6,22 @@
       <span class="config-item">送金ボタン:</span>
 
       <span class="radio-item">
-        <input type="radio" name="send-radio">
+        <input
+          type="radio"
+          name="send-radio"
+          value="on"
+          :checked="onChecked"
+          @change="radioChanged">
         <label>on</label>
       </span>
 
       <span class="radio-item">
-        <input type="radio" name="send-radio">
+        <input
+          type="radio"
+          name="send-radio"
+          value="off"
+          :checked="offChecked"
+          @change="radioChanged">
         <label>off</label>
       </span>
     </div>
@@ -61,18 +71,26 @@ export default class AppConfig extends Vue {
   private amount: RadioGroupValue[] = this.$store.state.Config.amount;
   // 予め登録しておいて送金画面で選択することができるメッセージ
   private message: RadioGroupValue[] = this.$store.state.Config.message;
+  private onChecked = false;
+  private offChecked = false;
 
- /* created() {
-  }*/
-  // ローカルストレージに保存してある設定を更新
-  private updateLocalStorage(configData: TypeConfigData) {
-    const storage = new DataStorage('configData');
-    storage.setData = configData;
+  created() {
+    // trueならon、falsならeoffにチェックを入れる
+    this.sendButton ? this.onChecked = true : this.offChecked = true
   }
 
-  // vuex.storeのstateを更新する
-  private updateStore(configData: TypeConfigData) {
-   this.$store.commit('Config/UPDATE_CONFIG_DATA', configData);
+  private radioChanged(event: any) {
+    const value = event.target.value;
+    switch (value) {
+      case 'on':
+        this.sendButton = true;
+        break;
+      case 'off':
+        this.sendButton = false;
+        break;
+      default:
+        break;
+    }
   }
 
   // 設定したデータを保存。ローカルストレージとVuexのstoreを更新する
@@ -93,6 +111,17 @@ export default class AppConfig extends Vue {
 
     this.updateLocalStorage(configData);
     this.updateStore(configData);
+  }
+
+  // ローカルストレージに保存してある設定を更新
+  private updateLocalStorage(configData: TypeConfigData) {
+    const storage = new DataStorage('configData');
+    storage.setData = configData;
+  }
+
+  // vuex.storeのstateを更新する
+  private updateStore(configData: TypeConfigData) {
+   this.$store.commit('Config/UPDATE_CONFIG_DATA', configData);
   }
 }
 </script>
