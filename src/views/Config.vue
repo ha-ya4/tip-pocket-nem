@@ -28,7 +28,7 @@
 
     <div id="amount-limit">
       <span class="config-item" style="display: block;">送金上限:</span>
-      <textarea class="textarea" rows="1" cols="" v-model="amountLimit"></textarea>
+      <textarea class="textarea" rows="1" cols="30" v-model="amountLimit"></textarea>
     </div>
 
     <!-- 数量の登録とデフォルトを決めておける-->
@@ -74,9 +74,9 @@ export default class AppConfig extends Vue {
   private onChecked = false;
   private offChecked = false;
 
-  created() {
+  private created() {
     // trueならon、falsならeoffにチェックを入れる
-    this.sendButton ? this.onChecked = true : this.offChecked = true
+    this.sendButton ? this.onChecked = true : this.offChecked = true;
   }
 
   private radioChanged(event: any) {

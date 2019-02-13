@@ -1,15 +1,18 @@
 <template>
-<!--数量と文字数の入力可能文字数を調べる
-    テキストエリアのバリデーション？
-    自動で広がるテキストエリア
-    ラジオのなし
-    クリックで展開するメニュー-->
   <div id="radio-button-group">
-    <span class="content-title">
-      <slot></slot>: {{ defaultValue }}
-    </span>
+    <div class="content-title">
+      <!--v-bind:classでthis.expansionがfalseならbefore,trueならafterにclassを切り替える-->
+      <button
+        :class="{ 'button-rotate-before': !expansion,  'button-rotate-after': expansion }"
+        @click="radioExpansion">&#9651;</button>
 
-    <form id="target">
+      <slot></slot>: {{ defaultValue }}
+    </div>
+
+    <form id="target" v-if="expansion">
+
+      <hr size="0.2" color="#969ca3" >
+
       <p class="radio-item">
         <input
           :id="'radio-item0-' + radioIdName"
@@ -31,7 +34,7 @@
           value="item1"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="" v-model="value1.value"></textarea>
+        <textarea rows="1" cols="30" maxlength="30" v-model="value1.value"></textarea>
       </p>
 
       <p class="radio-item">
@@ -43,7 +46,7 @@
           value="item2"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="" v-model="value2.value"></textarea>
+        <textarea rows="1" cols="30" maxlength="30" v-model="value2.value"></textarea>
       </p>
 
       <p class="radio-item">
@@ -55,7 +58,7 @@
           value="item3"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="" v-model="value3.value">
+        <textarea rows="1" cols="30" maxlength="30" v-model="value3.value">
         </textarea>
       </p>
     </form>
@@ -79,6 +82,7 @@ export default class RadioButtonGroup extends Vue {
   // IDを書き換えるときに付与する名前
   @Prop() private radioIdName: string;
 
+  private expansion: boolean = false;
   private none: RadioGroupValue = this.receivedItems[0];
   private value1: RadioGroupValue  = this.receivedItems[1];
   private value2: RadioGroupValue = this.receivedItems[2];
@@ -137,6 +141,14 @@ export default class RadioButtonGroup extends Vue {
     this.defaultValue = event.target.nextSibling.value;
   }
 
+  private radioExpansion() {
+    if (this.expansion) {
+      this.expansion = false;
+    } else if (!this.expansion) {
+      this.expansion = true;
+    }
+  }
+
   // １つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
   @Watch('value1.value')
   private valueChanged1() {
@@ -168,10 +180,11 @@ export default class RadioButtonGroup extends Vue {
 @media screen and (max-width: 800px) {
   /*全体*/
   #radio-button-group {
-    padding-top: 10px;
-  }
-
-  input[type=radio] {
+    box-shadow: 0.5px 0.5px 0.5px 0.5px rgba(85, 145, 160, 0.4);
+    border-radius: 3px;
+    margin-top: 15px;
+    padding-top: 5px;
+    padding-bottom: 3px;
   }
 
   textarea {
@@ -180,15 +193,31 @@ export default class RadioButtonGroup extends Vue {
     border-radius: 5px;
   }
 
+  button {
+    color: #959fad;
+  }
+
+  /*ボタンの向きを右にする。*/
+  .button-rotate-before {
+    transform:rotate(90deg);
+    transition: 0.05s;
+  }
+
+  /*ボタンクリックで向きを下に回転させる*/
+  .button-rotate-after {
+    transform:rotate(180deg);
+    transition: 0.05s;
+  }
+
   /*設定する項目とデフォルトの値*/
   .content-title {
     font-size: 20px;
     margin-left: 5px;
+    margin-bottom: 3px;
   }
 
   /*設定する項目のそれぞれのラジオボタンとテキスト*/
   .radio-item {
-    display: block;
     font-size: 18px;
     margin-top: 8px;
     margin-left: 25px;

@@ -20,11 +20,12 @@ export default class App extends Vue {}
 
 <style>
 body {
-  background-color: #b9d5f5;
+  background-color: #87cefa8c;
 }
 
 #nav {
-  background-color: #95c1f3;
+  background-color: #00bfff42;
+  box-shadow: -0.5px -0.5px 0.5px 0.5px rgba(85, 145, 160, 0.4);
   display: flex;
 }
 
@@ -35,7 +36,8 @@ a {
 }
 
 .xem-amount {
-  background-color: #95c1f3;
+  background-color: #00bfff42;
+  box-shadow: 1px 1px 5px 0.5px rgba(85, 145, 160, 0.4);
 }
 
 /*PC*/
@@ -68,8 +70,7 @@ a {
   }
 
   a {
-    border-top: 1px solid#c9ced4;
-    border-left: 0.5px solid#c9ced4;
+    box-shadow: -0.3px -1.5px 5px 0.5px rgba(85, 145, 160, 0.4);
     padding-top: 20px;
     padding-bottom: 20px;
   }
@@ -84,7 +85,6 @@ a {
   .xem-amount {
     text-align: center;
     font-size: 20px;
-    border-bottom: 1px solid#c9ced4;
     padding-top: 18px;
     padding-bottom: 18px;
   }
