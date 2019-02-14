@@ -2,7 +2,7 @@ import {
   UPDATE_SEND_BUTTON,
   UPDATE_CONFIG_DATA,
 } from '@/store/mutation-types.ts';
-import { TypeConfigData } from '@/interface.ts';
+import { TypeConfigData, RadioGroupValue } from '@/interface.ts';
 
 
 
@@ -28,6 +28,18 @@ export default {
     sendButton: true,
 
     amountLimit: 100,
+  },
+
+  getters: {
+    defaultAmount(state: any): number {
+      const defaultValue = state.amount.find((item: RadioGroupValue) => item.defaultValue === true);
+      return defaultValue.value;
+    },
+
+    defaultMessage(state: any): string {
+      const defaultValue = state.message.find((item: RadioGroupValue) => item.defaultValue === true);
+      return defaultValue.value;
+    },
   },
 
   mutations: {

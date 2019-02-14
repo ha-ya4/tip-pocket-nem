@@ -109,11 +109,13 @@ export default class RadioButtonGroup extends Vue {
     // 一度文字をうったあと数値を入れると型がstringになる。正しく入力したときにnumberに型を変換するために行う
     for (const item of items) {
       if (!isNaN((Number(item.value)))) {
-        item.value =  Number(item.value);
+        // ''は０に変換されてしまうのでifで回避
+        if (item.value !== '') {
+          item.value =  Number(item.value);
+        }
       }
     }
 
-    //console.log(items)
     return {
       defaultValue: this.defaultValue,
       values: items,

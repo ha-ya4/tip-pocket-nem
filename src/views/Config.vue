@@ -102,14 +102,14 @@ export default class AppConfig extends Vue {
   // $refを使うとproperty dose not exsistが出てしまうがanyで対応
   // type guardを使うのがよさそう？
   private save() {
-    //this.information = [];
+    this.information = [];
 
     const refsAmount: any = this.$refs.amountRadio;
     const amountData = refsAmount.passData();
     const refsMessage: any = this.$refs.messageRadio;
     const messageData = refsMessage.passData();
 
-    //amountが数値になってるかチェック
+    // amountが数値になってるかチェック
     if (amountData.values.some(
       (amount: RadioGroupValue) => typeof(amount.value) !== 'number' )
     ) {
@@ -126,7 +126,6 @@ export default class AppConfig extends Vue {
     if (this.information.some((info) => info.name === 'error')) {
       return;
     }
-    console.log(amountData.values)
 
     const configData = {
       amount: amountData.values,
@@ -137,6 +136,15 @@ export default class AppConfig extends Vue {
 
     this.updateLocalStorage(configData);
     this.updateStore(configData);
+
+    const success = {
+      id: this.information.length,
+      name : 'success',
+      message: '設定を保存しました',
+      color: 'black',
+    }
+    this.information = [];
+    this.information.push(success);
   }
 
   // ローカルストレージに保存してある設定を更新
