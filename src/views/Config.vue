@@ -43,6 +43,8 @@
       :receivedItems="message"
       :radioIdName="'message'">メッセージ</radio-button-group>
 
+    <Information :messages="information"/>
+
     <div id="save-button">
       <button type="button" class="app-button" @click="save">保存</button>
     </div>
@@ -54,13 +56,15 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
+import Information from '@/components/information.vue';
 
 import DataStorage from '@/class/data-storage';
-import { TypeConfigData, RadioGroupValue } from '@/interface.ts';
+import { TypeConfigData, RadioGroupValue, InformationMessage } from '@/interface.ts';
 
 @Component({
   components: {
     RadioButtonGroup,
+    Information,
   },
 })
 export default class AppConfig extends Vue {
@@ -71,6 +75,7 @@ export default class AppConfig extends Vue {
   private amount: RadioGroupValue[] = this.$store.state.Config.amount;
   // 予め登録しておいて送金画面で選択することができるメッセージ
   private message: RadioGroupValue[] = this.$store.state.Config.message;
+  private information: InformationMessage[] = [];
   private onChecked = false;
   private offChecked = false;
 
@@ -97,10 +102,31 @@ export default class AppConfig extends Vue {
   // $refを使うとproperty dose not exsistが出てしまうがanyで対応
   // type guardを使うのがよさそう？
   private save() {
+    //this.information = [];
+
     const refsAmount: any = this.$refs.amountRadio;
     const amountData = refsAmount.passData();
     const refsMessage: any = this.$refs.messageRadio;
     const messageData = refsMessage.passData();
+
+    //amountが数値になってるかチェック
+    if (amountData.values.some(
+      (amount: RadioGroupValue) => typeof(amount.value) !== 'number' )
+    ) {
+        const amountError = {
+          id: this.information.length,
+          name : 'error',
+          message: '数量には数字を入力してください',
+          color: 'red',
+        };
+        this.information.push(amountError);
+    }
+
+    // informationにエラーがあれば設定を保存せずにreturn
+    if (this.information.some((info) => info.name === 'error')) {
+      return;
+    }
+    console.log(amountData.values)
 
     const configData = {
       amount: amountData.values,
@@ -145,6 +171,7 @@ export default class AppConfig extends Vue {
 
   #save-button {
     text-align: center;
+    font-size: 12px;
     margin-top: 20px;
   }
 

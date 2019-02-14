@@ -103,9 +103,20 @@ export default class RadioButtonGroup extends Vue {
 
   // 設定値を返す。親から呼ぶ。
   private passData() {
+    const items = [this.none, this.value1, this.value2, this.value3];
+
+    // valueを数値に変換し、それが数字なら変換したものをvalueに入れる
+    // 一度文字をうったあと数値を入れると型がstringになる。正しく入力したときにnumberに型を変換するために行う
+    for (const item of items) {
+      if (!isNaN((Number(item.value)))) {
+        item.value =  Number(item.value);
+      }
+    }
+
+    //console.log(items)
     return {
       defaultValue: this.defaultValue,
-      values: [this.none, this.value1, this.value2, this.value3],
+      values: items,
     };
   }
 

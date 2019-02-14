@@ -12,9 +12,9 @@ export default {
   state: {
     amount: [
       { value: 0, defaultValue: false }, // valueの書き換え不可
-      { value: 1, defaultValue: true },
-      { value: 5, defaultValue: false },
-      { value: 10, defaultValue: false },
+      { value: 1.0, defaultValue: true },
+      { value: 5.0, defaultValue: false },
+      { value: 10.0, defaultValue: false },
     ],
 
     message: [
