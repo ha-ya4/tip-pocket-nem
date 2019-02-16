@@ -1,6 +1,7 @@
 <template>
   <div id="radio-button-group">
     <div class="content-title">
+      <!--messageとamountを分ける?-->
       <!--v-bind:classでthis.expansionがfalseならbefore,trueならafterにclassを切り替える-->
       <button
         :class="{ 'button-rotate-before': !expansion,  'button-rotate-after': expansion }"
@@ -84,9 +85,9 @@ export default class RadioButtonGroup extends Vue {
 
   private expansion: boolean = false;
   private none: RadioGroupValue = this.receivedItems[0];
-  private value1: RadioGroupValue  = this.receivedItems[1];
-  private value2: RadioGroupValue = this.receivedItems[2];
-  private value3: RadioGroupValue = this.receivedItems[3];
+  private value1: RadioGroupValue  = Object.assign({}, this.receivedItems[1]);
+  private value2: RadioGroupValue = Object.assign({}, this.receivedItems[2]);
+  private value3: RadioGroupValue = Object.assign({}, this.receivedItems[3]);
   private defaultValue: string | number = 0;
 
   // デフォルト値をセットする

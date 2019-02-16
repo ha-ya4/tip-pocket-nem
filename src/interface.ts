@@ -12,7 +12,6 @@ export interface RadioGroupValue {
 }
 
 export interface InformationMessage {
-  id: number;
   name: string;
   message: string;
   color: string;

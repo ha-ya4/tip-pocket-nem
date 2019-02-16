@@ -28,7 +28,7 @@
 
     <div id="amount-limit">
       <span class="config-item" style="display: block;">送金上限:</span>
-      <textarea class="textarea" rows="1" cols="30" v-model="amountLimit"></textarea>
+      <input type="text" max-length="17" v-model="amountLimit">
     </div>
 
     <!-- 数量の登録とデフォルトを決めておける-->
@@ -76,12 +76,41 @@ export default class AppConfig extends Vue {
   // 予め登録しておいて送金画面で選択することができるメッセージ
   private message: RadioGroupValue[] = this.$store.state.Config.message;
   private information: InformationMessage[] = [];
-  private onChecked = false;
-  private offChecked = false;
+  private onChecked: boolean = false;
+  private offChecked: boolean = false;
 
   private created() {
     // trueならon、falsならeoffにチェックを入れる
     this.sendButton ? this.onChecked = true : this.offChecked = true;
+  }
+
+  // amountLimitにエラーがないかチェック
+  private amountLimitCheck(values: RadioGroupValue[]) {
+    // 数字が入力されているかチェック
+    if (isNaN(Number(this.amountLimit))) {
+      const amountLimitError = {
+          name : 'error',
+          message: '送金上限には数字を入力してください',
+          color: 'red',
+      };
+      this.information.push(amountLimitError);
+      return;
+    }
+
+    // number型に変換
+    this.amountLimit = Number(this.amountLimit);
+
+    // 数量に入力された数字が送金料量の上限を超えていないか
+    for (const value of values) {
+      if (this.amountLimit < value.value) {
+        const amountLimitError = {
+          name : 'error',
+          message: '数量が送金上限を超えています',
+          color: 'red',
+        };
+        this.information.push(amountLimitError);
+      }
+    }
   }
 
   private radioChanged(event: any) {
@@ -89,9 +118,13 @@ export default class AppConfig extends Vue {
     switch (value) {
       case 'on':
         this.sendButton = true;
+        this.onChecked = true;
+        this.offChecked = false;
         break;
       case 'off':
         this.sendButton = false;
+        this.onChecked = false;
+        this.offChecked = true;
         break;
       default:
         break;
@@ -114,13 +147,14 @@ export default class AppConfig extends Vue {
       (amount: RadioGroupValue) => typeof(amount.value) !== 'number' )
     ) {
         const amountError = {
-          id: this.information.length,
           name : 'error',
           message: '数量には数字を入力してください',
           color: 'red',
         };
         this.information.push(amountError);
     }
+
+    this.amountLimitCheck(amountData.values);
 
     // informationにエラーがあれば設定を保存せずにreturn
     if (this.information.some((info) => info.name === 'error')) {
@@ -138,11 +172,10 @@ export default class AppConfig extends Vue {
     this.updateStore(configData);
 
     const success = {
-      id: this.information.length,
       name : 'success',
       message: '設定を保存しました',
       color: 'black',
-    }
+    };
     this.information = [];
     this.information.push(success);
   }
@@ -181,6 +214,16 @@ export default class AppConfig extends Vue {
     text-align: center;
     font-size: 12px;
     margin-top: 20px;
+  }
+
+  input[type=text] {
+    background-color: #eaf0f7;
+    font-size: 18px;
+    margin-top: 10px;
+    margin-left: 35.5px;
+    border: 0.1px solid #969ca3;
+    border-radius: 5px;
+    width: 70%
   }
 
   textarea {
