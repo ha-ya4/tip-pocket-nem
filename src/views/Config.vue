@@ -80,8 +80,10 @@ export default class AppConfig extends Vue {
   private offChecked: boolean = false;
 
   private created() {
-    // trueならon、falsならeoffにチェックを入れる
-    this.sendButton ? this.onChecked = true : this.offChecked = true;
+    // trueならon、falseならoffにチェックを入れる
+    this.sendButton
+      ? this.onChecked = true
+      : this.offChecked = true;
   }
 
   // amountLimitにエラーがないかチェック

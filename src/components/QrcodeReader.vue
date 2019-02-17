@@ -1,17 +1,27 @@
 <template>
   <div id="qrcode-reader">
-    <h1>qrreader</h1>
+    <h1>qreader</h1>
+    <qrcode-stream @decode="onDecode"></qrcode-stream>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-@Component({
+import { QrcodeStream } from 'vue-qrcode-reader';
 
+@Component({
+  components: {
+    QrcodeStream,
+  },
 })
 
-export default class Home extends Vue {}
+export default class QrReader extends Vue {
+  private onDecode(decodedString: string) {
+    const address = JSON.parse(decodedString).data.addr;
+    this.$emit('passAddress', address);
+  }
+}
 </script>
 
 <style scoped>

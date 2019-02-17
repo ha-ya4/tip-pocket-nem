@@ -1,99 +1,100 @@
 <template>
   <div id="transfer">
-    <form id="target">
-      <!--QRリーダー起動ボタン-->
-      <p class="transfer-button">
-        <button
-          type="button"
-          class="app-button"
-          @click="qrButton">QR</button>
-      </p>
-
-      <!--送金ボタンをoffにしたときに表示する警告文-->
-      <p class="send-button-none" v-if="offChecked">
-        QRコードを読み取ると確認なしで送金します(仮)
-      </p>
-
-      <!--アドレス入力欄-->
-      <p>
-        アドレス:<br>
-        <input type="text" maxlength="65">
-      </p>
-
-      <!--数量入力欄-->
-      <p>
-        数量:<br>
-        <input type="text" maxlength="17" v-model="sendAmount">
-      </p>
-
-      <!--メッセージ入力欄-->
-      <p>
-        メッセージ:
-        <textarea row="1" v-model="sendMessage"></textarea>
-      </p>
-
-      <!--送金ボタン-->
-      <p class="transfer-button" v-if="onChecked">
-        <button
-          type="button"
-          class="app-button"
-          @click="send">送金</button>
-      </p>
-
-      <!--送金ボタンのonn,off設定ボタン-->
-      <p id="send-radio-button">
-      <span class="config-item">送金ボタン:</span>
-
-      <span class="send-radio-item">
-        <input
-          type="radio"
-          name="send-radio"
-          value="on"
-          :checked="onChecked"
-          @change="sendRadioChanged">
-        <label>on</label>
-      </span>
-
-      <span class="send-radio-item">
-        <input
-          type="radio"
-          name="send-radio"
-          value="off"
-          :checked="offChecked"
-          @change="sendRadioChanged">
-        <label>off</label>
-      </span>
+    <p v-if="displayQrReader">
+      <qrcode-reader @passAddress="setAddressAndConditionallyTransfer"></qrcode-reader>
     </p>
 
-    <!--設定しておいた数量の中から選択できる-->
-    数量：
-    <div class="radio-button" v-for="(a, index) of amount">
-      <p>
-        <input
-          type="radio"
-          name="amount-radio"
-          :value="'value' + index"
-          :checked="a.defaultValue"
-          @change="amountRadioChanged">
-        <label>{{ a.value }}</label>
-      </p>
-    </div>
+    <!--QRリーダー起動ボタン-->
+    <p class="transfer-button">
+      <button
+        type="button"
+        class="app-button"
+        @click="qrButton">QR</button>
+    </p>
 
-    <!--設定しておいたメッセージの中から選択できる-->
-    メッセージ：
-    <div class="radio-button" v-for="(m, index) of message">
-      <p>
-        <input
-          type="radio"
-          name="message-radio"
-          :value="'value' + index"
-          :checked="m.defaultValue"
-          @change="messageRadioChanged">
-        <label>{{ m.value }}</label>
-      </p>
-    </div>
-  </form>
+    <!--送金ボタンをoffにしたときに表示する警告文-->
+    <p class="send-button-none" v-if="offChecked">
+      QRコードを読み取ると確認なしで送金します(仮)
+    </p>
 
+    <!--アドレス入力欄-->
+    <p>
+      アドレス:<br>
+      <input type="text" maxlength="50" v-model="sendAddress">
+    </p>
+
+    <!--数量入力欄-->
+    <p>
+      数量:<br>
+      <input type="text" maxlength="17" v-model="sendAmount">
+    </p>
+
+    <!--メッセージ入力欄-->
+    <p>
+      メッセージ:
+      <textarea row="1" v-model="sendMessage"></textarea>
+    </p>
+
+    <!--送金ボタン-->
+    <p class="transfer-button" v-if="onChecked">
+      <button
+        type="button"
+        class="app-button"
+        @click="send">送金</button>
+    </p>
+
+    <!--送金ボタンのonn,off設定ボタン-->
+    <p id="send-radio-button">
+    <span class="config-item">送金ボタン:</span>
+
+    <span class="send-radio-item">
+      <input
+        type="radio"
+        name="send-radio"
+        value="on"
+        :checked="onChecked"
+        @change="sendRadioChanged">
+      <label>on</label>
+    </span>
+
+    <span class="send-radio-item">
+      <input
+        type="radio"
+        name="send-radio"
+        value="off"
+        :checked="offChecked"
+        @change="sendRadioChanged">
+      <label>off</label>
+    </span>
+  </p>
+
+  <!--設定しておいた数量の中から選択できる-->
+  数量：
+  <div class="radio-button" v-for="(a, index) of userAmount">
+    <p>
+      <input
+        type="radio"
+        name="amount-radio"
+        :value="'value' + index"
+        :checked="a.defaultValue"
+        @change="amountRadioChanged">
+      <label>{{ a.value }}</label>
+    </p>
+  </div>
+
+  <!--設定しておいたメッセージの中から選択できる-->
+  メッセージ：
+  <div class="radio-button" v-for="(m, index) of userMessage">
+    <p>
+      <input
+        type="radio"
+        name="message-radio"
+        :value="'value' + index"
+        :checked="m.defaultValue"
+        @change="messageRadioChanged">
+      <label>{{ m.value }}</label>
+    </p>
+  </div>
 
   </div>
 </template>
@@ -102,6 +103,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import Information from '@/components/information.vue';
+import QrcodeReader from '@/components/QrcodeReader.vue';
 
 import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 
@@ -109,19 +111,22 @@ import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 @Component({
   components: {
     Information,
+    QrcodeReader,
   },
 })
 
 export default class Home extends Vue {
+  private sendAddress: string = '';
   // 予め登録しておいて送金画面で選択することができる数量
-  private amount: RadioGroupValue[] = this.$store.state.Config.amount;
+  private userAmount: RadioGroupValue[] = this.$store.state.Config.amount;
   private sendAmount: number = this.$store.getters['Config/defaultAmount'];
   // 予め登録しておいて送金画面で選択することができるメッセージ
-  private message: RadioGroupValue[] = this.$store.state.Config.message;
+  private userMessage: RadioGroupValue[] = this.$store.state.Config.message;
   private sendMessage: string = this.$store.getters['Config/defaultMessage'];
   private sendButton: boolean = this.$store.state.Config.sendButton;
   private onChecked: boolean = false;
   private offChecked: boolean = false;
+  private displayQrReader: boolean = false;
 
   private created() {
     this.sendButton ? this.onChecked = true : this.offChecked = true;
@@ -136,11 +141,22 @@ export default class Home extends Vue {
   }
 
   private qrButton() {
-    console.log('qr')
+    this.displayQrReader
+      ? this.displayQrReader = false
+      : this.displayQrReader = true;
+  }
+
+  // qrで読み取ったアドレスを受け取る。sendButtonがFALSEならそのまま送金
+  private setAddressAndConditionallyTransfer(address: string) {
+    this.sendAddress = address;
+
+    if (!this.sendButton) {
+      this.send();
+    }
   }
 
   private send() {
-    console.log('send')
+    console.log('send');
   }
 
   private sendRadioChanged(event: any) {

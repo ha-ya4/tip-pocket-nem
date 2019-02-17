@@ -3,4 +3,5 @@ declare module '*.vue' {
   export default Vue;
 }
 
-declare module 'nem-sdk'
+declare module 'nem-sdk';
+declare module 'vue-qrcode-reader';
