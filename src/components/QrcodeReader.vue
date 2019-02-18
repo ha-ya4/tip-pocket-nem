@@ -1,6 +1,5 @@
 <template>
   <div id="qrcode-reader">
-    <h1>qreader</h1>
     <qrcode-stream @decode="onDecode"></qrcode-stream>
   </div>
 </template>

@@ -24,4 +24,6 @@ new Vue({
 
 /*
 1.vuetifyいらない？
+２．メッセージのテキストエリアの自動
+3.configのsendButtonのところv-for
 */
