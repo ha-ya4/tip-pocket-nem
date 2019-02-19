@@ -9,7 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "dotenv-webpack": "^1.7.0",
     "firebase": "^5.8.1",
     "nem-sdk": "^1.6.7",
     "register-service-worker": "^1.5.2",
@@ -18,7 +18,6 @@
     "vue-property-decorator": "^7.0.0",
     "vue-qrcode-reader": "^1.4.0",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.4.4",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

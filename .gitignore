@@ -2,8 +2,8 @@
 .firebase
 node_modules
 public/img
-src/firebase.ts
 /dist
+.env
 tests
 jest.config.js
 

@@ -95,6 +95,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import Information from '@/components/information.vue';
 import QrcodeReader from '@/components/QrcodeReader.vue';
 
+import Nem from '@/class/nem.ts';
 import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 
 
@@ -106,6 +107,9 @@ import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 })
 
 export default class Home extends Vue {
+  // QRリーダーを表示するかどうか
+  private displayQrReader: boolean = false;
+  private nem: Nem = new Nem();
   // 送金先アドレス
   private sendAddress: string = '';
   // 送金数量
@@ -122,8 +126,6 @@ export default class Home extends Vue {
   private sendRadioLabel: string[] = ['on', 'off'];
   // sendButtonラジオのcheckedのon,offを切り替えるためのもの
   private sendRadioChecked: boolean[] = [false, false];
-  // QRリーダーを表示するかどうか
-  private displayQrReader: boolean = false;
 
   // sendButtonの設定値を反映させる
   private created() {
