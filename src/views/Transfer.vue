@@ -95,7 +95,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import Information from '@/components/information.vue';
 import QrcodeReader from '@/components/QrcodeReader.vue';
 
-import Nem from '@/class/nem.ts';
+import Wallet from '@/class/wallet.ts';
 import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 
 
@@ -109,7 +109,7 @@ import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 export default class Home extends Vue {
   // QRリーダーを表示するかどうか
   private displayQrReader: boolean = false;
-  private nem: Nem = new Nem();
+  private wallet: Wallet = new Wallet();
   // 送金先アドレス
   private sendAddress: string = '';
   // 送金数量

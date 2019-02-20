@@ -5,7 +5,7 @@
       <!--v-bind:classでthis.expansionがfalseならbefore,trueならafterにclassを切り替える-->
       <button
         :class="{ 'button-rotate-before': !expansion,  'button-rotate-after': expansion }"
-        @click="radioExpansion">&#9651;</button>
+        @click="radioExpansion"><font size="4"> &#9651;</font></button>
 
       <slot></slot>: {{ defaultValue }}
     </div>
@@ -208,7 +208,10 @@ export default class RadioButtonGroup extends Vue {
   }
 
   button {
+    background-color: transparent;
     color: #959fad;
+    outline: none;
+    border-style: none;
   }
 
   /*ボタンの向きを右にする。*/

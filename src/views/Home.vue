@@ -11,6 +11,7 @@
     <div class="xem-amount">
       amount
     </div>
+
     <router-view/>
 
   </div>
@@ -25,7 +26,7 @@ import DataStorage from '@/class/data-storage';
 export default class Home extends Vue {
   // アプリ起動時にローカルストレージからアプリ設定を読み込みvuex.storeを更新する
   private created() {
-    const storage = new DataStorage('configData');
+    const storage = new DataStorage('config-data');
     // ローカルストレージから設定を読み込む
     const configData = storage.getData;
 
@@ -100,6 +101,7 @@ a {
     font-size: 20px;
     padding-top: 18px;
     padding-bottom: 18px;
+    width: 100%;
   }
 }
 </style>

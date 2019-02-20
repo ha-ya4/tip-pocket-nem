@@ -21,14 +21,16 @@ export default class App extends Vue {}
 <style>
 body {
   background-color: #87cefa8c;
+  margin: 0;
 }
 
 /*スマホ*/
 @media screen and (max-width: 800px) {
   .app-button {
     background-color: #c8c9ca;
+    outline: none;
     font-size: 16px;
-    border: 0.3px solid #d8d9da;
+    border-style: none;
     border-radius: 15px;
     padding: 6px;
   }
