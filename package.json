@@ -11,8 +11,10 @@
   "dependencies": {
     "dotenv-webpack": "^1.7.0",
     "firebase": "^5.8.1",
+    "nem-library": "^2.0.0-RC4",
     "nem-sdk": "^1.6.7",
     "register-service-worker": "^1.5.2",
+    "rx": "^4.1.0",
     "vue": "^2.5.21",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",

@@ -1,48 +1,77 @@
 import Nem from '../class/nem';
+import nemSdk from 'nem-sdk';
+import { AccountInfoWithMetaData, Password } from 'nem-library';
+
+interface AccountData {
+  address: string;
+  iv: string;
+  privateKey: string;
+  publicKey: string;
+}
 
 export default class Wallet {
-  private address: string = '';
+  public address: string = '';
+  public iv: string = '';
+  public privateKey: string = '';
+  public publicKey: string = '';
+
   private balance: number = 0;
-  private nem: Nem = new Nem();
-  private loaclStorageKey = 'acoount-data';
-  private publicKey: string = '';
+  private nem: Nem;
+  private storageName = 'account-data';
 
-  constructor() {
-    const account = this.accountDataLoad();
+  constructor(walletName: string, password: string) {
+    this.nem = new Nem(walletName, password);
+    const acc = this.accountDataLoad();
 
-    if (account === null) {
-      const newAccount = this.nem.createAccount(this.loaclStorageKey, this.loaclStorageKey);
-      this.address = newAccount.address;
+    // アカウントの情報がなければ新規作成してローカルストレージに保存
+    if (acc === null) {
+      const account = this.nem.createAccount();
+      this.address = account.address.plain();
+      this.privateKey = account.encryptedPrivateKey.encryptedKey;
+      this.iv = account.encryptedPrivateKey.iv;
+      this.publicKey = account.open(new Password(password)).publicKey;
 
       const accountData = JSON.stringify({
-        address: newAccount.address,
-        publicKey: '',
+        address: this.address,
+        iv: this.iv,
+        privateKey: this.privateKey,
+        publicKey: this.publicKey,
       });
-      localStorage.setItem(this.loaclStorageKey, accountData);
-
-      const privateKey = JSON.stringify({ key: newAccount.privateKey });
-      localStorage.setItem('key', privateKey);
+      localStorage.setItem(this.storageName, accountData);
+      // アカウントの情報があればプロパティにセット
     } else {
-      this.address = account.address;
-      this.publicKey = account.publicKey;
+      this.address = acc.address;
+      this.iv = acc.iv;
+      this.privateKey = acc.privateKey;
+      this.publicKey = acc.publicKey;
     }
   }
 
-  private accountDataLoad(): {address: string, publicKey: string} | null {
-    const accountJson = localStorage.getItem(this.loaclStorageKey);
-    let account: {address: string, publicKey: string} | null = {
-      address: '',
-      publicKey: '',
+  // 暗号化してある秘密鍵を複合する
+  public decrypto(password: string): string {
+    const common = nemSdk.model.objects.create('common')(password, '');
+    const key = {
+      encrypted: this.privateKey,
+      iv: this.iv,
     };
+    nemSdk.crypto.helpers.passwordToPrivatekey(common, key, 'pass:bip32');
+    return common.privateKey;
+  }
+
+  public getAccount() {
+    this.nem.getAccount(this.address).subscribe((data: AccountInfoWithMetaData) => {
+      console.log(data);
+    });
+  }
+
+  // ローカルストレージからNEMアカウントを取得
+  private accountDataLoad(): AccountData | null {
+    const accountJson = localStorage.getItem(this.storageName);
 
     if (accountJson) {
-      const acc = JSON.parse(accountJson);
-      account.address = acc.address;
-      account.publicKey = acc.publicKey;
+      return JSON.parse(accountJson);
     } else {
-      account = null;
+      return null;
     }
-
-    return account;
   }
 }

@@ -109,7 +109,7 @@ import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 export default class Home extends Vue {
   // QRリーダーを表示するかどうか
   private displayQrReader: boolean = false;
-  private wallet: Wallet = new Wallet();
+  private wallet: Wallet = new Wallet('tip-pocket', 'tp-wallet');
   // 送金先アドレス
   private sendAddress: string = '';
   // 送金数量
@@ -132,6 +132,9 @@ export default class Home extends Vue {
     this.sendButton
       ? this.sendRadioChecked[0] = true
       : this.sendRadioChecked[1] = true;
+
+    // test
+    this.wallet.getAccount();
   }
 
   private amountRadioChanged(event: any) {

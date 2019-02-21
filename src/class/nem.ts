@@ -1,69 +1,50 @@
-import nem from 'nem-sdk';
+import {
+  AccountInfoWithMetaData,
+  Address,
+  SimpleWallet,
+  Password,
+  NEMLibrary,
+  NetworkTypes,
+  AccountHttp,
+} from 'nem-library';
+import { Observable } from 'rxjs';
 
-const NODE_LIST: string[] = [
-  '176.9.68.110',
-  '108.61.182.27',
-  '104.238.161.61',
-  '185.122.58.130',
-  'nempragt5.manitpro.be',
-  '103.207.68.57',
-  'asia.manitpro.be',
-  'rabanne.manitpro.be',
-  '160.16.147.251',
-  '95.169.14.208',
-  '153.122.85.177',
-  '153.122.13.99',
-  '110.44.135.87',
-  '153.122.13.35',
-];
+NEMLibrary.bootstrap(NetworkTypes.MAIN_NET);
 
-
-interface NemAccount {
-  address: string;
-  privateKey: string;
-}
+const accountHttpWithCustomNode: AccountHttp = new AccountHttp([
+  { protocol: 'http', domain: '176.9.68.110', port: 7890 },
+  { protocol: 'http', domain: '108.61.182.27', port: 7890 },
+  { protocol: 'http', domain: '104.238.161.61', port: 7890 },
+  { protocol: 'http', domain: '185.122.58.130', port: 7890 },
+  { protocol: 'http', domain: 'nempragt5.manitpro.be', port: 7890 },
+  { protocol: 'http', domain: 'asia.manitpro.be', port: 7890 },
+  { protocol: 'http', domain: 'rabanne.manitpro.be', port: 7890 },
+  { protocol: 'http', domain: '153.122.13.35', port: 7890 },
+  { protocol: 'http', domain: '95.169.14.208', port: 7890 },
+  { protocol: 'http', domain: '153.122.85.177', port: 7890 },
+]);
 
 export default class Nem {
-  private endpoint: string;
-  private node: string;
-  private port: string = process.env.NEM_PORT;
-  private net: number = process.env.NEM_MAIN_NET;
+  private accountHttp: AccountHttp = accountHttpWithCustomNode;
+  private password: string;
+  private walletName: string;
 
-  constructor() {
-    const index = Math.floor(Math.random() * 11);
-    this.node = NODE_LIST[index];
-
-    this.endpoint = nem.model.objects.create('endpoint')(this.node, this.port);
+  constructor(walletName: string, password: string) {
+    this.walletName = walletName;
+    this.password = password;
   }
-
   // アカウント作成
-  public createAccount(name: string, pass: string): NemAccount {
-    const walletName = name;
-    const password = pass;
-    const wallet = nem.model.wallet.createPRNG(walletName, password, this.net);
-    const common = nem.model.objects.create('common')(password, '');
-    const account = wallet.accounts[0];
-    nem.crypto.helpers.passwordToPrivatekey(common, account, account.algo);
-
-    return {
-      address: account.address,
-      privateKey: common.privateKey,
-    };
+  public createAccount(): SimpleWallet {
+    const password = new Password(this.password);
+    return SimpleWallet.create(this.walletName, password);
   }
 
-  public async getAccount(address: string) {
-    return await nem.com.requests.account.data(this.endpoint, address);
+  public getAccount(addr: string): Observable<AccountInfoWithMetaData> {
+    const address = new Address(addr);
+    return this.accountHttp.getFromAddress(address);
   }
 
   public async send(address: string, privateKey: string, amount: number, message: string) {
-    const common = nem.model.objects.create('common')('', privateKey);
-    const transferTransaction = nem.model
-                                   .objects
-                                   .create('transferTransaction')(address, amount, message);
-    const transactionEntity = nem.model
-                                 .transactions
-                                 .prepare('transferTransaction')(common, transferTransaction, this.net);
-
-    return await nem.model.transactions.send(common, transactionEntity, this.endpoint);
   }
 }
+
