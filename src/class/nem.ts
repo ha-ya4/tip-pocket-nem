@@ -1,13 +1,21 @@
 import {
-  AccountInfoWithMetaData,
+  XEM,
+  Account,
+  AccountHttp,
   Address,
+  SignedTransaction,
   SimpleWallet,
   Password,
   NEMLibrary,
   NetworkTypes,
-  AccountHttp,
+  TimeWindow,
+  TransferTransaction,
+  TransactionHttp,
 } from 'nem-library';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { SendParameters } from './wallet/data-class';
 
 NEMLibrary.bootstrap(NetworkTypes.MAIN_NET);
 
@@ -20,7 +28,6 @@ const accountHttpWithCustomNode: AccountHttp = new AccountHttp([
   { protocol: 'http', domain: 'asia.manitpro.be', port: 7890 },
   { protocol: 'http', domain: 'rabanne.manitpro.be', port: 7890 },
   { protocol: 'http', domain: '153.122.13.35', port: 7890 },
-  { protocol: 'http', domain: '95.169.14.208', port: 7890 },
   { protocol: 'http', domain: '153.122.85.177', port: 7890 },
 ]);
 
@@ -39,12 +46,34 @@ export default class Nem {
     return SimpleWallet.create(this.walletName, password);
   }
 
-  public getAccount(addr: string): Observable<AccountInfoWithMetaData> {
+  public getBalance(addr: string): Observable<number> {
     const address = new Address(addr);
-    return this.accountHttp.getFromAddress(address);
+    return this.accountHttp
+               .getFromAddress(address)
+               .pipe(
+                 map((d) => d.balance.balance / this.getDivisibility())
+               );
   }
 
-  public async send(address: string, privateKey: string, amount: number, message: string) {
+  public send(account: Account, parameters: SendParameters) {
+    const transferTransaction = TransferTransaction.create(
+      TimeWindow.createWithDeadline(),
+      new Address(parameters.receiverAddress),
+      new XEM(parameters.amount),
+      parameters.message
+    );
+
+    const transactionHttp = new TransactionHttp();
+
+    const signedTransaction: SignedTransaction = account.signTransaction(transferTransaction);
+
+    transactionHttp.announceTransaction(signedTransaction).subscribe(res => {
+      console.log(res)
+    })
+  }
+
+  private getDivisibility(): number {
+    return Math.pow(10, 6);
   }
 }
 

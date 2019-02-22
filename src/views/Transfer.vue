@@ -1,6 +1,6 @@
 <template>
   <div id="transfer">
-
+{{wallet.balance}}
     <p v-if="displayQrReader">
       <qrcode-reader @passAddress="setAddressAndConditionallyTransfer"></qrcode-reader>
     </p>
@@ -95,7 +95,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import Information from '@/components/information.vue';
 import QrcodeReader from '@/components/QrcodeReader.vue';
 
-import Wallet from '@/class/wallet.ts';
+import Wallet from '@/class/wallet/wallet.ts';
 import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 
 
@@ -132,9 +132,6 @@ export default class Home extends Vue {
     this.sendButton
       ? this.sendRadioChecked[0] = true
       : this.sendRadioChecked[1] = true;
-
-    // test
-    this.wallet.getAccount();
   }
 
   private amountRadioChanged(event: any) {
