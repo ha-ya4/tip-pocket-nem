@@ -5,6 +5,8 @@ import store from './store';
 import firebase from 'firebase';
 import './registerServiceWorker';
 
+import { provide } from '@/provide';
+
 Vue.config.productionTip = false;
 
 const firebaseConfig = {
@@ -21,6 +23,7 @@ firebase.initializeApp(firebaseConfig);
 new Vue({
   router,
   store,
+  provide,
   render: (h) => h(App),
 }).$mount('#app');
 

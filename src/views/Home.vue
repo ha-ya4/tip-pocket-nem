@@ -9,7 +9,7 @@
     </div>
 
     <div class="xem-amount">
-      amount
+      {{ balance }}
     </div>
 
     <router-view/>
@@ -18,14 +18,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import DataStorage from '@/class/data-storage';
+import Wallet from '@/class/wallet/wallet.ts';
 
 @Component
 export default class Home extends Vue {
-  // アプリ起動時にローカルストレージからアプリ設定を読み込みvuex.storeを更新する
+  @Inject('WALLET_SERVICE') private wallet: Wallet;
+
+  private balance: number = 0;
+
+  // ローカルストレージからアプリ設定を読み込みvuex.storeを更新する
+  // walletの残高を取得する
   private created() {
+    this.accountConfigLoad();
+    this.wallet.getBalance().subscribe( (balance) => this.balance = balance );
+  }
+
+  private accountConfigLoad() {
     const storage = new DataStorage('config-data');
     // ローカルストレージから設定を読み込む
     const configData = storage.getData;

@@ -3,6 +3,7 @@ import {
   Account,
   AccountHttp,
   Address,
+  AccountInfoWithMetaData,
   SignedTransaction,
   SimpleWallet,
   Password,
@@ -13,7 +14,6 @@ import {
   TransactionHttp,
 } from 'nem-library';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { SendParameters } from './wallet/data-class';
 
@@ -33,26 +33,16 @@ const accountHttpWithCustomNode: AccountHttp = new AccountHttp([
 
 export default class Nem {
   private accountHttp: AccountHttp = accountHttpWithCustomNode;
-  private password: string;
-  private walletName: string;
 
-  constructor(walletName: string, password: string) {
-    this.walletName = walletName;
-    this.password = password;
-  }
   // アカウント作成
-  public createAccount(): SimpleWallet {
-    const password = new Password(this.password);
-    return SimpleWallet.create(this.walletName, password);
+  public createAccount(walletName: string, pass: string): SimpleWallet {
+    const password = new Password(pass);
+    return SimpleWallet.create(walletName, password);
   }
 
-  public getBalance(addr: string): Observable<number> {
+  public getBalance(addr: string): Observable<AccountInfoWithMetaData> {
     const address = new Address(addr);
-    return this.accountHttp
-               .getFromAddress(address)
-               .pipe(
-                 map((d) => d.balance.balance / this.getDivisibility())
-               );
+    return this.accountHttp.getFromAddress(address);
   }
 
   public send(account: Account, parameters: SendParameters) {
@@ -60,19 +50,19 @@ export default class Nem {
       TimeWindow.createWithDeadline(),
       new Address(parameters.receiverAddress),
       new XEM(parameters.amount),
-      parameters.message
+      parameters.message,
     );
 
     const transactionHttp = new TransactionHttp();
 
     const signedTransaction: SignedTransaction = account.signTransaction(transferTransaction);
 
-    transactionHttp.announceTransaction(signedTransaction).subscribe(res => {
-      console.log(res)
-    })
+    transactionHttp.announceTransaction(signedTransaction).subscribe((res) => {
+      console.log(res);
+    });
   }
 
-  private getDivisibility(): number {
+  public getDivisibility(): number {
     return Math.pow(10, 6);
   }
 }

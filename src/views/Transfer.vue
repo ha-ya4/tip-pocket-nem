@@ -1,6 +1,6 @@
 <template>
   <div id="transfer">
-{{wallet.balance}}
+
     <p v-if="displayQrReader">
       <qrcode-reader @passAddress="setAddressAndConditionallyTransfer"></qrcode-reader>
     </p>
@@ -90,7 +90,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import Information from '@/components/information.vue';
 import QrcodeReader from '@/components/QrcodeReader.vue';
@@ -109,7 +109,6 @@ import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 export default class Home extends Vue {
   // QRリーダーを表示するかどうか
   private displayQrReader: boolean = false;
-  private wallet: Wallet = new Wallet('tip-pocket', 'tp-wallet');
   // 送金先アドレス
   private sendAddress: string = '';
   // 送金数量
@@ -172,6 +171,7 @@ export default class Home extends Vue {
   }
 
   private send() {
+    // this.send('tp-wallet', new SendParameters(0,PlainMessage.create('hello'),process.env.TEST_ADDRESS))
     console.log('send');
   }
 

@@ -1,68 +1,60 @@
 import nemSdk from 'nem-sdk';
 import { Account, Password, PlainMessage } from 'nem-library';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import Nem from '../nem';
-import { AccountData, SendParameters } from '../wallet/data-class'
+import { AccountData, SendParameters } from '../wallet/data-class';
 
 export default class Wallet {
   public address: string = '';
   public iv: string = '';
   public privateKey: string = '';
   public publicKey: string = '';
-  public balance: number = 0;
 
   private nem: Nem;
   private storageName = 'account-data';
 
   constructor(walletName: string, password: string) {
-    this.nem = new Nem(walletName, password);
-    const acc = this.accountDataLoad();
+    this.nem = new Nem();
+    const account = this.accountDataLoad();
 
     // アカウントの情報がなければ新規作成してローカルストレージに保存
-    if (acc === null) {
+    if (account === null) {
       // アカウント作成
-      const account = this.nem.createAccount();
-      this.address = account.address.plain();
-      this.privateKey = account.encryptedPrivateKey.encryptedKey;
-      this.iv = account.encryptedPrivateKey.iv;
-      this.publicKey = account.open(new Password(password)).publicKey;
-
-      // アカウントのデータをローカルストレージにセット
-      this.accountDataSave();
+      this.createAccount(walletName, password);
 
       // アカウントの情報があればプロパティにセット
     } else {
-      this.address = acc.address;
-      this.iv = acc.iv;
-      this.privateKey = acc.privateKey;
-      this.publicKey = acc.publicKey;
+      this.address = account.address;
+      this.iv = account.iv;
+      this.privateKey = account.privateKey;
+      this.publicKey = account.publicKey;
     }
-
-    this.getBalance()
-    //this.send('tp-wallet', new SendParameters(0,PlainMessage.create('hello'),'NDZG7C-EBFVFQ-AEHRLI-WFZV3X-RTSTH7-BZUPEP-OI7J'))
   }
 
-  public getBalance() {
-    this.nem.getBalance(this.address).subscribe((balance) => {
-      this.balance = balance;
-    });
+  public getBalance(): Observable<number> {
+    return this.nem.getBalance(this.address).pipe(
+      map((data) => data.balance.balance / this.nem.getDivisibility()),
+    );
   }
 
   public send(password: string, parameters: SendParameters) {
     const privateKey = this.decrypto(password);
     const account = Account.createWithPrivateKey(privateKey);
-    this.nem.send(account, parameters)
+    this.nem.send(account, parameters);
   }
 
   // ローカルストレージからNEMアカウントを取得
   private accountDataLoad(): AccountData | null {
-    const accountJson = localStorage.getItem(this.storageName);
+    const account = localStorage.getItem(this.storageName);
 
-    if (accountJson) {
-      return JSON.parse(accountJson);
-    } else {
-      return null;
+    if (account) {
+      const acc = JSON.parse(account);
+      return new AccountData(acc.address, acc.iv, acc.privateKey, acc.publicKey);
     }
+
+    return null;
   }
 
   private accountDataSave() {
@@ -73,6 +65,17 @@ export default class Wallet {
       publicKey: this.publicKey,
     });
     localStorage.setItem(this.storageName, accountData);
+  }
+
+  private createAccount(walletName: string, password: string) {
+    const account = this.nem.createAccount(walletName, password);
+    this.address = account.address.plain();
+    this.privateKey = account.encryptedPrivateKey.encryptedKey;
+    this.iv = account.encryptedPrivateKey.iv;
+    this.publicKey = account.open(new Password(password)).publicKey;
+
+    // アカウントのデータをローカルストレージにセット
+    this.accountDataSave();
   }
 
   // 暗号化してある秘密鍵を複合する
