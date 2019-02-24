@@ -7,6 +7,7 @@ import {
   SignedTransaction,
   SimpleWallet,
   Password,
+  NemAnnounceResult,
   NEMLibrary,
   NetworkTypes,
   TimeWindow,
@@ -45,7 +46,7 @@ export default class Nem {
     return this.accountHttp.getFromAddress(address);
   }
 
-  public send(account: Account, parameters: SendParameters) {
+  public send(account: Account, parameters: SendParameters): Observable<NemAnnounceResult> {
     const transferTransaction = TransferTransaction.create(
       TimeWindow.createWithDeadline(),
       new Address(parameters.receiverAddress),
@@ -57,9 +58,7 @@ export default class Nem {
 
     const signedTransaction: SignedTransaction = account.signTransaction(transferTransaction);
 
-    transactionHttp.announceTransaction(signedTransaction).subscribe((res) => {
-      console.log(res);
-    });
+    return transactionHttp.announceTransaction(signedTransaction);
   }
 
   public getDivisibility(): number {

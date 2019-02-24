@@ -1,5 +1,5 @@
 import nemSdk from 'nem-sdk';
-import { Account, Password, PlainMessage } from 'nem-library';
+import { Account, Password, NemAnnounceResult } from 'nem-library';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -39,10 +39,10 @@ export default class Wallet {
     );
   }
 
-  public send(password: string, parameters: SendParameters) {
+  public send(password: string, parameters: SendParameters): Observable<NemAnnounceResult> {
     const privateKey = this.decrypto(password);
     const account = Account.createWithPrivateKey(privateKey);
-    this.nem.send(account, parameters);
+    return this.nem.send(account, parameters);
   }
 
   // ローカルストレージからNEMアカウントを取得

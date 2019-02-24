@@ -18,6 +18,8 @@
       QRコードを読み取ると確認なしで送金します
     </p>
 
+    <Information :messages="information"/>
+
     <!--アドレス入力欄-->
     <p>
       アドレス:<br>
@@ -91,10 +93,13 @@
 
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
+import { PlainMessage, EncryptedMessage, NemAnnounceResult } from 'nem-library';
+import { catchError } from 'rxjs/operators';
 
 import Information from '@/components/information.vue';
 import QrcodeReader from '@/components/QrcodeReader.vue';
 
+import { SendParameters } from '@/class/wallet/data-class';
 import Wallet from '@/class/wallet/wallet.ts';
 import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 
@@ -107,8 +112,11 @@ import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 })
 
 export default class Home extends Vue {
+  @Inject('WALLET_SERVICE') private wallet: Wallet;
+
   // QRリーダーを表示するかどうか
   private displayQrReader: boolean = false;
+  private information: InformationMessage[] = [];
   // 送金先アドレス
   private sendAddress: string = '';
   // 送金数量
@@ -125,12 +133,25 @@ export default class Home extends Vue {
   private sendRadioLabel: string[] = ['on', 'off'];
   // sendButtonラジオのcheckedのon,offを切り替えるためのもの
   private sendRadioChecked: boolean[] = [false, false];
+  private walletPassword: string = '';
 
   // sendButtonの設定値を反映させる
   private created() {
     this.sendButton
       ? this.sendRadioChecked[0] = true
       : this.sendRadioChecked[1] = true;
+
+    // テスト用
+    this.walletPassword = 'tp-wallet';
+  }
+
+  private afterSendDisposal(response: NemAnnounceResult) {
+    this.sendAddress = '';
+    this.information.push({
+      name : response.message,
+      message: '送金に成功しました',
+      color: 'black',
+    });
   }
 
   private amountRadioChanged(event: any) {
@@ -154,6 +175,14 @@ export default class Home extends Vue {
     userItems[index].defaultValue = true;
   }
 
+  private sendError(error: any) {
+    this.information.push({
+      name : 'error',
+      message: error.error.message,
+      color: 'red',
+    });
+  }
+
   // qrリーダーの表示非表示を切り替える
   private qrButton() {
     this.displayQrReader
@@ -171,8 +200,22 @@ export default class Home extends Vue {
   }
 
   private send() {
-    // this.send('tp-wallet', new SendParameters(0,PlainMessage.create('hello'),process.env.TEST_ADDRESS))
-    console.log('send');
+    this.information = [];
+    const error = this.validation();
+    // errorがあればinformationの配列にpushしてからリターン
+    if (error.length !== 0) {
+      for (const err of error) {
+        this.information.push(err);
+      }
+      return;
+    }
+
+    const message = PlainMessage.create(this.sendMessage);
+    const parameters = new SendParameters(this.sendAmount, message, this.sendAddress);
+    const send = this.wallet.send(this.walletPassword, parameters).subscribe(
+      (res) => this.afterSendDisposal(res),
+      (err) => this.sendError(err),
+    );
   }
 
   private sendRadioChanged(event: any) {
@@ -191,6 +234,14 @@ export default class Home extends Vue {
       default:
         break;
     }
+  }
+
+  private validation(): InformationMessage[] {
+    const error: InformationMessage[] = [];
+    /*
+    if (this.sendAddress === '') { return false; }
+*/
+    return error;
   }
 }
 </script>
@@ -218,6 +269,11 @@ export default class Home extends Vue {
     width: 90%;
     margin-top: 5px;
     margin-left: 5%;
+  }
+
+  .nis-response {
+    text-align: center;
+    font-size: 20px;
   }
 
   .transfer-button {

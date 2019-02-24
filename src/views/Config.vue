@@ -182,7 +182,7 @@ export default class AppConfig extends Vue {
 
   // ローカルストレージに保存してある設定を更新
   private updateLocalStorage(configData: TypeConfigData) {
-    const storage = new DataStorage('configData');
+    const storage = new DataStorage('config-data');
     storage.setData = configData;
   }
 

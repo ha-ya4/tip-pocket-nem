@@ -35,7 +35,7 @@
           value="item1"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="30" maxlength="30" v-model="value1.value"></textarea>
+        <textarea rows="1" cols="25" maxlength="25" v-model="value1.value"></textarea>
       </p>
 
       <p class="radio-item">
@@ -47,7 +47,7 @@
           value="item2"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="30" maxlength="30" v-model="value2.value"></textarea>
+        <textarea rows="1" cols="25" maxlength="25" v-model="value2.value"></textarea>
       </p>
 
       <p class="radio-item">
@@ -59,7 +59,7 @@
           value="item3"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="30" maxlength="30" v-model="value3.value">
+        <textarea rows="1" cols="25" maxlength="25" v-model="value3.value">
         </textarea>
       </p>
     </form>
@@ -202,6 +202,7 @@ export default class RadioButtonGroup extends Vue {
   }
 
   textarea {
+    display: inline;
     background-color: #eaf0f7;
     border: 0.1px solid #969ca3;
     border-radius: 5px;
@@ -216,13 +217,13 @@ export default class RadioButtonGroup extends Vue {
 
   /*ボタンの向きを右にする。*/
   .button-rotate-before {
-    transform:rotate(90deg);
+    transform: rotate(90deg);
     transition: 0.05s;
   }
 
   /*ボタンクリックで向きを下に回転させる*/
   .button-rotate-after {
-    transform:rotate(180deg);
+    transform: rotate(180deg);
     transition: 0.05s;
   }
 
