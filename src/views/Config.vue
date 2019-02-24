@@ -67,7 +67,7 @@ import { TypeConfigData, RadioGroupValue, InformationMessage } from '@/interface
     Information,
   },
 })
-export default class AppConfig extends Vue {
+export default class Config extends Vue {
   private sendButton: boolean = this.$store.state.Config.sendButton;
   // 送金量の上限を決めておける
   private amountLimit: number = this.$store.state.Config.amountLimit;

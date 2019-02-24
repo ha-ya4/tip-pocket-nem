@@ -94,7 +94,6 @@
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import { PlainMessage, EncryptedMessage, NemAnnounceResult } from 'nem-library';
-import { catchError } from 'rxjs/operators';
 
 import Information from '@/components/information.vue';
 import QrcodeReader from '@/components/QrcodeReader.vue';
@@ -111,7 +110,7 @@ import { RadioGroupValue, InformationMessage } from '@/interface.ts';
   },
 })
 
-export default class Home extends Vue {
+export default class Transfer extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
   // QRリーダーを表示するかどうか
