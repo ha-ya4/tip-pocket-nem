@@ -16,7 +16,7 @@ import { InformationMessage } from '@/interface.ts';
 @Component({
   components: {
     Information,
-  }
+  },
 })
 export default class ReceiveAndWithdraw extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;

@@ -7,14 +7,17 @@ import {
   SignedTransaction,
   SimpleWallet,
   Password,
+  Pageable,
   NemAnnounceResult,
   NEMLibrary,
   NetworkTypes,
   TimeWindow,
+  Transaction,
   TransferTransaction,
   TransactionHttp,
 } from 'nem-library';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { SendParameters } from './wallet/data-class';
 
@@ -28,7 +31,6 @@ const accountHttpWithCustomNode: AccountHttp = new AccountHttp([
   { protocol: 'http', domain: 'nempragt5.manitpro.be', port: 7890 },
   { protocol: 'http', domain: 'asia.manitpro.be', port: 7890 },
   { protocol: 'http', domain: 'rabanne.manitpro.be', port: 7890 },
-  { protocol: 'http', domain: '153.122.13.35', port: 7890 },
   { protocol: 'http', domain: '153.122.85.177', port: 7890 },
 ]);
 
@@ -39,6 +41,11 @@ export default class Nem {
   public createAccount(walletName: string, pass: string): SimpleWallet {
     const password = new Password(pass);
     return SimpleWallet.create(walletName, password);
+  }
+
+  public getAllTransactionsPaginated(addr: string): Pageable<Transaction[]> {
+    const address = new Address(addr);
+    return this.accountHttp.allTransactionsPaginated(address);
   }
 
   public getBalance(addr: string): Observable<AccountInfoWithMetaData> {

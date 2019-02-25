@@ -1,5 +1,5 @@
 import nemSdk from 'nem-sdk';
-import { Account, Password, NemAnnounceResult } from 'nem-library';
+import { Account, Password, Pageable, NemAnnounceResult, Transaction } from 'nem-library';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -33,10 +33,18 @@ export default class Wallet {
     }
   }
 
+  public getAllTransactionsPaginated(): Pageable<Transaction[]> {
+    return this.nem.getAllTransactionsPaginated('NDZG7CEBFVFQAEHRLIWFZV3XRTSTH7BZUPEPOI7J');
+  }
+
   public getBalance(): Observable<number> {
     return this.nem.getBalance(this.address).pipe(
       map((data) => data.balance.balance / this.nem.getDivisibility()),
     );
+  }
+
+  public getDivisibility(): number {
+    return this.nem.getDivisibility();
   }
 
   public send(password: string, parameters: SendParameters): Observable<NemAnnounceResult> {

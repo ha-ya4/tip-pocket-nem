@@ -4,7 +4,7 @@
     <div id="nav">
       <router-link to="/transfer">チップ</router-link>
       <router-link to="/history">履歴</router-link>
-      <router-link to="/withdraw">出金</router-link>
+      <router-link to="/receivewithdraw">出金</router-link>
       <router-link to="/config">設定</router-link>
     </div>
 

@@ -19,7 +19,6 @@
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
     "vue-qrcode-reader": "^1.4.0",
-    "vue-qriously": "^1.1.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
