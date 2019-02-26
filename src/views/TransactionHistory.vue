@@ -31,9 +31,6 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import { Transaction, Pageable } from 'nem-library';
 
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-
 import Wallet from '@/class/wallet/wallet.ts';
 
 @Component({
