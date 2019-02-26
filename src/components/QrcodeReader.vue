@@ -24,5 +24,4 @@ export default class QrReader extends Vue {
 </script>
 
 <style scoped>
-
 </style>
