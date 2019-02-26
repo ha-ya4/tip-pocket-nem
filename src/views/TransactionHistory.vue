@@ -1,22 +1,41 @@
 <template>
   <div id="transaction-history">
 
+    <!--トランサクションの詳細を表示する-->
+    <modal-window
+      @modalClose="modalClose"
+      :open="modalOpen"
+      :transaction="historyDetail"
+    />
+
     <div class=transaction-history v-for="h of history">
-      <div class="history">
+      <div class="history" >
+        <a @click="modalContentOpen(h)">
+          <div class="transfer" v-if="!h.otherTransaction">
+            <hr>
+            {{ h.timeWindow.timeStamp | dateTime }}<br>
+            <hr>
+            sender:<br>{{ h.signer.address.value }}<br>
+            <hr>
+            quantity: {{ h._xem.quantity / divisibility }}<br>
+            <hr>
+            message:<br>{{ h.message.payload | stringShort }}
+            <hr>
+          </div>
+        </a>
 
-        <div class="transfer" v-if="!h.otherTransaction">
-          {{ h.timeWindow.timeStamp | dateTime }}<br>
-          sender: {{ h.signer.address.value }}
-          quantity: {{ h._xem.quantity / divisibility }}<br>
-          message: {{ h.message.payload }}
-        </div><br>
-
+        <!--マルチシグの場合はこっち-->
         <div class="multisig-transaction" v-if="h.otherTransaction">
+          <hr>
           {{ h.timeWindow.timeStamp | dateTime }} multisig<br>
-          sender: {{ h.otherTransaction.signer.address.value }}
+          <hr>
+          sender:<br>{{ h.otherTransaction.signer.address.value }}<br>
+          <hr>
           quantity: {{ h.otherTransaction._xem.quantity / divisibility }}<br>
-          message: {{ h.otherTransaction.message.payload }}
-        </div><br>
+          <hr>
+          message:<br>{{ h.otherTransaction.message.payload }}
+          <hr>
+        </div>
 
       </div>
     </div>
@@ -31,9 +50,15 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import { Transaction, Pageable } from 'nem-library';
 
+import ModalWindow from '@/components/ModalWindow.vue';
+
 import Wallet from '@/class/wallet/wallet.ts';
 
 @Component({
+  components: {
+    ModalWindow,
+  },
+
   filters: {
     // あとで直す
     dateTime(value: any): string {
@@ -42,6 +67,15 @@ import Wallet from '@/class/wallet/wallet.ts';
       const dateTime = `${date._year}-${date._month}-${date._day}/${time._hour}:${time._minute}:${time._second}`;
       return dateTime;
     },
+
+    stringShort(str: string): string {
+      const length = 25;
+      if (length < str.length) {
+        return str.substr(0, 25) + '...';
+      }
+
+      return str;
+    },
   },
 })
 export default class TransactionHistory extends Vue {
@@ -49,12 +83,13 @@ export default class TransactionHistory extends Vue {
 
   private addHistory: boolean = true;
   private allHistory: Pageable<Transaction[]> = this.wallet.getAllTransactionsPaginated();
-  private divisibility: number = this.wallet.getDivisibility()
+  private divisibility: number = this.wallet.getDivisibility();
   private history: Transaction[] = [];
+  private historyDetail: Transaction | null = null;
+  private modalOpen: boolean = false;
 
   private created() {
     this.allHistory.subscribe((history) => {
-      console.log(history)
       for (const h of history) {
         this.history.push(h);
       }
@@ -62,21 +97,55 @@ export default class TransactionHistory extends Vue {
   }
 
   private addHistoryButton() {
-    this.allHistory.nextPage()
+    this.allHistory.nextPage();
+  }
+
+  private modalContentOpen(transaction: Transaction) {
+    this.modalOpen = true;
+    this.historyDetail = transaction;
+  }
+
+  private modalClose() {
+    this.modalOpen = false;
   }
 }
 </script>
 
 <style scoped>
 @media screen and (max-width: 800px) {
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
+  hr {
+    background-color: #bbb;
+    border: none;
+    height: 1px;
+  }
+
   #transaction-history {
-    margin: 10px;
+    word-wrap: break-word;
+    margin-left: auto;
+    margin-right: auto;
+    width: 95%;
   }
 
   .transaction-history {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .history {
+    box-shadow: 0.5px 0.5px 0.5px 0.5px rgba(85, 145, 160, 0.4);
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 
   .transfer {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .add-history-button {
