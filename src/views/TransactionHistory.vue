@@ -5,38 +5,57 @@
     <modal-window
       @modalClose="modalClose"
       :open="modalOpen"
-      :transaction="historyDetail"
-    />
+    >
+      <history-detail :historyDetail="historyDetail"/>
+    </modal-window>
 
     <div class=transaction-history v-for="h of history">
+
       <div class="history" >
         <a @click="modalContentOpen(h)">
-          <div class="transfer" v-if="!h.otherTransaction">
+          <div class="transfer" v-if="h._xem">
             <hr>
-            {{ h.timeWindow.timeStamp | dateTime }}<br>
+            {{ h.timeWindow.timeStamp | dateTime }}
             <hr>
-            sender:<br>{{ h.signer.address.value }}<br>
+            <span class="transaction-type">TransferTransaction</span>
             <hr>
-            quantity: {{ h._xem.quantity / divisibility }}<br>
+            sender:<br>{{ h.signer.address.value }}
+            <hr>
+            quantity: {{ h._xem.quantity / divisibility }}
+            <hr>
+            <span v-if="h._assets === undefined">
+              アセットなし
+            </span>
+            <span v-if="h._assets !== undefined">
+              アセットあり
+            </span>
             <hr>
             message:<br>{{ h.message.payload | stringShort }}
             <hr>
           </div>
+
+          <!--マルチシグの場合はこっち-->
+          <div class="multisig-transaction" v-if="h.otherTransaction">
+            <hr>
+            {{ h.timeWindow.timeStamp | dateTime }}
+            <hr>
+            <span class="transaction-type">MultisigTransaction</span>
+            <hr>
+            sender:<br>{{ h.otherTransaction.signer.address.value }}
+            <hr>
+            quantity: {{ h.otherTransaction._xem.quantity / divisibility }}
+            <hr>
+            <span v-if="h.otherTransaction._assets === undefined">
+              アセットなし
+            </span>
+            <span v-if="h.otherTransaction._assets !== undefined">
+              アセットあり
+            </span>
+            <hr>
+            message:<br>{{ h.otherTransaction.message.payload }}
+            <hr>
+          </div>
         </a>
-
-        <!--マルチシグの場合はこっち-->
-        <div class="multisig-transaction" v-if="h.otherTransaction">
-          <hr>
-          {{ h.timeWindow.timeStamp | dateTime }} multisig<br>
-          <hr>
-          sender:<br>{{ h.otherTransaction.signer.address.value }}<br>
-          <hr>
-          quantity: {{ h.otherTransaction._xem.quantity / divisibility }}<br>
-          <hr>
-          message:<br>{{ h.otherTransaction.message.payload }}
-          <hr>
-        </div>
-
       </div>
     </div>
 
@@ -51,13 +70,15 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import { Transaction, Pageable } from 'nem-library';
 import { Observable } from 'rxjs';
 
-import ModalWindow from '@/components/ModalWindow.vue';
+import ModalWindow from '@/components/modal-window/ModalWindow.vue';
+import HistoryDetail from '@/components/modal-window/HistoryDetail.vue';
 
 import Wallet from '@/class/wallet/wallet.ts';
 
 @Component({
   components: {
     ModalWindow,
+    HistoryDetail,
   },
 
   filters: {
@@ -65,7 +86,7 @@ import Wallet from '@/class/wallet/wallet.ts';
     dateTime(value: any): string {
       const date = value._date;
       const time = value._time;
-      const dateTime = `${date._year}-${date._month}-${date._day}/${time._hour}:${time._minute}:${time._second}`;
+      const dateTime = `${date._year}-${date._month}-${date._day}/${time._hour}:${time._minute}`;
       return dateTime;
     },
 
@@ -91,6 +112,7 @@ export default class TransactionHistory extends Vue {
 
   private created() {
     this.allHistory.subscribe((history) => {
+      console.log(history)
       for (const h of history) {
         this.history.push(h);
       }
@@ -102,8 +124,8 @@ export default class TransactionHistory extends Vue {
   }
 
   private modalContentOpen(transaction: Transaction) {
-    this.modalOpen = true;
     this.historyDetail = transaction;
+    this.modalOpen = true;
   }
 
   private modalClose() {
@@ -132,6 +154,11 @@ export default class TransactionHistory extends Vue {
     width: 95%;
   }
 
+  .add-history-button {
+    text-align: center;
+    margin-top: 5px;
+  }
+
   .transaction-history {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -149,9 +176,8 @@ export default class TransactionHistory extends Vue {
     margin-right: auto;
   }
 
-  .add-history-button {
-    text-align: center;
-    margin-top: 5px;
+  .transaction-type {
+    color: rgba(231, 159, 2, 0.911);
   }
 }
 </style>
