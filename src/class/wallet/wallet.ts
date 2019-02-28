@@ -35,6 +35,17 @@ export default class Wallet {
     }
   }
 
+  public createAccount(walletName: string, password: string) {
+    const account = this.nem.createAccount(walletName, password);
+    this.address = account.address.plain();
+    this.privateKey = account.encryptedPrivateKey.encryptedKey;
+    this.iv = account.encryptedPrivateKey.iv;
+    this.publicKey = account.open(new Password(password)).publicKey;
+
+    // アカウントのデータをローカルストレージにセット
+    this.accountDataSave();
+  }
+
   // 暗号化してある秘密鍵を複合する
   public decrypto(): string {
     const common = nemSdk.model.objects.create('common')(this.password, '');
@@ -86,16 +97,5 @@ export default class Wallet {
       publicKey: this.publicKey,
     });
     localStorage.setItem(this.storageName, accountData);
-  }
-
-  private createAccount(walletName: string, password: string) {
-    const account = this.nem.createAccount(walletName, password);
-    this.address = account.address.plain();
-    this.privateKey = account.encryptedPrivateKey.encryptedKey;
-    this.iv = account.encryptedPrivateKey.iv;
-    this.publicKey = account.open(new Password(password)).publicKey;
-
-    // アカウントのデータをローカルストレージにセット
-    this.accountDataSave();
   }
 }

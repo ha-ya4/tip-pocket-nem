@@ -28,6 +28,10 @@ export default {
     sendButton: true,
 
     amountLimit: 100,
+
+    withPasswordInput: false,
+
+    walletPassword: '',
   },
 
   getters: {

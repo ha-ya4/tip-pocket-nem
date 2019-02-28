@@ -1,6 +1,12 @@
 <template>
   <div id="home">
 
+    <modal-window
+      :open="createAccountModal"
+    >
+    <create-account/>
+    </modal-window>
+
     <div id="nav">
       <router-link to="/transfer">チップ</router-link>
       <router-link to="/history">履歴</router-link>
@@ -20,24 +26,43 @@
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import CreateAccount from '@/components/create-account/CreateAccount.vue';
+import ModalWindow from '@/components/modal-window/ModalWindow.vue';
+
 import DataStorage from '@/class/data-storage';
 import Wallet from '@/class/wallet/wallet.ts';
 
-@Component
+@Component({
+  components: {
+    CreateAccount,
+    ModalWindow,
+  },
+})
 export default class Home extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
   private balance: number = 0;
+  private walletName: string = 'tip-pocket';
+  private walletPassword: string = 'tip-pocket-nem-wallet';
+  private createAccountModal: boolean = false;
 
   // ローカルストレージからアプリ設定を読み込みvuex.storeを更新する
   // walletの残高を取得する
   private created() {
+    //設定がなければウォレット作成。作成後アプリ設定とアカウント情報を別々にローカルストレージへ
+    if(!this.accountConfigLoad()) {
+      this.createAccountModal = true;
+    }
+  }
+
+  private Load() {
     this.accountConfigLoad();
     this.wallet.getBalance().subscribe( (balance) => this.balance = balance );
   }
 
-  private accountConfigLoad() {
-    const storage = new DataStorage('tip-wallet-config-data');
+  private accountConfigLoad(): boolean {
+    const storageName = `${this.walletName}-config-data`
+    const storage = new DataStorage(storageName);
     // ローカルストレージから設定を読み込む
     const configData = storage.getData;
 
@@ -45,11 +70,19 @@ export default class Home extends Vue {
     if (configData) {
       // あればvuex.storeを更新
       this.$store.commit('Config/UPDATE_CONFIG_DATA', configData);
+      return true;
     } else {
       // なければアプリ設定の初期値をローカルストレージに登録
-      const data = this.$store.state.Config;
-      storage.setData = data;
+     /* const data = this.$store.state.Config;
+      storage.setData = data;*/
+      return false;
     }
+  }
+
+  private accountLoad() {}
+
+  private createAccountAndSet() {
+    this.wallet.createAccount(this.walletName, this.walletPassword);
   }
 }
 </script>
