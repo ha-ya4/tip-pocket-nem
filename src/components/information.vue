@@ -44,6 +44,7 @@ export default class Information extends Vue {
 }
 
 .message-content {
+  text-align: center;
   padding-top: 7px;
   padding-left: 5px;
 }

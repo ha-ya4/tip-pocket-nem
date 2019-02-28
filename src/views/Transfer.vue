@@ -132,7 +132,6 @@ export default class Transfer extends Vue {
   private sendRadioLabel: string[] = ['on', 'off'];
   // sendButtonラジオのcheckedのon,offを切り替えるためのもの
   private sendRadioChecked: boolean[] = [false, false];
-  private walletPassword: string = '';
 
   // sendButtonの設定値を反映させる
   private created() {
@@ -141,7 +140,6 @@ export default class Transfer extends Vue {
       : this.sendRadioChecked[1] = true;
 
     // テスト用
-    this.walletPassword = 'tp-wallet';
   }
 
   private afterSendDisposal(response: NemAnnounceResult) {
@@ -177,7 +175,7 @@ export default class Transfer extends Vue {
   private sendError(error: any) {
     this.information.push({
       name : 'error',
-      message: error.error.message,
+      message: error.message,
       color: 'red',
     });
   }
@@ -211,7 +209,7 @@ export default class Transfer extends Vue {
 
     const message = PlainMessage.create(this.sendMessage);
     const parameters = new SendParameters(this.sendAmount, message, this.sendAddress);
-    const send = this.wallet.send(this.walletPassword, parameters).subscribe(
+    const send = this.wallet.send(parameters).subscribe(
       (res) => this.afterSendDisposal(res),
       (err) => this.sendError(err),
     );

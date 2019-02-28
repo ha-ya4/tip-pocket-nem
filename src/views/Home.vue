@@ -4,7 +4,7 @@
     <div id="nav">
       <router-link to="/transfer">チップ</router-link>
       <router-link to="/history">履歴</router-link>
-      <router-link to="/receivewithdraw">出金</router-link>
+      <router-link to="/receive">入金</router-link>
       <router-link to="/config">設定</router-link>
     </div>
 
@@ -37,7 +37,7 @@ export default class Home extends Vue {
   }
 
   private accountConfigLoad() {
-    const storage = new DataStorage('config-data');
+    const storage = new DataStorage('tip-wallet-config-data');
     // ローカルストレージから設定を読み込む
     const configData = storage.getData;
 

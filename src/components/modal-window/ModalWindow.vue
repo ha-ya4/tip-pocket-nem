@@ -1,7 +1,5 @@
 <template>
-
   <div id="modal-window">
-
     <!--親コンポーネントから渡されたbool値でモーダルの表示、非表示を切り替える-->
     <div :class="{ 'modal-none': !open }">
 
@@ -15,14 +13,8 @@
           <slot></slot>
         </div>
 
-        <div class="close-button">
-          <button type="button" class="app-button" @click="modalClose">閉じる</button>
-      　</div>
-
       </div>
-
     </div>
-
   </div>
 </template>
 
@@ -84,11 +76,6 @@ export default class ModalWindow extends Vue {
 
 .modal-none {
   display: none;
-}
-
-.close-button {
-  text-align: center;
-  margin: 15px;
 }
 
 .overlay {

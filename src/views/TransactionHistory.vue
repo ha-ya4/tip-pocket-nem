@@ -6,7 +6,10 @@
       @modalClose="modalClose"
       :open="modalOpen"
     >
-      <history-detail :historyDetail="historyDetail"/>
+      <history-detail
+        @modalClose="modalClose"
+        :historyDetail="historyDetail"
+      />
     </modal-window>
 
     <div class=transaction-history v-for="h of history">
@@ -111,7 +114,6 @@ export default class TransactionHistory extends Vue {
 
   private created() {
     this.allHistory.subscribe((history) => {
-      console.log(history)
       for (const h of history) {
         this.history.push(h);
       }

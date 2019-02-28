@@ -14,8 +14,10 @@ export default class Wallet {
 
   private nem: Nem;
   private storageName = 'account-data';
+  private password: string;
 
   constructor(walletName: string, password: string) {
+    this.password = password;
     this.nem = new Nem();
     const account = this.accountDataLoad();
 
@@ -33,6 +35,17 @@ export default class Wallet {
     }
   }
 
+  // 暗号化してある秘密鍵を複合する
+  public decrypto(): string {
+    const common = nemSdk.model.objects.create('common')(this.password, '');
+    const key = {
+      encrypted: this.privateKey,
+      iv: this.iv,
+    };
+    nemSdk.crypto.helpers.passwordToPrivatekey(common, key, 'pass:bip32');
+    return common.privateKey;
+  }
+
   public getAllTransactionsPaginated(): Pageable<Transaction[]> {
     return this.nem.getAllTransactionsPaginated('NDZG7CEBFVFQAEHRLIWFZV3XRTSTH7BZUPEPOI7J');
   }
@@ -47,8 +60,8 @@ export default class Wallet {
     return this.nem.getDivisibility();
   }
 
-  public send(password: string, parameters: SendParameters): Observable<NemAnnounceResult> {
-    const privateKey = this.decrypto(password);
+  public send(parameters: SendParameters): Observable<NemAnnounceResult> {
+    const privateKey = this.decrypto();
     const account = Account.createWithPrivateKey(privateKey);
     return this.nem.send(account, parameters);
   }
@@ -84,16 +97,5 @@ export default class Wallet {
 
     // アカウントのデータをローカルストレージにセット
     this.accountDataSave();
-  }
-
-  // 暗号化してある秘密鍵を複合する
-  private decrypto(password: string): string {
-    const common = nemSdk.model.objects.create('common')(password, '');
-    const key = {
-      encrypted: this.privateKey,
-      iv: this.iv,
-    };
-    nemSdk.crypto.helpers.passwordToPrivatekey(common, key, 'pass:bip32');
-    return common.privateKey;
   }
 }

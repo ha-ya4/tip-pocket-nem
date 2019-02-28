@@ -4,7 +4,7 @@ import Router from 'vue-router';
 import Config from '@/views/Config.vue';
 import TransactionHistory from '@/views/TransactionHistory.vue';
 import Transfer from '@/views/Transfer.vue';
-import ReceiveAndWithdraw from '@/views/ReceiveAndWithdraw.vue';
+import Receive from '@/views/Receive.vue';
 
 Vue.use(Router);
 
@@ -28,9 +28,9 @@ export default new Router({
       component: TransactionHistory,
     },
     {
-      path: '/receivewithdraw',
-      name: 'receivewithdraw',
-      component: ReceiveAndWithdraw,
+      path: '/receive',
+      name: 'receive',
+      component: Receive,
     },
     {
       path: '*',
