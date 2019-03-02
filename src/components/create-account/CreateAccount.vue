@@ -1,7 +1,8 @@
 <template>
   <div id="create-account">
+    <div class="container">
 
-    <div :class="{ 'select-create-next': pages !== 0 }">
+    <div class="contents" :class="{ 'select-create-next': pages !== 0 }">
       <input type="radio"
         name="radio-item"
         value="new-account"
@@ -14,40 +15,66 @@
         value="from-privatekey"
         @change="radioChanged"
       >
-      <label>秘密鍵をインポート</label>
+      <label>秘密鍵をインポート</label><br>
+
+      <span class="error" v-if="error">どちらか選択してください</span>
 
       <div class="next-button">
         <button type="button" class="app-button" @click="nextPage">次へ</button>
       </div>
     </div>
 
-    <div :class="{ 'import-privatekey-next': pages !== 1 }"></div>
+    <div v-if="pages === 1" class="position-height" :class="{ 'new-account': pages === 1 }">
+      <new-account/>
+    </div>
 
-    <div :class="{ 'new-account-next': pages !== 2 }"></div>
+    <div v-if="pages === 2" class="position-height" :class="{ 'import-privatekey': pages === 2 }">
+      privatekey
+    </div>
 
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import{ CreateAcountPages } from '@/components/create-account/enum-pages'
+import NewAccount from '@/components/create-account/NewAccount.vue';
+import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 
-@Component({})
+import { CreateAcountPages } from '@/components/create-account/types.ts';
+import { InformationMessage } from '@/interface.ts';
+
+@Component({
+  components: {
+    NewAccount,
+    ImportPrivateKey,
+  },
+})
 export default class CreateAccount extends Vue {
+  private error: boolean = false;
   private pages: CreateAcountPages = CreateAcountPages.CreateMethod;
+  private createMethod: CreateAcountPages;
 
   private radioChanged(event: any) {
+    this.error = false;
     switch (event.target.value) {
       case 'new-account':
+        this.createMethod = CreateAcountPages.NewAccount;
         break;
       case 'from-privatekey':
+        this.createMethod = CreateAcountPages.ImportPrivateKey;
         break;
     }
   }
 
   private nextPage() {
-    this.pages = CreateAcountPages.NewAccount;
+    if (this.createMethod === undefined) {
+      this.error = true;
+      return;
+    }
+    this.pages = this.createMethod;
+    this.error = false;
   }
 }
 </script>
@@ -55,19 +82,31 @@ export default class CreateAccount extends Vue {
 <style scoped>
 @media screen and (max-width: 800px) {
   #create-account {
-    text-align: center;
+    /*flex,absoluteどちらかで縦が中央に寄せれなかった。*/
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+  }
+
+  .error {
+    color: red;
   }
 
   .select-create-next {
     animation-name: select-create-next;
-    animation-duration: 0.5s;
+    animation-duration: 0.3s;
     animation-fill-mode: forwards;
   }
-
   @keyframes select-create-next {
     0% {
-      position: relative;
-      right: 100px;
       transform:translateX(-0px);
     }
 
@@ -81,8 +120,40 @@ export default class CreateAccount extends Vue {
     margin: 15px;
   }
 
-  .import-privatekey-next {}
+  .position-height {
+    position: relative;
+    bottom: 50px;
+  }
 
-  .new-account-next {}
+  .new-account {
+    animation-name: new-account;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+  }
+  @keyframes new-account {
+    0% {
+      transform:translateX(1000px);
+    }
+
+    100% {
+      transform:translateX(0px);
+    }
+  }
+
+  .import-privatekey {
+    animation-name: import-privatekey;
+    animation-duration: 0.3s;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes import-privatekey {
+    0% {
+      transform:translateX(1000px);
+    }
+
+    100% {
+      transform:translateX(0px);
+    }
+  }
 }
 </style>

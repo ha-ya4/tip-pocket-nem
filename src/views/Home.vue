@@ -29,7 +29,6 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import CreateAccount from '@/components/create-account/CreateAccount.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
-import DataStorage from '@/class/data-storage';
 import Wallet from '@/class/wallet/wallet.ts';
 
 @Component({
@@ -42,47 +41,41 @@ export default class Home extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
   private balance: number = 0;
-  private walletName: string = 'tip-pocket';
-  private walletPassword: string = 'tip-pocket-nem-wallet';
   private createAccountModal: boolean = false;
 
   // ローカルストレージからアプリ設定を読み込みvuex.storeを更新する
   // walletの残高を取得する
   private created() {
-    //設定がなければウォレット作成。作成後アプリ設定とアカウント情報を別々にローカルストレージへ
-    if(!this.accountConfigLoad()) {
+    // dataがなければウォレット作成。あればそのままbalance取得
+    if (!this.accountDataLoad()) {
       this.createAccountModal = true;
+    } else {
+      this.getBalance();
     }
+
+    //--------------------テスト用-------------------
+    this.createAccountModal = true;
   }
 
-  private Load() {
-    this.accountConfigLoad();
-    this.wallet.getBalance().subscribe( (balance) => this.balance = balance );
-  }
+  private accountDataLoad(): boolean {
+    const storageName = this.wallet.walletName;
+    const accountDataJson = localStorage.getItem(storageName);
 
-  private accountConfigLoad(): boolean {
-    const storageName = `${this.walletName}-config-data`
-    const storage = new DataStorage(storageName);
-    // ローカルストレージから設定を読み込む
-    const configData = storage.getData;
-
-    // ローカルストレージに設定のデータがあったか確認。
-    if (configData) {
-      // あればvuex.storeを更新
-      this.$store.commit('Config/UPDATE_CONFIG_DATA', configData);
+    // ローカルストレージにデータがあったか確認。
+    if (accountDataJson) {
+      // あればvuex.storeとthis.walletを更新
+      const accountData = JSON.parse(accountDataJson);
+      this.$store.commit('Config/UPDATE_CONFIG_DATA', accountData.configData);
+      this.wallet.setPublicData = accountData.accountData;
       return true;
     } else {
-      // なければアプリ設定の初期値をローカルストレージに登録
-     /* const data = this.$store.state.Config;
-      storage.setData = data;*/
+      // なければアカウント作成画面を表示
       return false;
     }
   }
 
-  private accountLoad() {}
-
-  private createAccountAndSet() {
-    this.wallet.createAccount(this.walletName, this.walletPassword);
+  private getBalance() {
+    this.wallet.getBalance().subscribe( (balance) => this.balance = balance );
   }
 }
 </script>

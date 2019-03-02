@@ -41,65 +41,67 @@ export default class ModalWindow extends Vue {
 </script>
 
 <style scoped>
-/*レスポンシブじゃなくていいと思う*/
-#modal-content {
-  box-sizing: border-box;
-  border-top: 25px solid rgb(170, 199, 231);
-  border-bottom: 25px solid rgb(170, 199, 231);
-  border-radius: 10px;
-  background-color: #fdfeff;
-  z-index: 2;
-  position: fixed;
-  width: 90%;
-  height: 70%;
-  top: 15%;
-  left: 5%;
-  overflow:auto;
-  word-wrap: break-word;
-  animation-name: modal-fadein;
-  animation-duration: 0.3s;
-}
-
-@keyframes modal-fadein {
-  from {
-    opacity: 0;
+/*スマホ*/
+@media screen and (max-width: 800px) {
+  #modal-content {
+    box-sizing: border-box;
+    border-top: 25px solid rgb(170, 199, 231);
+    border-bottom: 25px solid rgb(170, 199, 231);
+    border-radius: 10px;
+    background-color: #fdfeff;
+    z-index: 2;
+    position: fixed;
+    width: 90%;
+    height: 70%;
+    top: 15%;
+    left: 5%;
+    overflow:auto;
+    word-wrap: break-word;
+    animation-name: modal-fadein;
+    animation-duration: 0.3s;
   }
 
-  to {
-    opacity: 1;
-  }
-}
+  @keyframes modal-fadein {
+    from {
+      opacity: 0;
+    }
 
-.modal-item {
-  padding: 15px;
-}
-
-.modal-none {
-  display: none;
-}
-
-.overlay {
-  background-color: #0a0a0a;
-  z-index: 1;
-  opacity: 0.65;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  animation-name: overlay-fadein;
-  animation-duration: 0.3s;
-}
-
-@keyframes overlay-fadein {
-  from {
-    opacity: 0;
+    to {
+      opacity: 1;
+    }
   }
 
-  to {
+  .modal-item {
+    padding: 15px;
+  }
+
+  .modal-none {
+    display: none;
+  }
+
+  .overlay {
+    background-color: #0a0a0a;
+    z-index: 1;
     opacity: 0.65;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    animation-name: overlay-fadein;
+    animation-duration: 0.3s;
+  }
+
+  @keyframes overlay-fadein {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 0.65;
+    }
   }
 }
 </style>

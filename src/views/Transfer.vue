@@ -138,8 +138,6 @@ export default class Transfer extends Vue {
     this.sendButton
       ? this.sendRadioChecked[0] = true
       : this.sendRadioChecked[1] = true;
-
-    // テスト用
   }
 
   private afterSendDisposal(response: NemAnnounceResult) {

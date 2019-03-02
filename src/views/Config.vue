@@ -53,12 +53,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
 import Information from '@/components/information.vue';
 
-import DataStorage from '@/class/data-storage';
+import Wallet from '@/class/wallet/wallet.ts';
 import { TypeConfigData, RadioGroupValue, InformationMessage } from '@/interface.ts';
 
 @Component({
@@ -68,6 +68,8 @@ import { TypeConfigData, RadioGroupValue, InformationMessage } from '@/interface
   },
 })
 export default class Config extends Vue {
+  @Inject('WALLET_SERVICE') private wallet: Wallet;
+
   private sendButton: boolean = this.$store.state.Config.sendButton;
   // 送金量の上限を決めておける
   private amountLimit: number = this.$store.state.Config.amountLimit;
@@ -182,8 +184,15 @@ export default class Config extends Vue {
 
   // ローカルストレージに保存してある設定を更新
   private updateLocalStorage(configData: TypeConfigData) {
-    const storage = new DataStorage('config-data');
-    storage.setData = configData;
+    const storageName = this.wallet.walletName;
+    const accountDataJson = localStorage.getItem(storageName);
+    if (accountDataJson) {
+      const accountData = JSON.parse(accountDataJson);
+      // ローカルストレージに保存してある設定の部分を新しい設定で書き換える
+      accountData.configData = configData;
+      const json = JSON.stringify(accountData);
+      localStorage.setItem(storageName, json);
+    }
   }
 
   // vuex.storeのstateを更新する

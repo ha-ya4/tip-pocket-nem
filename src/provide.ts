@@ -1,5 +1,5 @@
 import Wallet from '@/class/wallet/wallet';
 
 export const provide = {
-  ['WALLET_SERVICE']: new Wallet('', ''),
+  ['WALLET_SERVICE']: new Wallet(),
 };
