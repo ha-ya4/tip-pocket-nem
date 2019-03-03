@@ -2,7 +2,7 @@
   <div id="create-account">
     <div class="container">
 
-    <div class="contents" :class="{ 'select-create-next': pages !== 0 }">
+    <div v-if="pages === 0" :class="{ 'select-create-next': pages !== 0 }">
       <input type="radio"
         name="radio-item"
         value="new-account"
@@ -103,7 +103,6 @@ export default class CreateAccount extends Vue {
   .select-create-next {
     animation-name: select-create-next;
     animation-duration: 0.3s;
-    animation-fill-mode: forwards;
   }
   @keyframes select-create-next {
     0% {
@@ -122,7 +121,6 @@ export default class CreateAccount extends Vue {
 
   .position-height {
     position: relative;
-    bottom: 50px;
   }
 
   .new-account {

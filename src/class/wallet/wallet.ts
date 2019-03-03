@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import Nem from '../nem';
-import { AccountData, SendParameters } from '../wallet/data-class';
+import { SendParameters } from '../wallet/data-class';
 
 export default class Wallet {
   public address: string = '';
@@ -29,9 +29,13 @@ export default class Wallet {
   // 暗号化してある秘密鍵を複合する
   public decrypto(): string {
     const common = nemSdk.model.objects.create('common')(this.walletPassword, '');
-    const key = this.getKey;
+    const key = this.getKey();
     if (key) {
-      nemSdk.crypto.helpers.passwordToPrivatekey(common, key, 'pass:bip32');
+      const keyObject = {
+        encrypted: key.encryptedKey,
+        iv: key.iv,
+      };
+      nemSdk.crypto.helpers.passwordToPrivatekey(common, keyObject, 'pass:bip32');
       return common.privateKey;
     }
 
@@ -43,7 +47,7 @@ export default class Wallet {
   }
 
   public getBalance(): Observable<number> {
-    return this.nem.getBalance(this.address).pipe(
+    return this.nem.getAccountInfoWithMetaData(this.address).pipe(
       map((data) => data.balance.balance / this.nem.getDivisibility()),
     );
   }

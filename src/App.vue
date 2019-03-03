@@ -22,6 +22,7 @@ export default class App extends Vue {}
 body {
   background-color: #87cefa8c;
   margin: 0;
+  word-wrap: break-word;
 }
 
 /*スマホ*/

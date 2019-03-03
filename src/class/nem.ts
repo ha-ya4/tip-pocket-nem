@@ -48,7 +48,7 @@ export default class Nem {
     return this.accountHttp.allTransactionsPaginated(address);
   }
 
-  public getBalance(addr: string): Observable<AccountInfoWithMetaData> {
+  public getAccountInfoWithMetaData(addr: string): Observable<AccountInfoWithMetaData> {
     const address = new Address(addr);
     return this.accountHttp.getFromAddress(address);
   }

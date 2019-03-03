@@ -102,9 +102,9 @@ export default class TransactionHistory extends Vue {
 
 <style scoped>
 hr {
-    background-color: #bbb;
-    border: none;
-    height: 1px;
+  background-color: #bbb;
+  border: none;
+  height: 1px;
 }
 
 .assets {
@@ -117,6 +117,6 @@ hr {
 }
 
 .transaction-type {
-    color: rgba(231, 159, 2, 0.911);
+  color: rgba(231, 159, 2, 0.911);
 }
 </style>

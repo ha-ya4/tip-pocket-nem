@@ -4,6 +4,10 @@
     {{ wallet.address }}
 
     <div v-if="createAccountComplete">
+      <p class="privatekey-description">
+          秘密鍵は最も重要なものです。秘密鍵を忘れてしまったり、他人に知られてしまうと大事な資産を失うことになります。
+          あなたが管理するもので、誰かが変わりに管理してはくれません。必ず紙に書いて厳重に保管してください。
+      </p>
       <!--押すと秘密鍵を表示するボタン-->
       <div class="openPrivateKey">
         <button
@@ -16,10 +20,6 @@
       </div>
 
       <div class="content" v-if="displayPrivateKeyButton">
-        <p class="privatekey-description">
-          秘密鍵は最も重要なものです。秘密鍵を忘れてしまったり、他人に知られてしまうと大事な資産を失うことになります。
-          あなたが管理するもので、誰かが変わりに管理してはくれません。必ず紙に書いて厳重に保管してください。
-        </p>
         <div class="privatekey">
           <span class="account-privatekey">{{ privateKey }}</span>
         </div>
@@ -80,8 +80,12 @@ export default class NewAccount extends Vue {
 
 <style scoped>
 @media screen and (max-width: 800px) {
+  .new-account {
+    font-size: 2.7vw;
+  }
+
   .account-privatekey {
-    font-size: 3.2vw;
+    font-size: 2.5vw;
   }
 
   .content {
@@ -97,7 +101,6 @@ export default class NewAccount extends Vue {
 
   .privatekey-description {
     color: red;
-    font-size: 3.8vw;
   }
 
   .openPrivateKey {
