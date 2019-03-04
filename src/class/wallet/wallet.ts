@@ -34,19 +34,14 @@ export default class Wallet {
   }
 
   // 暗号化してある秘密鍵を複合する
-  public decrypto(): string {
+  public decrypto(encryptedKey: {encryptedKey: string, iv: string }): string {
     const common = nemSdk.model.objects.create('common')(this.walletPassword, '');
-    const key = this.getKey();
-    if (key) {
-      const keyObject = {
-        encrypted: key.encryptedKey,
-        iv: key.iv,
-      };
-      nemSdk.crypto.helpers.passwordToPrivatekey(common, keyObject, 'pass:bip32');
-      return common.privateKey;
-    }
-
-    return '';
+    const keyObject = {
+      encrypted: encryptedKey.encryptedKey,
+      iv: encryptedKey.iv,
+    };
+    nemSdk.crypto.helpers.passwordToPrivatekey(common, keyObject, 'pass:bip32');
+    return common.privateKey;
   }
 
   public getAllTransactionsPaginated(): Pageable<Transaction[]> {
@@ -63,19 +58,11 @@ export default class Wallet {
     return this.nem.getDivisibility();
   }
 
-  public send(parameters: SendParameters): Observable<NemAnnounceResult> {
-    const privateKey = this.decrypto();
+  public send(
+    encryptedKey: {encryptedKey: string, iv: string }, parameters: SendParameters,
+  ): Observable<NemAnnounceResult> {
+    const privateKey = this.decrypto(encryptedKey);
     const account = Account.createWithPrivateKey(privateKey);
     return this.nem.send(account, parameters);
-  }
-
-  private getKey(): { encryptedKey: string, iv: string } | null {
-    const storageName = `${this.walletName}-key`;
-    const keyJson = localStorage.getItem(storageName);
-    if (keyJson) {
-      return JSON.parse(keyJson);
-    } else {
-      return null;
-    }
   }
 }

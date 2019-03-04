@@ -20,6 +20,7 @@ import { SimpleWallet } from 'nem-library';
 
 import Information from '@/components/information.vue';
 
+import LocalStorage from '@/class/local-storage';
 import Wallet from '@/class/wallet/wallet.ts';
 import { CreateAcountPages } from '@/components/create-account/types.ts';
 import { InformationMessage } from '@/interface.ts';
@@ -47,12 +48,13 @@ export default class ImportPrivateKey extends Vue {
     try {
       // プライベートキーをインポートしてアカウント作成、ローカルストレージにセット
       const account = this.wallet.createWithPrivateKey(this.privateKey);
-      this.setLocalStorage(account);
+      LocalStorage.setNemAccount(this.wallet.walletName, this.wallet.address, this.wallet.publicKey);
+      LocalStorage.setEncryptedKey(account.encryptedPrivateKey, this.wallet.walletName);
       this.success = true;
       // インポート成功後自動でモーダルを閉じる
       setTimeout(() => {
         this.modalClose();
-      }, 3000);
+      }, 2000);
     } catch {
       // validationできてないエラーがあれば表示
       this.information.push({
@@ -61,28 +63,6 @@ export default class ImportPrivateKey extends Vue {
         color: 'red',
       });
     }
-  }
-
-   // accountDataを保存
-  private setLocalStorage(account: SimpleWallet) {
-    // ローカルストレージからデータ取得、なければリターン
-    const accountDataStorageName = this.wallet.walletName;
-    const accountDataJson = localStorage.getItem(accountDataStorageName);
-    if (!accountDataJson) { return; }
-
-    const accountData = JSON.parse(accountDataJson);
-    // 作成されたアカウントからアドレスとパブリックキー取得
-    const publicData = { address: this.wallet.address, publicKey: this.wallet.publicKey };
-    // ローカルストレージから取得したデータのaccountData部分をpublicDataで書き換える
-    accountData.accountData = publicData;
-    const accData = JSON.stringify(accountData);
-    // アカウントのデータをローカルストレージに保存
-    localStorage.setItem(accountDataStorageName, accData);
-
-    const key = JSON.stringify(account.encryptedPrivateKey);
-    const keyStorageName = `${this.wallet.walletName}-key`;
-    // key保存
-    localStorage.setItem(keyStorageName, key);
   }
 
   private modalClose() {

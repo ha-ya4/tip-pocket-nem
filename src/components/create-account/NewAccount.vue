@@ -33,8 +33,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
-import { SimpleWallet } from 'nem-library';
 
+import LocalStorage from '@/class/local-storage';
 import Wallet from '@/class/wallet/wallet.ts';
 import { InformationMessage } from '@/interface.ts';
 
@@ -50,41 +50,25 @@ export default class NewAccount extends Vue {
 
   private created() {
     const account = this.wallet.createAccount();
-    this.setLocalStorage(account);
+    LocalStorage.setNemAccount(this.wallet.walletName, this.wallet.address, this.wallet.publicKey);
+    LocalStorage.setEncryptedKey(account.encryptedPrivateKey, this.wallet.walletName);
     this.newAccountText = '新規アカウント作成が完了しました';
     this.createAccountComplete = true;
   }
 
+  // 押すとプライベートキーを表示するボタン
   private displayPrivateKeybutton() {
     this.displayPrivateKey = true;
-    const privateKey = this.wallet.decrypto();
-    this.privateKey = privateKey;
-    // １０秒経過で閉じるボタン表示。いらないか？
-    setTimeout(() => {
-      this.modalCloseButton = true;
-    }, 10000);
-  }
-
-  // accountDataを保存
-  private setLocalStorage(account: SimpleWallet) {
-    // ローカルストレージからデータ取得、なければリターン
-    const accountDataStorageName = this.wallet.walletName;
-    const accountDataJson = localStorage.getItem(accountDataStorageName);
-    if (!accountDataJson) { return; }
-
-    const accountData = JSON.parse(accountDataJson);
-    // 作成されたアカウントからアドレスとパブリックキー取得
-    const publicData = { address: this.wallet.address, publicKey: this.wallet.publicKey };
-    // ローカルストレージから取得したデータのaccountData部分をpublicDataで書き換える
-    accountData.accountData = publicData;
-    const accData = JSON.stringify(accountData);
-    // アカウントのデータをローカルストレージに保存
-    localStorage.setItem(accountDataStorageName, accData);
-
-    const key = JSON.stringify(account.encryptedPrivateKey);
-    const keyStorageName = `${this.wallet.walletName}-key`;
-    // key保存
-    localStorage.setItem(keyStorageName, key);
+    // ローカルストレージからプライベートキーを取得してdecryptoする。
+    const key = LocalStorage.getKey(this.wallet.walletName);
+    if (key) {
+      const privateKey = this.wallet.decrypto(key);
+      this.privateKey = privateKey;
+      // １０秒経過で閉じるボタン表示。いらないか？
+      setTimeout(() => {
+        this.modalCloseButton = true;
+      }, 10000);
+    }
   }
 
   private modalClose() {

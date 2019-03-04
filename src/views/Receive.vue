@@ -34,6 +34,7 @@
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import LocalStorage from '@/class/local-storage';
 import Wallet from '@/class/wallet/wallet.ts';
 
 @Component({})
@@ -44,15 +45,21 @@ export default class ReceiveAndWithdraw extends Vue {
   private displayPrivateKeyButtonText: string = '秘密鍵を見る';
   private privateKey: string = '';
 
+  // 押すとプライベートキーを表示するボタン
   private displayPrivateKeybutton() {
     if (this.displayPrivateKeyButton) {
       this.displayPrivateKeyButton = false;
       this.displayPrivateKeyButtonText = '秘密鍵を見る';
       this.privateKey = '';
-    } else {
-      this.displayPrivateKeyButton = true;
-      this.displayPrivateKeyButtonText = '秘密鍵を隠す';
-      const privateKey = this.wallet.decrypto();
+    }
+
+    this.displayPrivateKeyButton = true;
+    this.displayPrivateKeyButtonText = '秘密鍵を隠す';
+
+    // ローカルストレージからプライベートキーを取得してdecryptoする
+    const key = LocalStorage.getKey(this.wallet.walletName);
+    if (key) {
+      const privateKey = this.wallet.decrypto(key);
       this.privateKey = privateKey;
     }
   }

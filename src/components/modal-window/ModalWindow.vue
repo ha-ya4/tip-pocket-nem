@@ -76,8 +76,8 @@ export default class ModalWindow extends Vue {
 
   .small {
     width: 90%;
-    height: 30%;
-    top: 35%;
+    height: 40%;
+    top: 30%;
     left: 5%;
   }
 

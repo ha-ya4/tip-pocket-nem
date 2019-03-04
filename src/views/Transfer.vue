@@ -1,6 +1,14 @@
 <template>
   <div id="transfer">
 
+    <modal-window
+      :open="modal.open"
+      :modalSize="modal.size"
+    >
+      <p style="text-align: center;">秘密鍵が見つかりませんでした</p>
+      <import-private-key @modalClose="modalClose"/>
+    </modal-window>
+
     <p v-if="displayQrReader">
       <qrcode-reader @passAddress="setAddressAndConditionallyTransfer"></qrcode-reader>
     </p>
@@ -96,9 +104,13 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import { PlainMessage, EncryptedMessage, NemAnnounceResult } from 'nem-library';
 
 import Information from '@/components/information.vue';
+import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 import QrcodeReader from '@/components/QrcodeReader.vue';
+import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
+import LocalStorage from '@/class/local-storage';
 import { SendParameters } from '@/class/wallet/data-class';
+import { ModalSize } from '@/types/enum';
 import Wallet from '@/class/wallet/wallet.ts';
 import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 
@@ -106,6 +118,8 @@ import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 @Component({
   components: {
     Information,
+    ImportPrivateKey,
+    ModalWindow,
     QrcodeReader,
   },
 })
@@ -133,6 +147,11 @@ export default class Transfer extends Vue {
   // sendButtonラジオのcheckedのon,offを切り替えるためのもの
   private sendRadioChecked: boolean[] = [false, false];
 
+  private modal: {open: boolean, size: ModalSize} = {
+    open: false,
+    size: ModalSize.Small,
+  };
+
   // sendButtonの設定値を反映させる
   private created() {
     this.sendButton
@@ -143,7 +162,7 @@ export default class Transfer extends Vue {
   private afterSendDisposal(response: NemAnnounceResult) {
     this.sendAddress = '';
     this.information.push({
-      name: response.message,
+      name: 'success',
       message: '送金に成功しました',
       color: 'black',
     });
@@ -170,12 +189,8 @@ export default class Transfer extends Vue {
     userItems[index].defaultValue = true;
   }
 
-  private sendError(error: any) {
-    this.information.push({
-      name : 'error',
-      message: error.message,
-      color: 'red',
-    });
+  private modalClose() {
+    this.modal.open = false;
   }
 
   // qrリーダーの表示非表示を切り替える
@@ -183,6 +198,14 @@ export default class Transfer extends Vue {
     this.displayQrReader
       ? this.displayQrReader = false
       : this.displayQrReader = true;
+  }
+
+  private sendError(error: any) {
+    this.information.push({
+      name : 'error',
+      message: error.message,
+      color: 'red',
+    });
   }
 
   // qrで読み取ったアドレスを受け取る。sendButtonがFALSEならそのまま送金
@@ -207,7 +230,14 @@ export default class Transfer extends Vue {
 
     const message = PlainMessage.create(this.sendMessage);
     const parameters = new SendParameters(this.sendAmount, message, this.sendAddress);
-    const send = this.wallet.send(parameters).subscribe(
+    const key = LocalStorage.getKey(this.wallet.walletName);
+    // プライベートキーがローカルストレージになければインポート画面へ
+    if (!key) {
+      this.modal.open = true;
+      return;
+    }
+
+    this.wallet.send(key, parameters).subscribe(
       (res) => this.afterSendDisposal(res),
       (err) => this.sendError(err),
     );

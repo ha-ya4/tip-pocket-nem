@@ -2,10 +2,10 @@
   <div id="home">
 
     <modal-window
-      :open="createAccountModal"
-      :modalSize="modalSize"
+      :open="modal.open"
+      :modalSize="modal.size"
     >
-    <create-account @modalClose="modalClose" />
+      <create-account @modalClose="modalClose" />
     </modal-window>
 
     <div id="nav">
@@ -44,8 +44,11 @@ export default class Home extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
   private balance: number = 0;
-  private createAccountModal: boolean = false;
-  private modalSize: ModalSize = ModalSize.Middle;
+
+  private modal: {open: boolean, size: ModalSize} = {
+    open: false,
+    size: ModalSize.Large,
+  };
 
   // ローカルストレージからアプリ設定を読み込みvuex.storeを更新する
   // walletの残高を取得する
@@ -53,7 +56,7 @@ export default class Home extends Vue {
     // dataがなければウォレット作成。あればそのままbalance取得
     if (!this.accountDataLoad()) {
       this.setAccountData();
-      this.createAccountModal = true;
+      this.modal.open = true;
     } else {
       this.getBalance();
     }
@@ -88,7 +91,7 @@ export default class Home extends Vue {
   }
 
   private modalClose() {
-    this.createAccountModal = false;
+    this.modal.open = false;
   }
 }
 </script>
