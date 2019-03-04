@@ -143,7 +143,7 @@ export default class Transfer extends Vue {
   private afterSendDisposal(response: NemAnnounceResult) {
     this.sendAddress = '';
     this.information.push({
-      name : response.message,
+      name: response.message,
       message: '送金に成功しました',
       color: 'black',
     });

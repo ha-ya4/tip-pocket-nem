@@ -17,7 +17,6 @@ import {
   TransactionHttp,
 } from 'nem-library';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 
 import { SendParameters } from './wallet/data-class';
 
@@ -41,6 +40,11 @@ export default class Nem {
   public createAccount(walletName: string, pass: string): SimpleWallet {
     const password = new Password(pass);
     return SimpleWallet.create(walletName, password);
+  }
+
+  public createWithPrivateKey(walletName: string, pass: string, privateKey: string): SimpleWallet {
+    const password = new Password(pass);
+    return SimpleWallet.createWithPrivateKey(walletName, password, privateKey);
   }
 
   public getAllTransactionsPaginated(addr: string): Pageable<Transaction[]> {

@@ -31,6 +31,7 @@ import CreateAccount from '@/components/create-account/CreateAccount.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
 import { ModalSize } from '@/types/enum';
+import { AccountData } from '@/components/create-account/types.ts';
 import Wallet from '@/class/wallet/wallet.ts';
 
 @Component({
@@ -51,13 +52,11 @@ export default class Home extends Vue {
   private created() {
     // dataがなければウォレット作成。あればそのままbalance取得
     if (!this.accountDataLoad()) {
+      this.setAccountData();
       this.createAccountModal = true;
     } else {
       this.getBalance();
     }
-
-    //--------------------テスト用-------------------
-    this.createAccountModal = true;
   }
 
   private accountDataLoad(): boolean {
@@ -65,16 +64,23 @@ export default class Home extends Vue {
     const accountDataJson = localStorage.getItem(storageName);
 
     // ローカルストレージにデータがあったか確認。
-    if (accountDataJson) {
-      // あればvuex.storeとthis.walletを更新
-      const accountData = JSON.parse(accountDataJson);
-      this.$store.commit('Config/UPDATE_CONFIG_DATA', accountData.configData);
-      this.wallet.setPublicData = accountData.accountData;
-      return true;
-    } else {
-      // なければアカウント作成画面を表示
-      return false;
-    }
+    if (!accountDataJson) { return false; }
+    // あればvuex.storeとthis.walletを更新
+    const accountData = JSON.parse(accountDataJson);
+    this.$store.commit('Config/UPDATE_CONFIG_DATA', accountData.configData);
+    this.wallet.setPublicData = accountData.accountData;
+    return true;
+  }
+
+  private setAccountData() {
+    // vuexstoreから初期値取得
+    const configData = this.$store.state.Config;
+    // アカウント作成後にセットするので''をいれておく
+    const publicData = { address: '', publicKey: '' };
+    const accountdata = JSON.stringify(new AccountData(configData, publicData));
+    const accountDataStorageName = this.wallet.walletName;
+    // アカウントのパブリックデータとアプリ設定をローカルストレージに保存
+    localStorage.setItem(accountDataStorageName, accountdata);
   }
 
   private getBalance() {

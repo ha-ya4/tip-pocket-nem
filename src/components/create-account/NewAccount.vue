@@ -36,7 +36,6 @@ import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
 import { SimpleWallet } from 'nem-library';
 
 import Wallet from '@/class/wallet/wallet.ts';
-import { AccountData } from '@/components/create-account/types.ts';
 import { InformationMessage } from '@/interface.ts';
 
 @Component({})
@@ -66,17 +65,21 @@ export default class NewAccount extends Vue {
     }, 10000);
   }
 
-  // accountDataとkeyを別々に保存
+  // accountDataを保存
   private setLocalStorage(account: SimpleWallet) {
-    // vuexstoreから初期値取得
-    const configData = this.$store.state.Config;
+    // ローカルストレージからデータ取得、なければリターン
+    const accountDataStorageName = this.wallet.walletName;
+    const accountDataJson = localStorage.getItem(accountDataStorageName);
+    if (!accountDataJson) { return; }
+
+    const accountData = JSON.parse(accountDataJson);
     // 作成されたアカウントからアドレスとパブリックキー取得
     const publicData = { address: this.wallet.address, publicKey: this.wallet.publicKey };
-    // AccountDataクラス作成
-    const accountdata = JSON.stringify(new AccountData(configData, publicData));
-    const accountDataStorageName = this.wallet.walletName;
-    // アカウントのパブリックデータとアプリ設定をローカルストレージに保存
-    localStorage.setItem(accountDataStorageName, accountdata);
+    // ローカルストレージから取得したデータのaccountData部分をpublicDataで書き換える
+    accountData.accountData = publicData;
+    const accData = JSON.stringify(accountData);
+    // アカウントのデータをローカルストレージに保存
+    localStorage.setItem(accountDataStorageName, accData);
 
     const key = JSON.stringify(account.encryptedPrivateKey);
     const keyStorageName = `${this.wallet.walletName}-key`;

@@ -23,12 +23,12 @@
       </div>
     </div>
 
-    <div v-if="pages === 1" class="position-height" :class="{ 'new-account': pages === 1 }">
-      <new-account @modalClose="modalClose" />
+    <div v-if="pages === 1" :class="{ 'new-account': pages === 1 }">
+      <new-account @modalClose="modalClose"/>
     </div>
 
-    <div v-if="pages === 2" class="position-height" :class="{ 'import-privatekey': pages === 2 }">
-      privatekey
+    <div v-if="pages === 2" :class="{ 'import-privatekey': pages === 2 }">
+      <import-private-key @modalClose="modalClose"/>
     </div>
 
   </div>
@@ -41,12 +41,11 @@ import NewAccount from '@/components/create-account/NewAccount.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 
 import { CreateAcountPages } from '@/components/create-account/types.ts';
-import { InformationMessage } from '@/interface.ts';
 
 @Component({
   components: {
-    NewAccount,
     ImportPrivateKey,
+    NewAccount,
   },
 })
 export default class CreateAccount extends Vue {
@@ -106,11 +105,6 @@ export default class CreateAccount extends Vue {
 
   .next-button {
     margin: 15px;
-  }
-
-  .position-height {
-    position: relative;
-    bottom: 20%;
   }
 
   .new-account {

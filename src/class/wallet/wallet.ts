@@ -26,6 +26,13 @@ export default class Wallet {
     return account;
   }
 
+  public createWithPrivateKey(privateKey: string): SimpleWallet {
+    const account = this.nem.createWithPrivateKey(this.walletName, this.walletPassword, privateKey);
+    this.address = account.address.plain();
+    this.publicKey = account.open(new Password(this.walletPassword)).publicKey;
+    return account;
+  }
+
   // 暗号化してある秘密鍵を複合する
   public decrypto(): string {
     const common = nemSdk.model.objects.create('common')(this.walletPassword, '');
