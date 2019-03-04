@@ -3,8 +3,9 @@
 
     <modal-window
       :open="createAccountModal"
+      :modalSize="modalSize"
     >
-    <create-account/>
+    <create-account @modalClose="modalClose" />
     </modal-window>
 
     <div id="nav">
@@ -29,6 +30,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import CreateAccount from '@/components/create-account/CreateAccount.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
+import { ModalSize } from '@/types/enum';
 import Wallet from '@/class/wallet/wallet.ts';
 
 @Component({
@@ -42,6 +44,7 @@ export default class Home extends Vue {
 
   private balance: number = 0;
   private createAccountModal: boolean = false;
+  private modalSize: ModalSize = ModalSize.Middle;
 
   // ローカルストレージからアプリ設定を読み込みvuex.storeを更新する
   // walletの残高を取得する
@@ -76,6 +79,10 @@ export default class Home extends Vue {
 
   private getBalance() {
     this.wallet.getBalance().subscribe( (balance) => this.balance = balance );
+  }
+
+  private modalClose() {
+    this.createAccountModal = false;
   }
 }
 </script>

@@ -5,6 +5,7 @@
     <modal-window
       @modalClose="modalClose"
       :open="modalOpen"
+      :modalSize="modalSize"
     >
       <history-detail
         @modalClose="modalClose"
@@ -76,6 +77,7 @@ import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 import HistoryDetail from '@/components/modal-window/HistoryDetail.vue';
 
 import Wallet from '@/class/wallet/wallet.ts';
+import { ModalSize } from '@/types/enum';
 
 @Component({
   components: {
@@ -111,6 +113,7 @@ export default class TransactionHistory extends Vue {
   private history: Transaction[] = [];
   private historyDetail: Transaction | null = null;
   private modalOpen: boolean = false;
+  private modalSize: ModalSize = ModalSize.Large;
 
   private created() {
     this.allHistory.subscribe((history) => {

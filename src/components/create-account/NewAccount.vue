@@ -1,29 +1,32 @@
 <template>
   <div id="new-account">
-    {{ newAccountText }}
-    {{ wallet.address }}
+    <p class="complete">{{ newAccountText }}</p><br>
+    address:<br>{{ wallet.address }}
 
     <div v-if="createAccountComplete">
       <p class="privatekey-description">
-          秘密鍵は最も重要なものです。秘密鍵を忘れてしまったり、他人に知られてしまうと大事な資産を失うことになります。
+          秘密鍵をメモしてください。秘密鍵を忘れてしまったり、他人に知られてしまうと大事な資産を失うことになります。
           あなたが管理するもので、誰かが変わりに管理してはくれません。必ず紙に書いて厳重に保管してください。
       </p>
       <!--押すと秘密鍵を表示するボタン-->
-      <div class="openPrivateKey">
-        <button
-          type="button"
-          class="app-button"
-          @click="displayPrivateKeybutton"
-        >
+      <div class="button">
+        <button type="button" class="app-button" @click="displayPrivateKeybutton">
           秘密鍵を見る
         </button>
       </div>
 
-      <div class="content" v-if="displayPrivateKeyButton">
+      <div class="content" v-if="displayPrivateKey">
         <div class="privatekey">
-          <span class="account-privatekey">{{ privateKey }}</span>
+          {{ privateKey }}
         </div>
       </div>
+
+      <div class="button" v-if="modalCloseButton">
+        <button type="button" class="app-button" @click="modalClose">
+          閉じる
+        </button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -42,8 +45,9 @@ export default class NewAccount extends Vue {
 
   private newAccountText: string = '新規アカウント作成中...';
   private createAccountComplete: boolean = false;
-  private displayPrivateKeyButton: boolean = false;
+  private displayPrivateKey: boolean = false;
   private privateKey = '';
+  private modalCloseButton: boolean = false;
 
   private created() {
     const account = this.wallet.createAccount();
@@ -53,9 +57,13 @@ export default class NewAccount extends Vue {
   }
 
   private displayPrivateKeybutton() {
-    this.displayPrivateKeyButton = true;
+    this.displayPrivateKey = true;
     const privateKey = this.wallet.decrypto();
     this.privateKey = privateKey;
+    // １０秒経過で閉じるボタン表示。いらないか？
+    setTimeout(() => {
+      this.modalCloseButton = true;
+    }, 10000);
   }
 
   // accountDataとkeyを別々に保存
@@ -75,17 +83,21 @@ export default class NewAccount extends Vue {
     // key保存
     localStorage.setItem(keyStorageName, key);
   }
+
+  private modalClose() {
+    this.$emit('modalClose');
+  }
 }
 </script>
 
 <style scoped>
 @media screen and (max-width: 800px) {
-  .new-account {
-    font-size: 2.7vw;
+  #new-account {
+    font-size: 3vw;
   }
 
-  .account-privatekey {
-    font-size: 2.5vw;
+  .complete {
+    text-align: center;
   }
 
   .content {
@@ -94,6 +106,7 @@ export default class NewAccount extends Vue {
   }
 
   .privatekey {
+    font-size: 2.5vw;
     color: red;
     padding: 5px;
     border: 1px solid red;
@@ -103,7 +116,7 @@ export default class NewAccount extends Vue {
     color: red;
   }
 
-  .openPrivateKey {
+  .button {
     text-align: center
   }
 }

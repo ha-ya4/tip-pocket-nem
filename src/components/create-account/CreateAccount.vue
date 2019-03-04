@@ -1,8 +1,7 @@
 <template>
   <div id="create-account">
-    <div class="container">
 
-    <div v-if="pages === 0" :class="{ 'select-create-next': pages !== 0 }">
+    <div class="select" :class="{ 'select-create-next': pages !== 0 }">
       <input type="radio"
         name="radio-item"
         value="new-account"
@@ -25,14 +24,13 @@
     </div>
 
     <div v-if="pages === 1" class="position-height" :class="{ 'new-account': pages === 1 }">
-      <new-account/>
+      <new-account @modalClose="modalClose" />
     </div>
 
     <div v-if="pages === 2" class="position-height" :class="{ 'import-privatekey': pages === 2 }">
       privatekey
     </div>
 
-    </div>
   </div>
 </template>
 
@@ -76,51 +74,43 @@ export default class CreateAccount extends Vue {
     this.pages = this.createMethod;
     this.error = false;
   }
+
+  private modalClose() {
+    this.$emit('modalClose');
+  }
 }
 </script>
 
 <style scoped>
 @media screen and (max-width: 800px) {
   #create-account {
-    /*flex,absoluteどちらかで縦が中央に寄せれなかった。*/
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
+    margin-top: 5%;
   }
 
   .error {
     color: red;
   }
 
+  .select {
+    text-align: center
+  }
+
+  /*横スライドでけしたかったが保留*/
   .select-create-next {
+    display: none;
     animation-name: select-create-next;
     animation-duration: 0.3s;
+    animation-fill-mode: forwards;
   }
-  @keyframes select-create-next {
-    0% {
-      transform:translateX(-0px);
-    }
-
-    100% {
-      transform:translateX(-1000px);
-    }
-  }
+  @keyframes select-create-next {}
 
   .next-button {
-    text-align: center;
     margin: 15px;
   }
 
   .position-height {
     position: relative;
+    bottom: 20%;
   }
 
   .new-account {

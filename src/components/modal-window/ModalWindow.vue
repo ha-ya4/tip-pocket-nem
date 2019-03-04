@@ -6,7 +6,9 @@
       <!--オーバーレイのためのdiv。クリックでモーダルが消える-->
       <div class="overlay" @click.stop="modalClose"></div>
 
-      <div id="modal-content">
+      <div
+        id="modal-content"
+        :class="{ 'large': modalSize === 0, 'middle': modalSize === 1, 'small': modalSize === 2}">
 
         <div class="modal-item">
           <!--表示したいものを親コンポーネントからスロットに挿入-->
@@ -22,10 +24,12 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Transaction } from 'nem-library';
 
+import { ModalSize } from '@/types/enum';
 
 @Component({})
 export default class ModalWindow extends Vue {
   @Prop() private open: boolean;
+  @Prop() private modalSize: ModalSize;
 
   // 一度表示してスクロールを動かすと、次に表示するときも前のスクロール位置になってしまうので、beforeUpdateでスクロール位置を０に戻す
   private beforeUpdate() {
@@ -51,14 +55,30 @@ export default class ModalWindow extends Vue {
     background-color: #fdfeff;
     z-index: 2;
     position: fixed;
+    overflow: hidden;
+    animation-name: modal-fadein;
+    animation-duration: 0.3s;
+  }
+
+  .large {
     width: 90%;
     height: 70%;
     top: 15%;
     left: 5%;
-    overflow:auto;
-    word-wrap: break-word;
-    animation-name: modal-fadein;
-    animation-duration: 0.3s;
+  }
+
+  .middle {
+    width: 90%;
+    height: 50%;
+    top: 25%;
+    left: 5%;
+  }
+
+  .small {
+    width: 90%;
+    height: 30%;
+    top: 35%;
+    left: 5%;
   }
 
   @keyframes modal-fadein {
