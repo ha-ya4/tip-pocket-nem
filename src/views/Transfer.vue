@@ -9,9 +9,9 @@
       <import-private-key @modalClose="modalClose"/>
     </modal-window>
 
-    <p v-if="displayQrReader">
+    <div v-if="displayQrReader">
       <qrcode-reader @passAddress="setAddressAndConditionallyTransfer"></qrcode-reader>
-    </p>
+    </div>
 
     <!--QRリーダー起動ボタン-->
     <p class="transfer-button">

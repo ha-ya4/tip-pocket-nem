@@ -19,7 +19,9 @@
       {{ balance }}
     </div>
 
-    <router-view/>
+    <div class="main-contents">
+      <router-view/>
+    </div>
 
   </div>
 </template>
@@ -98,7 +100,6 @@ export default class Home extends Vue {
 
 <style scoped>
 #nav {
-  background-color: #00bfff42;
   box-shadow: -0.5px -0.5px 0.5px 0.5px rgba(85, 145, 160, 0.4);
   display: flex;
 }
@@ -137,24 +138,35 @@ a {
 /*スマホ*/
 @media screen and (max-width: 800px) {
   #nav {
+    background-color: rgb(157, 227, 245);
     text-align: center;
     position: fixed;
     bottom: 0;
     width: 100%;
+    z-index: 999;
   }
 
   a {
     box-shadow: -0.3px -1.5px 5px 0.5px rgba(85, 145, 160, 0.4);
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 17px;
+    padding-bottom: 17px;
+  }
+
+  .main-contents {
+    margin-top: 80px;
+    margin-bottom: 75px;
   }
 
   .xem-amount {
+    background-color: rgb(157, 227, 245);
     text-align: center;
+    position: fixed;
+    top: 0;
     font-size: 20px;
     padding-top: 18px;
     padding-bottom: 18px;
     width: 100%;
+    z-index: 999;
   }
 }
 </style>

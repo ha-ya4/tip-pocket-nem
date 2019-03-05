@@ -20,7 +20,7 @@ export default class App extends Vue {}
 
 <style>
 body {
-  background-color: #87cefa8c;
+  background-color: #b5def585;
   margin: 0;
   word-wrap: break-word;
 }
