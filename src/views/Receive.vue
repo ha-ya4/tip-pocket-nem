@@ -1,6 +1,10 @@
 <template>
   <div id="receive">
 
+    <div class="qrcode">
+      <qriously v-model="QR.text" :size="QR.size"></qriously>
+    </div>
+
     <!--walletアドレス-->
     <div class="content">
       address:
@@ -45,16 +49,21 @@ export default class ReceiveAndWithdraw extends Vue {
   private displayPrivateKeyButtonText: string = '秘密鍵を見る';
   private privateKey: string = '';
 
+  private QR: { text: string, size: number } = {
+    text: this.wallet.generateAddressQRText(),
+    size: 200,
+  };
+
   // 押すとプライベートキーを表示するボタン
   private displayPrivateKeybutton() {
     if (this.displayPrivateKeyButton) {
       this.displayPrivateKeyButton = false;
       this.displayPrivateKeyButtonText = '秘密鍵を見る';
       this.privateKey = '';
+    } else {
+      this.displayPrivateKeyButton = true;
+      this.displayPrivateKeyButtonText = '秘密鍵を隠す';
     }
-
-    this.displayPrivateKeyButton = true;
-    this.displayPrivateKeyButtonText = '秘密鍵を隠す';
 
     // ローカルストレージからプライベートキーを取得してdecryptoする
     const key = LocalStorage.getKey(this.wallet.walletName);
@@ -72,7 +81,10 @@ export default class ReceiveAndWithdraw extends Vue {
     padding: 3%;
     word-wrap: break-word;
   }
+
   .account-address {
+    display: block;
+    text-align: center;
     font-size: 3.2vw;
     margin-left: 3%;
   }
@@ -99,6 +111,10 @@ export default class ReceiveAndWithdraw extends Vue {
 
   .openPrivateKey {
     text-align: center
+  }
+
+  .qrcode {
+    text-align: center;
   }
 }
 </style>

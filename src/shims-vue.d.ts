@@ -5,3 +5,4 @@ declare module '*.vue' {
 
 declare module 'nem-sdk';
 declare module 'vue-qrcode-reader';
+declare module 'vue-qriously';

@@ -1,5 +1,14 @@
 import nemSdk from 'nem-sdk';
-import { Account, Password, Pageable, NemAnnounceResult, SimpleWallet, Transaction } from 'nem-library';
+import {
+  Account,
+  Address,
+  Password,
+  Pageable,
+  NemAnnounceResult,
+  SimpleWallet,
+  Transaction,
+  QRService,
+} from 'nem-library';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -42,6 +51,11 @@ export default class Wallet {
     };
     nemSdk.crypto.helpers.passwordToPrivatekey(common, keyObject, 'pass:bip32');
     return common.privateKey;
+  }
+
+  public generateAddressQRText(): string {
+    const address = new Address(this.address);
+    return new QRService().generateAddressQRText(address);
   }
 
   public getAllTransactionsPaginated(): Pageable<Transaction[]> {
