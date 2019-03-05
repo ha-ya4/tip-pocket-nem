@@ -47,7 +47,7 @@ export default class Home extends Vue {
 
   private modal: {open: boolean, size: ModalSize} = {
     open: false,
-    size: ModalSize.Large,
+    size: ModalSize.Middle,
   };
 
   // ローカルストレージからアプリ設定を読み込みvuex.storeを更新する

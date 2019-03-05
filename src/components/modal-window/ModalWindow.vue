@@ -55,7 +55,7 @@ export default class ModalWindow extends Vue {
     background-color: #fdfeff;
     z-index: 2;
     position: fixed;
-    overflow: hidden;
+    overflow: scroll;
     animation-name: modal-fadein;
     animation-duration: 0.3s;
   }

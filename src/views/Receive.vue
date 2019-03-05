@@ -1,6 +1,14 @@
 <template>
   <div id="receive">
 
+    <modal-window
+      :open="modal.open"
+      :modalSize="modal.size"
+    >
+      <p style="text-align: center;">秘密鍵が見つかりませんでした</p>
+      <import-private-key @modalClose="modalClose"/>
+    </modal-window>
+
     <div class="qrcode">
       <qriously v-model="QR.text" :size="QR.size"></qriously>
     </div>
@@ -38,16 +46,30 @@
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
+import ModalWindow from '@/components/modal-window/ModalWindow.vue';
+
 import LocalStorage from '@/class/local-storage';
+import { ModalSize } from '@/types/enum';
 import Wallet from '@/class/wallet/wallet.ts';
 
-@Component({})
-export default class ReceiveAndWithdraw extends Vue {
+@Component({
+  components: {
+    ImportPrivateKey,
+    ModalWindow,
+  },
+})
+export default class Receive extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
   private displayPrivateKeyButton: boolean = false;
   private displayPrivateKeyButtonText: string = '秘密鍵を見る';
   private privateKey: string = '';
+
+  private modal: {open: boolean, size: ModalSize} = {
+    open: false,
+    size: ModalSize.Small,
+  };
 
   private QR: { text: string, size: number } = {
     text: this.wallet.generateAddressQRText(),
@@ -56,6 +78,16 @@ export default class ReceiveAndWithdraw extends Vue {
 
   // 押すとプライベートキーを表示するボタン
   private displayPrivateKeybutton() {
+    // ローカルストレージからプライベートキーを取得。なければインポート画面へ
+    const key = LocalStorage.getKey(this.wallet.walletName);
+    if (!key) {
+      this.modal.open = true;
+      return;
+    }
+
+    const privateKey = this.wallet.decrypto(key);
+    this.privateKey = privateKey;
+
     if (this.displayPrivateKeyButton) {
       this.displayPrivateKeyButton = false;
       this.displayPrivateKeyButtonText = '秘密鍵を見る';
@@ -64,13 +96,10 @@ export default class ReceiveAndWithdraw extends Vue {
       this.displayPrivateKeyButton = true;
       this.displayPrivateKeyButtonText = '秘密鍵を隠す';
     }
+  }
 
-    // ローカルストレージからプライベートキーを取得してdecryptoする
-    const key = LocalStorage.getKey(this.wallet.walletName);
-    if (key) {
-      const privateKey = this.wallet.decrypto(key);
-      this.privateKey = privateKey;
-    }
+  private modalClose() {
+    this.modal.open = false;
   }
 }
 </script>

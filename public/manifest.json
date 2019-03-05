@@ -1,6 +1,6 @@
 {
-  "name": "aaa",
-  "short_name": "aaa",
+  "name": "TipPocket",
+  "short_name": "TipPocket",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",
@@ -13,8 +13,9 @@
       "type": "image/png"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "./transfer",
   "display": "standalone",
+  "orientation": "landscape",
   "background_color": "#000000",
   "theme_color": "#4DBA87"
 }
