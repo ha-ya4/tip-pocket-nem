@@ -3,7 +3,7 @@
 
     <div class="transfer" v-if="historyDetail._xem">
       <hr>
-      {{ historyDetail.timeWindow.timeStamp | dateTime }}
+      {{ historyDetail.timeWindow.timeStamp | fDateTime }}
       <hr>
       <span class="transaction-type">TransferTransaction</span>
       <hr>
@@ -36,7 +36,7 @@
     <!--マルチシグの場合はこっち-->
     <div class="multisig-transaction" v-if="historyDetail.otherTransaction">
       <hr>
-      {{ historyDetail.timeWindow.timeStamp | dateTime }}
+      {{ historyDetail.timeWindow.timeStamp | fDateTime }}
       <hr>
       <span class="transaction-type">MultisigTransaction</span>
       <hr>
@@ -76,17 +76,12 @@
 import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
 import { Transaction } from 'nem-library';
 
-import Wallet from '@/class/wallet/wallet.ts';
+import Filters from '@/filters.vue';
+
+import Wallet from '@/class/wallet.ts';
 
 @Component({
-  filters: {
-    dateTime(value: any): string {
-      const date = value._date;
-      const time = value._time;
-      const dateTime = `${date._year}-${date._month}-${date._day}/${time._hour}:${time._minute}`;
-      return dateTime;
-    },
-  },
+  mixins: [Filters],
 })
 export default class TransactionHistory extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;

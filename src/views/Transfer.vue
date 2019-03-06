@@ -109,9 +109,9 @@ import QrcodeReader from '@/components/QrcodeReader.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
 import LocalStorage from '@/class/local-storage';
-import { SendParameters } from '@/class/wallet/data-class';
+import { SendParameters } from '@/types/data-class';
 import { ModalSize } from '@/types/enum';
-import Wallet from '@/class/wallet/wallet.ts';
+import Wallet from '@/class/wallet.ts';
 import { RadioGroupValue, InformationMessage } from '@/interface.ts';
 
 
@@ -123,7 +123,6 @@ import { RadioGroupValue, InformationMessage } from '@/interface.ts';
     QrcodeReader,
   },
 })
-
 export default class Transfer extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 

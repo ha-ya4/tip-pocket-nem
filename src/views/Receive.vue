@@ -37,7 +37,7 @@
         あなたが管理するもので、誰かが変わりに管理してはくれません。必ず紙に書いて厳重に保管してください。
       </p>
       <div class="privatekey">
-        <span class="account-privatekey">{{ privateKey }}</span>
+        <span class="account-privatekey">{{ privateKey | fInsertHyphen }}</span>
       </div>
     </div>
   </div>
@@ -46,18 +46,21 @@
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import Filters from '@/filters.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
 import LocalStorage from '@/class/local-storage';
 import { ModalSize } from '@/types/enum';
-import Wallet from '@/class/wallet/wallet.ts';
+import Wallet from '@/class/wallet.ts';
 
 @Component({
   components: {
     ImportPrivateKey,
     ModalWindow,
   },
+
+  mixins: [Filters],
 })
 export default class Receive extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
@@ -119,7 +122,7 @@ export default class Receive extends Vue {
   }
 
   .account-privatekey {
-    font-size: 3.2vw;
+    font-size: 3.6vw;
   }
 
   .content {

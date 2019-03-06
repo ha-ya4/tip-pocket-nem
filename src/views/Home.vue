@@ -15,7 +15,7 @@
       <router-link to="/config">設定</router-link>
     </div>
 
-    <div class="xem-amount">
+    <div class="balance">
       {{ balance }}
     </div>
 
@@ -32,9 +32,9 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import CreateAccount from '@/components/create-account/CreateAccount.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
-import { ModalSize } from '@/types/enum';
 import { AccountData } from '@/components/create-account/types.ts';
-import Wallet from '@/class/wallet/wallet.ts';
+import { ModalSize } from '@/types/enum';
+import Wallet from '@/class/wallet.ts';
 
 @Component({
   components: {
@@ -110,7 +110,7 @@ a {
   color: black;
 }
 
-.xem-amount {
+.balance {
   background-color: #00bfff42;
   box-shadow: 1px 1px 5px 0.5px rgba(85, 145, 160, 0.4);
 }
@@ -124,7 +124,7 @@ a {
     padding-bottom: 20px;
   }
 
-  .xem-amount {
+  .balance {
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -157,7 +157,7 @@ a {
     margin-bottom: 75px;
   }
 
-  .xem-amount {
+  .balance {
     background-color: rgb(157, 227, 245);
     text-align: center;
     position: fixed;

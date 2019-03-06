@@ -58,7 +58,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
 import Information from '@/components/information.vue';
 
-import Wallet from '@/class/wallet/wallet.ts';
+import Wallet from '@/class/wallet.ts';
 import { TypeConfigData, RadioGroupValue, InformationMessage } from '@/interface.ts';
 
 @Component({

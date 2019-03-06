@@ -31,14 +31,11 @@ export default class ModalWindow extends Vue {
   @Prop() private open: boolean;
   @Prop() private modalSize: ModalSize;
 
-  // 一度表示してスクロールを動かすと、次に表示するときも前のスクロール位置になってしまうので、beforeUpdateでスクロール位置を０に戻す
-  private beforeUpdate() {
-    const element = document.getElementById('modal-content') as HTMLElement;
-    if (element.scrollTop !== null) { element.scrollTop = 0; }
-  }
-
   // 親のメソッドを呼び出してthis.openをfalseに切り替える。モーダルが消える
   private modalClose() {
+    const element = document.getElementById('modal-content') as HTMLElement;
+    if (element.scrollTop !== null) { element.scrollTop = 0; }
+
     this.$emit('modalClose');
   }
 }

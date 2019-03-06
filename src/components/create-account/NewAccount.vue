@@ -35,7 +35,7 @@
 import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
 
 import LocalStorage from '@/class/local-storage';
-import Wallet from '@/class/wallet/wallet.ts';
+import Wallet from '@/class/wallet.ts';
 import { InformationMessage } from '@/interface.ts';
 
 @Component({})

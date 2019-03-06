@@ -21,7 +21,7 @@ import { SimpleWallet } from 'nem-library';
 import Information from '@/components/information.vue';
 
 import LocalStorage from '@/class/local-storage';
-import Wallet from '@/class/wallet/wallet.ts';
+import Wallet from '@/class/wallet.ts';
 import { CreateAcountPages } from '@/components/create-account/types.ts';
 import { InformationMessage } from '@/interface.ts';
 

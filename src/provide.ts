@@ -1,4 +1,4 @@
-import Wallet from '@/class/wallet/wallet';
+import Wallet from '@/class/wallet';
 
 export const provide = {
   ['WALLET_SERVICE']: new Wallet(),

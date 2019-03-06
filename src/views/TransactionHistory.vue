@@ -4,8 +4,8 @@
     <!--トランサクションの詳細を表示する-->
     <modal-window
       @modalClose="modalClose"
-      :open="modalOpen"
-      :modalSize="modalSize"
+      :open="modal.open"
+      :modalSize="modal.size"
     >
       <history-detail
         @modalClose="modalClose"
@@ -19,7 +19,7 @@
         <a @click="modalContentOpen(h)">
           <div class="transfer" v-if="h._xem">
             <hr>
-            {{ h.timeWindow.timeStamp | dateTime }}
+            {{ h.timeWindow.timeStamp | fDateTime }}
             <hr>
             <span class="transaction-type">TransferTransaction</span>
             <hr>
@@ -34,14 +34,14 @@
               アセットあり
             </span>
             <hr>
-            message:<br>{{ h.message.payload | stringShort }}
+            message:<br>{{ h.message.payload | fStringShort }}
             <hr>
           </div>
 
           <!--マルチシグの場合はこっち-->
           <div class="multisig-transaction" v-if="h.otherTransaction">
             <hr>
-            {{ h.timeWindow.timeStamp | dateTime }}
+            {{ h.timeWindow.timeStamp | fDateTime }}
             <hr>
             <span class="transaction-type">MultisigTransaction</span>
             <hr>
@@ -56,7 +56,7 @@
               アセットあり
             </span>
             <hr>
-            message:<br>{{ h.otherTransaction.message.payload }}
+            message:<br>{{ h.otherTransaction.message.payload | fStringShort }}
             <hr>
           </div>
         </a>
@@ -73,10 +73,11 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import { Transaction, Pageable } from 'nem-library';
 
+import Filters from '@/filters.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 import HistoryDetail from '@/components/modal-window/HistoryDetail.vue';
 
-import Wallet from '@/class/wallet/wallet.ts';
+import Wallet from '@/class/wallet.ts';
 import { ModalSize } from '@/types/enum';
 
 @Component({
@@ -85,24 +86,7 @@ import { ModalSize } from '@/types/enum';
     HistoryDetail,
   },
 
-  filters: {
-    // あとで直す
-    dateTime(value: any): string {
-      const date = value._date;
-      const time = value._time;
-      const dateTime = `${date._year}-${date._month}-${date._day}/${time._hour}:${time._minute}`;
-      return dateTime;
-    },
-
-    stringShort(str: string): string {
-      const length = 25;
-      if (length < str.length) {
-        return str.substr(0, 25) + '...';
-      }
-
-      return str;
-    },
-  },
+  mixins: [Filters],
 })
 export default class TransactionHistory extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
@@ -112,8 +96,11 @@ export default class TransactionHistory extends Vue {
   private divisibility: number = this.wallet.getDivisibility();
   private history: Transaction[] = [];
   private historyDetail: Transaction | null = null;
-  private modalOpen: boolean = false;
-  private modalSize: ModalSize = ModalSize.Large;
+
+  private modal: {open: boolean, size: ModalSize} = {
+    open: false,
+    size: ModalSize.Large,
+  };
 
   private created() {
     this.allHistory.subscribe((history) => {
@@ -129,11 +116,11 @@ export default class TransactionHistory extends Vue {
 
   private modalContentOpen(transaction: Transaction) {
     this.historyDetail = transaction;
-    this.modalOpen = true;
+    this.modal.open = true;
   }
 
   private modalClose() {
-    this.modalOpen = false;
+    this.modal.open = false;
   }
 }
 </script>
