@@ -20,10 +20,11 @@ import { SimpleWallet } from 'nem-library';
 
 import Information from '@/components/information.vue';
 
+import { InformationData } from '@/types/data-class.ts';
 import LocalStorage from '@/class/local-storage';
 import Wallet from '@/class/wallet.ts';
 import { CreateAcountPages } from '@/components/create-account/types.ts';
-import { InformationMessage } from '@/interface.ts';
+
 
 @Component({
   components: {
@@ -35,7 +36,7 @@ export default class ImportPrivateKey extends Vue {
 
   private complete: boolean = false;
   private error: boolean = false;
-  private information: InformationMessage[] = [];
+  private information: InformationData[] = [];
   private privateKey: string = '';
   private success: boolean = false;
 
@@ -57,11 +58,8 @@ export default class ImportPrivateKey extends Vue {
       }, 2000);
     } catch {
       // validationできてないエラーがあれば表示
-      this.information.push({
-        name: 'error',
-        message: '秘密鍵の形式が違います。入力に間違いがないか確認してください。',
-        color: 'red',
-      });
+      const info = new InformationData('red', 'error', '秘密鍵の形式が違います。入力に間違いがないか確認してください。');
+      this.information.push(info);
     }
   }
 
@@ -71,20 +69,14 @@ export default class ImportPrivateKey extends Vue {
 
   private validation(): boolean {
     if (this.privateKey === '') {
-      this.information.push({
-        name: 'error',
-        message: '秘密鍵を入力してください',
-        color: 'red',
-      });
+      const info = new InformationData('red', 'error', '秘密鍵を入力してください');
+      this.information.push(info);
       return false;
     }
 
     if (this.privateKey.length < 64) {
-      this.information.push({
-        name: 'error',
-        message: '秘密鍵は64文字以上〜66文字以内です',
-        color: 'red',
-      });
+      const info = new InformationData('red', 'error', '秘密鍵は64文字以上〜66文字以内です');
+      this.information.push(info);
       return false;
     }
 

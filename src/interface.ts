@@ -10,9 +10,3 @@ export interface RadioGroupValue {
   value: string | number;
   defaultValue: boolean;
 }
-
-export interface InformationMessage {
-  name: string;
-  message: string;
-  color: string;
-}

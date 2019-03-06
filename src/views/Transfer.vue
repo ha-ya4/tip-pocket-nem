@@ -109,10 +109,10 @@ import QrcodeReader from '@/components/QrcodeReader.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
 import LocalStorage from '@/class/local-storage';
-import { SendParameters } from '@/types/data-class';
+import { InformationData, SendParameters } from '@/types/data-class';
 import { ModalSize } from '@/types/enum';
 import Wallet from '@/class/wallet.ts';
-import { RadioGroupValue, InformationMessage } from '@/interface.ts';
+import { RadioGroupValue } from '@/interface.ts';
 
 
 @Component({
@@ -128,7 +128,7 @@ export default class Transfer extends Vue {
 
   // QRリーダーを表示するかどうか
   private displayQrReader: boolean = false;
-  private information: InformationMessage[] = [];
+  private information: InformationData[] = [];
   // 送金先アドレス
   private sendAddress: string = '';
   // 送金数量
@@ -160,11 +160,8 @@ export default class Transfer extends Vue {
 
   private afterSendDisposal(response: NemAnnounceResult) {
     this.sendAddress = '';
-    this.information.push({
-      name: 'success',
-      message: '送金に成功しました',
-      color: 'black',
-    });
+    const info = new InformationData('black', 'success', '送金に成功しました');
+    this.information.push(info);
   }
 
   private amountRadioChanged(event: any) {
@@ -200,11 +197,8 @@ export default class Transfer extends Vue {
   }
 
   private sendError(error: any) {
-    this.information.push({
-      name : 'error',
-      message: error.message,
-      color: 'red',
-    });
+    const info = new InformationData('red', 'error', error.message);
+    this.information.push(info);
   }
 
   // qrで読み取ったアドレスを受け取る。sendButtonがFALSEならそのまま送金
@@ -260,8 +254,8 @@ export default class Transfer extends Vue {
     }
   }
 
-  private validation(): InformationMessage[] {
-    const error: InformationMessage[] = [];
+  private validation(): InformationData[] {
+    const error: InformationData[] = [];
     /*
     if (this.sendAddress === '') { return false; }
 */

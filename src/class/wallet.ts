@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import Nem from './nem';
-import { SendParameters } from '../types/data-class';
+import { SendParameters } from '@/types/data-class';
 
 export default class Wallet {
   public address: string = '';

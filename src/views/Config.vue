@@ -28,7 +28,7 @@
 
     <div id="amount-limit">
       <span class="config-item" style="display: block;">送金上限:</span>
-      <input type="text" max-length="17" v-model="amountLimit">
+      <input type="text" cols="25" maxlength="10" v-model="amountLimit">
     </div>
 
     <!-- 数量の登録とデフォルトを決めておける-->
@@ -59,7 +59,8 @@ import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
 import Information from '@/components/information.vue';
 
 import Wallet from '@/class/wallet.ts';
-import { TypeConfigData, RadioGroupValue, InformationMessage } from '@/interface.ts';
+import { InformationData } from '@/types/data-class';
+import { TypeConfigData, RadioGroupValue } from '@/interface.ts';
 
 @Component({
   components: {
@@ -77,7 +78,7 @@ export default class Config extends Vue {
   private amount: RadioGroupValue[] = this.$store.state.Config.amount;
   // 予め登録しておいて送金画面で選択することができるメッセージ
   private message: RadioGroupValue[] = this.$store.state.Config.message;
-  private information: InformationMessage[] = [];
+  private information: InformationData[] = [];
   private onChecked: boolean = false;
   private offChecked: boolean = false;
 
@@ -89,12 +90,8 @@ export default class Config extends Vue {
   // amountLimitにエラーがないかチェック
   private amountLimitCheck(values: RadioGroupValue[]) {
     // 数字が入力されているかチェック
-    if (isNaN(Number(this.amountLimit))) {
-      const amountLimitError = {
-          name : 'error',
-          message: '送金上限には数字を入力してください',
-          color: 'red',
-      };
+    if (isNaN(this.amountLimit)) {
+      const amountLimitError = new InformationData('red', 'error', '送金上限には数字を入力してください');
       this.information.push(amountLimitError);
       return;
     }
@@ -102,16 +99,20 @@ export default class Config extends Vue {
     // number型に変換
     this.amountLimit = Number(this.amountLimit);
 
-    // 数量に入力された数字が送金料量の上限を超えていないか
-    for (const value of values) {
-      if (this.amountLimit < value.value) {
-        const amountLimitError = {
-          name : 'error',
-          message: '数量が送金上限を超えています',
-          color: 'red',
-        };
-        this.information.push(amountLimitError);
-      }
+    // xemの総発行枚数以下かチェック
+    const xemMaxAmount = 8_999_999_999;
+    if (xemMaxAmount < this.amountLimit) {
+      const amountLimitError = new InformationData('red', 'error', 'xemの総発行枚数8,999,999,999より小さい数字を入力してください');
+      this.information.push(amountLimitError);
+      return;
+    }
+
+    // 数量に入力された数字が送金量の上限を超えていないかチェック。送金上限を超えていたときにtrueが返る
+    const amountLimitResult = values.some((value) => this.amountLimit < value.value );
+    if (amountLimitResult) {
+      const amountLimitError = new InformationData('red', 'error', '送金上限を超えた数量が入力されています');
+      this.information.push(amountLimitError);
+      return;
     }
   }
 
@@ -148,12 +149,8 @@ export default class Config extends Vue {
     if (amountData.values.some(
       (amount: RadioGroupValue) => typeof(amount.value) !== 'number' )
     ) {
-        const amountError = {
-          name : 'error',
-          message: '数量には数字を入力してください',
-          color: 'red',
-        };
-        this.information.push(amountError);
+      const amountError = new InformationData('red', 'error', '数量には数字を入力してください');
+      this.information.push(amountError);
     }
 
     this.amountLimitCheck(amountData.values);
@@ -173,11 +170,7 @@ export default class Config extends Vue {
     this.updateLocalStorage(configData);
     this.updateStore(configData);
 
-    const success = {
-      name : 'success',
-      message: '設定を保存しました',
-      color: 'black',
-    };
+    const success = new InformationData('black', 'success', '設定を保存しました');
     this.information = [];
     this.information.push(success);
   }

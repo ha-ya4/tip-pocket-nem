@@ -18,7 +18,7 @@ import {
 } from 'nem-library';
 import { Observable } from 'rxjs';
 
-import { SendParameters } from '../types/data-class';
+import { SendParameters } from '@/types/data-class';
 
 NEMLibrary.bootstrap(NetworkTypes.MAIN_NET);
 

@@ -32,7 +32,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import CreateAccount from '@/components/create-account/CreateAccount.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
-import { AccountData } from '@/components/create-account/types.ts';
+import { AccountData } from '@/types/data-class.ts';
 import { ModalSize } from '@/types/enum';
 import Wallet from '@/class/wallet.ts';
 

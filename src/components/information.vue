@@ -16,11 +16,11 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
-import { InformationMessage } from '@/interface.ts';
+import { InformationData } from '@/types/data-class.ts';
 
 @Component
 export default class Information extends Vue {
-  @Prop() private messages: InformationMessage[];
+  @Prop() private messages: InformationData[];
 }
 </script>
 
