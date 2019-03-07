@@ -2,6 +2,7 @@ import nemSdk from 'nem-sdk';
 import {
   Account,
   Address,
+  AssetDefinition,
   Password,
   Pageable,
   NemAnnounceResult,
@@ -56,6 +57,14 @@ export default class Wallet {
   public generateAddressQRText(): string {
     const address = new Address(this.address);
     return new QRService().generateAddressQRText(address);
+  }
+
+  public getAssets(namespace: string): Observable<AssetDefinition[]> {
+    return this.nem.getAllAssetsGivenNamespace(namespace);
+  }
+
+  public getAssetDivisibility(quantity: number, namespace: string, name: string): Observable<number> {
+    return this.nem.getAssetDivisibility(namespace, name);
   }
 
   public getAllTransactionsPaginated(): Pageable<Transaction[]> {

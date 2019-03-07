@@ -3,3 +3,8 @@ export enum ModalSize {
   Middle,
   Small,
 }
+
+export enum Result {
+  Success = 'success',
+  Error = 'error',
+}

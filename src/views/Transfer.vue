@@ -31,19 +31,19 @@
     <!--アドレス入力欄-->
     <p>
       アドレス:<br>
-      <input type="text" maxlength="50" v-model="sendAddress">
+      <input type="text" maxlength="45" v-model="sendParams.address">
     </p>
 
     <!--数量入力欄-->
     <p>
       数量:<br>
-      <input type="text" maxlength="17" v-model="sendAmount">
+      <input type="text" maxlength="17" v-model="sendParams.amount">
     </p>
 
     <!--メッセージ入力欄-->
     <p>
       メッセージ:
-      <textarea row="1" v-model="sendMessage"></textarea>
+      <textarea row="1" maxlength="1024" v-model="sendParams.message"></textarea>
     </p>
 
     <!--送金ボタン-->
@@ -70,7 +70,7 @@
 
     <!--設定しておいた数量の中から選択できる-->
     数量：
-    <div class="radio-button" v-for="(a, index) of userAmount">
+    <div class="radio-button" v-for="(a, index) of userParams.amount">
       <p>
         <input
           type="radio"
@@ -84,7 +84,7 @@
 
     <!--設定しておいたメッセージの中から選択できる-->
     メッセージ：
-    <div class="radio-button" v-for="(m, index) of userMessage">
+    <div class="radio-button" v-for="(m, index) of userParams.message">
       <p>
         <input
           type="radio"
@@ -110,6 +110,7 @@ import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
 import LocalStorage from '@/class/local-storage';
 import { InformationData, SendParameters } from '@/types/data-class';
+import { Result } from '@/types/enum';
 import { ModalSize } from '@/types/enum';
 import Wallet from '@/class/wallet.ts';
 import { RadioGroupValue } from '@/interface.ts';
@@ -126,29 +127,38 @@ import { RadioGroupValue } from '@/interface.ts';
 export default class Transfer extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
+  private amountLimit: number = this.$store.state.Config.amountLimit;
+
   // QRリーダーを表示するかどうか
   private displayQrReader: boolean = false;
+
   private information: InformationData[] = [];
-  // 送金先アドレス
-  private sendAddress: string = '';
-  // 送金数量
-  private sendAmount: number = this.$store.getters['Config/defaultAmount'];
-  // 送金メッセージ
-  private sendMessage: string = this.$store.getters['Config/defaultMessage'];
-  // 登録しておいて送金画面で選択することができる数量
-  private userAmount: RadioGroupValue[] = this.$store.state.Config.amount;
-  // 登録しておいて送金画面で選択することができるメッセージ
-  private userMessage: RadioGroupValue[] = this.$store.state.Config.message;
-  // 登録しておいたsendButtonの設定
+
+  private modal: {open: boolean, size: ModalSize} = {
+    open: false,
+    size: ModalSize.Small,
+  };
+
+   // 登録しておいたsendButtonの設定
   private sendButton: boolean = this.$store.state.Config.sendButton;
+
   // sendButtonラジオのラベル
   private sendRadioLabel: string[] = ['on', 'off'];
   // sendButtonラジオのcheckedのon,offを切り替えるためのもの
   private sendRadioChecked: boolean[] = [false, false];
 
-  private modal: {open: boolean, size: ModalSize} = {
-    open: false,
-    size: ModalSize.Small,
+  private sendParams: { address: string, amount: number, message: string } = {
+    // 送金先アドレス
+    address: '',
+    // 送金数量
+    amount: this.$store.getters['Config/defaultAmount'],
+    // 送金メッセージ
+    message: this.$store.getters['Config/defaultMessage'],
+  };
+
+  private userParams: { amount: RadioGroupValue[], message: RadioGroupValue[] } = {
+    amount: this.$store.state.Config.amount,
+    message: this.$store.state.Config.message,
   };
 
   // sendButtonの設定値を反映させる
@@ -159,19 +169,19 @@ export default class Transfer extends Vue {
   }
 
   private afterSendDisposal(response: NemAnnounceResult) {
-    this.sendAddress = '';
-    const info = new InformationData('black', 'success', '送金に成功しました');
+    this.sendParams.address = '';
+    const info = new InformationData('black', Result.Success, '送金に成功しました');
     this.information.push(info);
   }
 
   private amountRadioChanged(event: any) {
-    this.checkChanged(this.userAmount, event.target.value);
-    this.sendAmount = event.target.nextSibling.textContent;
+    this.checkChanged(this.userParams.amount, event.target.value);
+    this.sendParams.amount = event.target.nextSibling.textContent;
   }
 
   private messageRadioChanged(event: any) {
-    this.checkChanged(this.userMessage, event.target.value);
-    this.sendMessage = event.target.nextSibling.textContent;
+    this.checkChanged(this.userParams.message, event.target.value);
+    this.sendParams.message = event.target.nextSibling.textContent;
   }
 
   // radioボタンのcheckを切り替える
@@ -196,14 +206,17 @@ export default class Transfer extends Vue {
       : this.displayQrReader = true;
   }
 
+  // もしかしたらバランスの取得が遅いこともあるかもなので、this.validation()で残高足りてるか確認して止めずにここで日本語にする
   private sendError(error: any) {
-    const info = new InformationData('red', 'error', error.message);
+    let err = error.message;
+    if (err === 'FAILURE_INSUFFICIENT_BALANCE') { err = '残高が足りません'; }
+    const info = new InformationData('red', Result.Error, err);
     this.information.push(info);
   }
 
   // qrで読み取ったアドレスを受け取る。sendButtonがFALSEならそのまま送金
   private setAddressAndConditionallyTransfer(address: string) {
-    this.sendAddress = address;
+    this.sendParams.address = address;
 
     if (!this.sendButton) {
       this.send();
@@ -212,17 +225,13 @@ export default class Transfer extends Vue {
 
   private send() {
     this.information = [];
-    const error = this.validation();
-    // errorがあればinformationの配列にpushしてからリターン
-    if (error.length !== 0) {
-      for (const err of error) {
-        this.information.push(err);
-      }
-      return;
-    }
+    this.validation();
+    // errorがあればリターン
+    const validationResult = this.information.some((info) => info.result === Result.Error);
+    if (validationResult) { return; }
 
-    const message = PlainMessage.create(this.sendMessage);
-    const parameters = new SendParameters(this.sendAmount, message, this.sendAddress);
+    const message = PlainMessage.create(this.sendParams.message);
+    const parameters = new SendParameters(this.sendParams.amount, message, this.sendParams.address);
     const key = LocalStorage.getKey(this.wallet.walletName);
     // プライベートキーがローカルストレージになければインポート画面へ
     if (!key) {
@@ -254,12 +263,31 @@ export default class Transfer extends Vue {
     }
   }
 
-  private validation(): InformationData[] {
-    const error: InformationData[] = [];
-    /*
-    if (this.sendAddress === '') { return false; }
-*/
-    return error;
+  private validation() {
+    // 数量に数字が入力されているか
+    if (isNaN(this.sendParams.amount)) {
+      const error = new InformationData('red', Result.Error, '数量には数字を入力してください');
+      this.information.push(error);
+    }
+
+    // 設定した送金上限を超えていないか
+    if (this.amountLimit < this.sendParams.amount) {
+      const error = new InformationData('red', Result.Error, '設定された送金量の上限を超えています');
+      this.information.push(error);
+    }
+
+    // addressが入力されているか
+    if (this.sendParams.address === '') {
+      const error = new InformationData('red', Result.Error, 'アドレスが入力されていません');
+      this.information.push(error);
+    }
+
+    // 先頭がNから始まる40文字か
+    const pattern = /^[n,N].{39}$/;
+    if (!pattern.test(this.sendParams.address.trim())) {
+      const error = new InformationData('red', Result.Error, 'アドレスの形式が間違っています');
+      this.information.push(error);
+    }
   }
 }
 </script>

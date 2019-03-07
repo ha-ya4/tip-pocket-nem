@@ -60,6 +60,7 @@ import Information from '@/components/information.vue';
 
 import Wallet from '@/class/wallet.ts';
 import { InformationData } from '@/types/data-class';
+import { Result } from '@/types/enum';
 import { TypeConfigData, RadioGroupValue } from '@/interface.ts';
 
 @Component({
@@ -91,7 +92,7 @@ export default class Config extends Vue {
   private amountLimitCheck(values: RadioGroupValue[]) {
     // 数字が入力されているかチェック
     if (isNaN(this.amountLimit)) {
-      const amountLimitError = new InformationData('red', 'error', '送金上限には数字を入力してください');
+      const amountLimitError = new InformationData('red', Result.Error, '送金上限には数字を入力してください');
       this.information.push(amountLimitError);
       return;
     }
@@ -102,7 +103,7 @@ export default class Config extends Vue {
     // xemの総発行枚数以下かチェック
     const xemMaxAmount = 8_999_999_999;
     if (xemMaxAmount < this.amountLimit) {
-      const amountLimitError = new InformationData('red', 'error', 'xemの総発行枚数8,999,999,999より小さい数字を入力してください');
+      const amountLimitError = new InformationData('red', Result.Error, 'xemの総発行枚数8,999,999,999より小さい数字を入力してください');
       this.information.push(amountLimitError);
       return;
     }
@@ -110,7 +111,7 @@ export default class Config extends Vue {
     // 数量に入力された数字が送金量の上限を超えていないかチェック。送金上限を超えていたときにtrueが返る
     const amountLimitResult = values.some((value) => this.amountLimit < value.value );
     if (amountLimitResult) {
-      const amountLimitError = new InformationData('red', 'error', '送金上限を超えた数量が入力されています');
+      const amountLimitError = new InformationData('red', Result.Error, '送金上限を超えた数量が入力されています');
       this.information.push(amountLimitError);
       return;
     }
@@ -149,14 +150,14 @@ export default class Config extends Vue {
     if (amountData.values.some(
       (amount: RadioGroupValue) => typeof(amount.value) !== 'number' )
     ) {
-      const amountError = new InformationData('red', 'error', '数量には数字を入力してください');
+      const amountError = new InformationData('red', Result.Error, '数量には数字を入力してください');
       this.information.push(amountError);
     }
 
     this.amountLimitCheck(amountData.values);
 
     // informationにエラーがあれば設定を保存せずにreturn
-    if (this.information.some((info) => info.name === 'error')) {
+    if (this.information.some((info) => info.result === 'error')) {
       return;
     }
 
@@ -170,7 +171,7 @@ export default class Config extends Vue {
     this.updateLocalStorage(configData);
     this.updateStore(configData);
 
-    const success = new InformationData('black', 'success', '設定を保存しました');
+    const success = new InformationData('black', Result.Success, '設定を保存しました');
     this.information = [];
     this.information.push(success);
   }

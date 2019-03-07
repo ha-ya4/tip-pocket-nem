@@ -19,13 +19,13 @@
       <hr>
       fee: {{ historyDetail.fee / divisibility }}
       <hr>
-      <span v-if="historyDetail._assets === undefined">
+      <span v-if="assets.length === 0">
         アセットなし
       </span>
-      <div v-if="historyDetail._assets !== undefined">
+      <div v-if="assets.length !== 0">
         assets:<br>
-        <div class="assets" v-for="asset of historyDetail._assets">
-          <nobr>{{ asset.quantity }} </nobr>{{ asset.assetId.namespaceId }}:{{ asset.assetId.name }}
+        <div class="assets" v-for="asset of assets">
+          <nobr>{{ asset.quantity }} </nobr>{{ asset.namespace }}:{{ asset.name }}
         </div>
       </div>
       <hr>
@@ -74,10 +74,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
-import { Transaction } from 'nem-library';
+import { TransferTransaction } from 'nem-library';
 
 import Filters from '@/filters.vue';
 
+import { AppAsset } from '@/components/modal-window/data-class';
 import Wallet from '@/class/wallet.ts';
 
 @Component({
@@ -85,8 +86,24 @@ import Wallet from '@/class/wallet.ts';
 })
 export default class TransactionHistory extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
-  @Prop() private historyDetail: Transaction;
+  @Prop() private historyDetail: TransferTransaction;
+
+  private assets: AppAsset[] = [];
   private divisibility: number = this.wallet.getDivisibility();
+
+  /* // 一旦アセットをthis.assetsにいれる。それから可分性かけてthis.assetsをv-forに渡す。
+  // observableでうまいことやる方法が思いつかないのでこうなる
+  // マルチシグ分も忘れずに
+  private beforeUpdate() {
+    try {
+      for (let a of this.historyDetail.assets()) {
+        const asset = new AppAsset(a.assetId.namespaceId, a.assetId.name, a.quantity);
+        this.assets.push(asset);
+      }
+    // 例外発生時は何もしなくて良い
+    } catch {}
+  }
+  */
 
   // 親のメソッドを呼び出してthis.openをfalseに切り替える。モーダルが消える
   private modalClose() {
