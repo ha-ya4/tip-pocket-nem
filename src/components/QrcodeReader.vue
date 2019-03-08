@@ -14,7 +14,6 @@ import { QrcodeStream } from 'vue-qrcode-reader';
     QrcodeStream,
   },
 })
-
 export default class QrReader extends Vue {
   private onDecode(decodedString: string) {
     const address = JSON.parse(decodedString).data.addr;

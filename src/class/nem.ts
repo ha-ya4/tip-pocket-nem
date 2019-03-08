@@ -25,7 +25,7 @@ import { SendParameters } from '@/types/data-class';
 
 NEMLibrary.bootstrap(NetworkTypes.MAIN_NET);
 
-const NODES: { protocol: 'http' | 'https' | undefined, domain: string, port: number }[] = [
+const NODES: Array<{ protocol: 'http' | 'https' | undefined, domain: string, port: number }> = [
   { protocol: 'http', domain: '176.9.68.110', port: 7890 },
   { protocol: 'http', domain: '108.61.182.27', port: 7890 },
   { protocol: 'http', domain: '104.238.161.61', port: 7890 },
@@ -34,7 +34,7 @@ const NODES: { protocol: 'http' | 'https' | undefined, domain: string, port: num
   { protocol: 'http', domain: 'asia.manitpro.be', port: 7890 },
   { protocol: 'http', domain: 'rabanne.manitpro.be', port: 7890 },
   { protocol: 'http', domain: '153.122.85.177', port: 7890 },
-]
+];
 
 export default class Nem {
   private accountHttp: AccountHttp = new AccountHttp(NODES);

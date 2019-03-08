@@ -63,7 +63,7 @@ export default class Wallet {
     return this.nem.getAllAssetsGivenNamespace(namespace);
   }
 
-  public getAssetDivisibility(quantity: number, namespace: string, name: string): Observable<number> {
+  public getAssetDivisibility(namespace: string, name: string): Observable<number> {
     return this.nem.getAssetDivisibility(namespace, name);
   }
 

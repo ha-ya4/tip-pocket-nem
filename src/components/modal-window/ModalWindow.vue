@@ -47,7 +47,6 @@ export default class ModalWindow extends Vue {
   #modal-content {
     box-sizing: border-box;
     border-top: 25px solid rgb(170, 199, 231);
-    border-bottom: 25px solid rgb(170, 199, 231);
     border-radius: 10px;
     background-color: #fdfeff;
     z-index: 2;

@@ -52,12 +52,13 @@
       <hr>
       fee: {{ historyDetail.otherTransaction.fee / divisibility }}
       <hr>
-      <span v-if="historyDetail.otherTransaction._assets === undefined">
+      <span v-if="assets.length === 0">
         アセットなし
       </span>
-      <div v-if="historyDetail.otherTransaction._assets !== undefined">
-        <div class="assets" v-for="asset of historyDetail.otherTransaction._assets">
-          <nobr>{{ asset.quantity }} </nobr>{{ asset.assetId.namespaceId }}:{{ asset.assetId.name }}
+      <div v-if="assets.length !== 0">
+        assets:<br>
+        <div class="assets" v-for="asset of assets">
+          <nobr>{{ asset.quantity }} </nobr>{{ asset.namespace }}:{{ asset.name }}
         </div>
       </div>
       <hr>
@@ -73,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
+import { Component, Vue, Prop, Inject, Watch } from 'vue-property-decorator';
 import { TransferTransaction } from 'nem-library';
 
 import Filters from '@/filters.vue';
@@ -91,23 +92,29 @@ export default class TransactionHistory extends Vue {
   private assets: AppAsset[] = [];
   private divisibility: number = this.wallet.getDivisibility();
 
-  /* // 一旦アセットをthis.assetsにいれる。それから可分性かけてthis.assetsをv-forに渡す。
-  // observableでうまいことやる方法が思いつかないのでこうなる
-  // マルチシグ分も忘れずに
-  private beforeUpdate() {
-    try {
-      for (let a of this.historyDetail.assets()) {
-        const asset = new AppAsset(a.assetId.namespaceId, a.assetId.name, a.quantity);
-        this.assets.push(asset);
-      }
-    // 例外発生時は何もしなくて良い
-    } catch {}
-  }
-  */
-
   // 親のメソッドを呼び出してthis.openをfalseに切り替える。モーダルが消える
   private modalClose() {
     this.$emit('modalClose');
+  }
+
+  // 一旦アセットをthis.assetsにいれる。それから可分性かけてthis.assetsをv-forに渡す。
+  // observableでうまいことやる方法が思いつかないのでこうなる
+  // マルチシグだと変わると思うけど試せてない
+  @Watch('historyDetail')
+  private watchDetail() {
+    this.assets = [];
+    try {
+      for (const a of this.historyDetail.assets()) {
+        const asset = new AppAsset(a.assetId.namespaceId, a.assetId.name, a.quantity);
+        this.assets.push(asset);
+      }
+
+      for (const a of this.assets) {
+        this.wallet.getAssetDivisibility(a.namespace, a.name).subscribe((divisibility) => {
+          a.quantity = a.quantity / divisibility;
+        });
+      }
+    } catch {/* 例外発生時は何もしなくて良い */}
   }
 }
 </script>

@@ -1,10 +1,8 @@
 <template>
   <div id="receive">
 
-    <modal-window
-      :open="modal.open"
-      :modalSize="modal.size"
-    >
+    <!--秘密鍵がローカルストレージになかった場合-->
+    <modal-window :open="privateKeyModal.open" :modalSize="privateKeyModal.size">
       <p style="text-align: center;">秘密鍵が見つかりませんでした</p>
       <import-private-key @modalClose="modalClose"/>
     </modal-window>
@@ -21,11 +19,7 @@
 
     <!--押すと秘密鍵を表示するボタン-->
     <div class="openPrivateKey">
-      <button
-        type="button"
-        class="app-button"
-        @click="displayPrivateKeybutton"
-      >
+      <button type="button" class="app-button" @click="displayPrivateKeybutton">
         {{ displayPrivateKeyButtonText }}
       </button>
     </div>
@@ -40,12 +34,15 @@
         <span class="account-privatekey">{{ privateKey | fInsertHyphen }}</span>
       </div>
     </div>
+
+    <delete-account/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import DeleteAccount from '@/components/DeleteAccount.vue';
 import Filters from '@/filters.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
@@ -56,6 +53,7 @@ import Wallet from '@/class/wallet.ts';
 
 @Component({
   components: {
+    DeleteAccount,
     ImportPrivateKey,
     ModalWindow,
   },
@@ -69,7 +67,7 @@ export default class Receive extends Vue {
   private displayPrivateKeyButtonText: string = '秘密鍵を見る';
   private privateKey: string = '';
 
-  private modal: {open: boolean, size: ModalSize} = {
+  private privateKeyModal: {open: boolean, size: ModalSize} = {
     open: false,
     size: ModalSize.Small,
   };
@@ -84,7 +82,7 @@ export default class Receive extends Vue {
     // ローカルストレージからプライベートキーを取得。なければインポート画面へ
     const key = LocalStorage.getKey(this.wallet.walletName);
     if (!key) {
-      this.modal.open = true;
+      this.privateKeyModal.open = true;
       return;
     }
 
@@ -102,7 +100,7 @@ export default class Receive extends Vue {
   }
 
   private modalClose() {
-    this.modal.open = false;
+    this.privateKeyModal.open = false;
   }
 }
 </script>
