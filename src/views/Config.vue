@@ -1,6 +1,8 @@
 <template>
   <div id="config">
 
+    <delete-account/>
+
     <!-- offにするとQR読み込みで即送金（できるなら）-->
     <div id="send-button">
       <span class="config-item">送金ボタン:</span>
@@ -55,6 +57,7 @@
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
+import DeleteAccount from '@/components/DeleteAccount.vue';
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
 import Information from '@/components/information.vue';
 
@@ -65,6 +68,7 @@ import { TypeConfigData, RadioGroupValue } from '@/interface.ts';
 
 @Component({
   components: {
+    DeleteAccount,
     RadioButtonGroup,
     Information,
   },

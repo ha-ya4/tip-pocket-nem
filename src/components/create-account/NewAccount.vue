@@ -49,6 +49,8 @@ export default class NewAccount extends Vue {
 
   private created() {
     const account = this.wallet.createAccount();
+    // vuexから設定の初期値をローカルストレージにセットする
+    LocalStorage.setAccountData(this.wallet.walletName, this.$store.state.Config);
     LocalStorage.setNemAccount(this.wallet.walletName, this.wallet.address, this.wallet.publicKey);
     LocalStorage.setEncryptedKey(account.encryptedPrivateKey, this.wallet.walletName);
     this.newAccountText = '新規アカウント作成が完了しました';

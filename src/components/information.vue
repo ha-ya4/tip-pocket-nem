@@ -1,5 +1,6 @@
 <template>
   <div id="information">
+
     <div class="messages" v-if="messages.length">
       <div v-for="message of messages">
         <p class="message-content">
@@ -8,8 +9,8 @@
           </font>
         </p>
       </div>
-
     </div>
+
   </div>
 </template>
 

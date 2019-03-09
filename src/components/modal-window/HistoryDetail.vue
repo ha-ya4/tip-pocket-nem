@@ -29,7 +29,7 @@
         </div>
       </div>
       <hr>
-      message:<br>{{ historyDetail.message.payload }}
+      message:<br>{{ historyDetail.message.plain() }}
       <hr>
     </div>
 
@@ -62,7 +62,7 @@
         </div>
       </div>
       <hr>
-      message:<br>{{ historyDetail.otherTransaction.message.payload }}
+      message:<br>{{ historyDetail.otherTransaction.message.plain() }}
       <hr>
     </div>
 

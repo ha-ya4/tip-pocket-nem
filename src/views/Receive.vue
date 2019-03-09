@@ -35,14 +35,12 @@
       </div>
     </div>
 
-    <delete-account/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import DeleteAccount from '@/components/DeleteAccount.vue';
 import Filters from '@/filters.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
@@ -53,7 +51,6 @@ import Wallet from '@/class/wallet.ts';
 
 @Component({
   components: {
-    DeleteAccount,
     ImportPrivateKey,
     ModalWindow,
   },

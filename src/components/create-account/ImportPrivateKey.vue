@@ -50,6 +50,8 @@ export default class ImportPrivateKey extends Vue {
     try {
       // プライベートキーをインポートしてアカウント作成、ローカルストレージにセット
       const account = this.wallet.createWithPrivateKey(this.privateKey);
+      // vuexから設定の初期値をローカルストレージにセットする
+      LocalStorage.setAccountData(this.wallet.walletName, this.$store.state.Config);
       LocalStorage.setNemAccount(this.wallet.walletName, this.wallet.address, this.wallet.publicKey);
       LocalStorage.setEncryptedKey(account.encryptedPrivateKey, this.wallet.walletName);
       this.success = true;

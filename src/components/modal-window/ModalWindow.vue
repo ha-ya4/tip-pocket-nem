@@ -1,5 +1,6 @@
 <template>
   <div id="modal-window">
+
     <!--親コンポーネントから渡されたbool値でモーダルの表示、非表示を切り替える-->
     <div :class="{ 'modal-none': !open }">
 
@@ -14,9 +15,10 @@
           <!--表示したいものを親コンポーネントからスロットに挿入-->
           <slot></slot>
         </div>
-
       </div>
+
     </div>
+
   </div>
 </template>
 

@@ -20,9 +20,9 @@ import { Component, Vue } from 'vue-property-decorator';
     },
 
     fStringShort(str: string): string {
-      const length = 25;
+      const length = 35;
       if (length < str.length) {
-        return str.substr(0, 25) + '...';
+        return str.substr(0, length) + '...';
       }
       return str;
     },

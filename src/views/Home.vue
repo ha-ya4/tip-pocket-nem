@@ -1,12 +1,7 @@
 <template>
   <div id="home">
 
-    <modal-window
-      :open="modal.open"
-      :modalSize="modal.size"
-    >
-      <create-account @modalClose="modalClose" />
-    </modal-window>
+    <create-account @modalClose="modalClose" :modalOpen="modalOpen"/>
 
     <div id="nav">
       <router-link to="/transfer">チップ</router-link>
@@ -30,38 +25,27 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import CreateAccount from '@/components/create-account/CreateAccount.vue';
-import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
-import { AccountData } from '@/types/data-class.ts';
-import { ModalSize } from '@/types/enum';
 import Wallet from '@/class/wallet.ts';
 
 @Component({
   components: {
     CreateAccount,
-    ModalWindow,
   },
 })
 export default class Home extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
   private balance: number = 0;
+  private modalOpen: boolean = false;
 
-  private modal: {open: boolean, size: ModalSize} = {
-    open: false,
-    size: ModalSize.Middle,
-  };
-
-  // ローカルストレージからアプリ設定を読み込みvuex.storeを更新する
-  // walletの残高を取得する
   private created() {
     // dataがなければウォレット作成。あればそのままbalance取得
     if (!this.accountDataLoad()) {
-      this.setAccountData();
-      this.modal.open = true;
-    } else {
-      this.getBalance();
+      this.modalOpen = true;
     }
+
+    this.getBalance();
   }
 
   private accountDataLoad(): boolean {
@@ -77,23 +61,12 @@ export default class Home extends Vue {
     return true;
   }
 
-  private setAccountData() {
-    // vuexstoreから初期値取得
-    const configData = this.$store.state.Config;
-    // アカウント作成後にセットするので''をいれておく
-    const publicData = { address: '', publicKey: '' };
-    const accountdata = JSON.stringify(new AccountData(configData, publicData));
-    const accountDataStorageName = this.wallet.walletName;
-    // アカウントのパブリックデータとアプリ設定をローカルストレージに保存
-    localStorage.setItem(accountDataStorageName, accountdata);
-  }
-
   private getBalance() {
-    this.wallet.getBalance().subscribe( (balance) => this.balance = balance );
+    this.wallet.getBalance().subscribe((balance) => this.balance = balance );
   }
 
   private modalClose() {
-    this.modal.open = false;
+    this.modalOpen = false;
   }
 }
 </script>

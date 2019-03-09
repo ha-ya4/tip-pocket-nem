@@ -27,14 +27,14 @@
             <hr>
             quantity: {{ h._xem.quantity / divisibility }}
             <hr>
-            <span v-if="h._assets === undefined">
+            <span v-if="h._assets === undefined || h._assets.length === 0">
               アセットなし
             </span>
-            <span v-if="h._assets !== undefined">
+            <span v-else>
               アセットあり
             </span>
             <hr>
-            message:<br>{{ h.message.payload | fStringShort }}
+            message:<br>{{ h.message.plain() | fStringShort }}
             <hr>
           </div>
 
@@ -49,14 +49,14 @@
             <hr>
             quantity: {{ h.otherTransaction._xem.quantity / divisibility }}
             <hr>
-            <span v-if="h.otherTransaction._assets === undefined">
+            <span v-if="h.otherTransaction._assets === undefined  || h._assets.length === 0">
               アセットなし
             </span>
-            <span v-if="h.otherTransaction._assets !== undefined">
+            <span v-else>
               アセットあり
             </span>
             <hr>
-            message:<br>{{ h.otherTransaction.message.payload | fStringShort }}
+            message:<br>{{ h.otherTransaction.message.plain() | fStringShort }}
             <hr>
           </div>
         </a>

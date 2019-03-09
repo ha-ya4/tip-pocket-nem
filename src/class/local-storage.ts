@@ -1,3 +1,6 @@
+import { AccountData } from '@/types/data-class.ts';
+import { TypeConfigData } from '@/interface.ts';
+
 export default class LocalStorage {
   public static getKey(walletName: string): { encryptedKey: string, iv: string } | null {
     const storageName = `${walletName}-key`;
@@ -17,6 +20,16 @@ export default class LocalStorage {
       const accData = JSON.stringify(accountData);
       localStorage.setItem(accountDataStorageName, accData);
     }
+  }
+
+  public static setAccountData(walletName: string, configData: TypeConfigData) {
+    const config = configData;
+    // アカウント作成後にセットするので''をいれておく
+    const publicData = { address: '', publicKey: '' };
+    const accountdata = JSON.stringify(new AccountData(config, publicData));
+    const accountDataStorageName = walletName;
+    // アカウントのパブリックデータとアプリ設定をローカルストレージに保存
+    localStorage.setItem(accountDataStorageName, accountdata);
   }
 
   public static setEncryptedKey(encryptedKey: { encryptedKey: string, iv: string }, walletName: string) {
