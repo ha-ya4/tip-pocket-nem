@@ -3,37 +3,18 @@
 
     <!--秘密鍵がローカルストレージになかった場合-->
     <modal-window :open="privateKeyModal.open" :modalSize="privateKeyModal.size">
-      <p style="text-align: center;">秘密鍵が見つかりませんでした</p>
+      <p>秘密鍵が見つかりませんでした</p>
       <import-private-key @modalClose="modalClose"/>
     </modal-window>
 
-    <div class="qrcode">
-      <qriously v-model="QR.text" :size="QR.size"></qriously>
-    </div>
+    <qriously v-model="QR.text" :size="QR.size"></qriously>
 
     <!--walletアドレス-->
     <div class="content">
-      address:
-      <span class="account-address">{{ wallet.address }}</span>
+      address<br>{{ wallet.address }}
     </div>
 
-    <!--押すと秘密鍵を表示するボタン-->
-    <div class="openPrivateKey">
-      <button type="button" class="app-button" @click="displayPrivateKeybutton">
-        {{ displayPrivateKeyButtonText }}
-      </button>
-    </div>
-
-    <!--秘密鍵と説明-->
-    <div class="content" v-if="displayPrivateKeyButton">
-      <p class="privatekey-description">
-        秘密鍵は最も重要なものです。秘密鍵を忘れてしまったり、他人に知られてしまうと大事な資産を失うことになります。
-        あなたが管理するもので、誰かが変わりに管理してはくれません。必ず紙に書いて厳重に保管してください。
-      </p>
-      <div class="privatekey">
-        <span class="account-privatekey">{{ privateKey | fInsertHyphen }}</span>
-      </div>
-    </div>
+    <private-key-text :keyModalOpen="keyModalOpen"/>
 
   </div>
 </template>
@@ -44,6 +25,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import Filters from '@/filters.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
+import PrivateKeyText from '@/components/PrivateKeyText.vue';
 
 import LocalStorage from '@/class/local-storage';
 import { ModalSize } from '@/types/enum';
@@ -53,9 +35,8 @@ import Wallet from '@/class/wallet.ts';
   components: {
     ImportPrivateKey,
     ModalWindow,
+    PrivateKeyText,
   },
-
-  mixins: [Filters],
 })
 export default class Receive extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
@@ -73,6 +54,9 @@ export default class Receive extends Vue {
     text: this.wallet.generateAddressQRText(),
     size: 200,
   };
+
+  // 秘密鍵のインポート画面を表示する。PrivateKeyText.vueから呼び出す。
+  private keyModalOpen = () => { this.privateKeyModal.open = true; };
 
   // 押すとプライベートキーを表示するボタン
   private displayPrivateKeybutton() {
@@ -105,15 +89,9 @@ export default class Receive extends Vue {
 <style scoped>
 @media screen and (max-width: 800px) {
   #receive {
+    text-align: center;
     padding: 3%;
     word-wrap: break-word;
-  }
-
-  .account-address {
-    display: block;
-    text-align: center;
-    font-size: 3.2vw;
-    margin-left: 3%;
   }
 
   .account-privatekey {
@@ -136,12 +114,11 @@ export default class Receive extends Vue {
     font-size: 3.8vw;
   }
 
-  .openPrivateKey {
-    text-align: center
-  }
-
-  .qrcode {
-    text-align: center;
+  .hyphen-button {
+    background-color: #b5def585;
+    color: red;
+    border-style: none;
+    outline: none;
   }
 }
 </style>

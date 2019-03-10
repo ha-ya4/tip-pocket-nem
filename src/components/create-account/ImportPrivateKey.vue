@@ -35,7 +35,6 @@ import { CreateAcountPages } from '@/components/create-account/types.ts';
 export default class ImportPrivateKey extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
-  private complete: boolean = false;
   private error: boolean = false;
   private information: InformationData[] = [];
   private privateKey: string = '';
@@ -58,12 +57,15 @@ export default class ImportPrivateKey extends Vue {
       // インポート成功後自動でモーダルを閉じる
       setTimeout(() => {
         this.modalClose();
+        this.success = false;
       }, 2000);
     } catch {
       // validationできてないエラーがあれば表示
       const info = new InformationData('red', Result.Error, '秘密鍵の形式が違います。入力に間違いがないか確認してください。');
       this.information.push(info);
     }
+
+    this.privateKey = '';
   }
 
   private modalClose() {
