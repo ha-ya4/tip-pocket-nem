@@ -48,6 +48,13 @@ export default class DeleteAccount extends Vue {
   private insHyphen: boolean = false;
   private privateKey: string = '';
 
+  // 画面サイズによってhyphenButtonのテキストを変える
+  private created() {
+    if (window.parent.screen.width < 800 && window.parent.screen.height < 800) {
+      this.hyphenButtonText = 'tap!'
+    }
+  }
+
   // 押すとプライベートキーを表示するボタン
   private displayPrivateKeyButton() {
     // ローカルストレージからプライベートキーを取得。なければインポート画面へ

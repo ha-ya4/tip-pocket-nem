@@ -1,5 +1,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { PublicAccount } from 'nem-library';
+
+import LocalStorage from '@/class/local-storage';
+import Wallet from '@/class/wallet.ts';
 
 @Component({
   filters: {
@@ -8,6 +12,19 @@ import { Component, Vue } from 'vue-property-decorator';
       const time = value._time;
       const dateTime = `${date._year}-${date._month}-${date._day}/${time._hour}:${time._minute}`;
       return dateTime;
+    },
+
+    fGetMessage(message: any, recipientPublicAccount: PublicAccount, wallet: Wallet): string {
+      const mess = message.plain();
+      if (mess) {
+        return mess;
+      }
+
+      const storageName = wallet.walletName;
+      const keyJson = LocalStorage.getKey(storageName);
+      if (keyJson) {}
+
+      return mess
     },
 
     // ５文字ごとに-を入れる

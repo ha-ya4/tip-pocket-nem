@@ -19,16 +19,6 @@
       <hr>
       fee: {{ historyDetail.fee / divisibility }}
       <hr>
-      <span v-if="assets.length === 0">
-        アセットなし
-      </span>
-      <div v-if="assets.length !== 0">
-        assets:<br>
-        <div class="assets" v-for="asset of assets">
-          <nobr>{{ asset.quantity }} </nobr>{{ asset.namespace }}:{{ asset.name }}
-        </div>
-      </div>
-      <hr>
       message:<br>{{ historyDetail.message.plain() }}
       <hr>
     </div>
@@ -51,16 +41,6 @@
       quantity: {{ historyDetail.otherTransaction._xem.quantity / divisibility }}
       <hr>
       fee: {{ historyDetail.otherTransaction.fee / divisibility }}
-      <hr>
-      <span v-if="assets.length === 0">
-        アセットなし
-      </span>
-      <div v-if="assets.length !== 0">
-        assets:<br>
-        <div class="assets" v-for="asset of assets">
-          <nobr>{{ asset.quantity }} </nobr>{{ asset.namespace }}:{{ asset.name }}
-        </div>
-      </div>
       <hr>
       message:<br>{{ historyDetail.otherTransaction.message.plain() }}
       <hr>

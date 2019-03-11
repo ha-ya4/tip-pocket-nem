@@ -105,18 +105,6 @@ export default class RadioButtonGroup extends Vue {
   // 設定値を返す。親から呼ぶ。
   private passData() {
     const items = [this.none, this.value1, this.value2, this.value3];
-
-    // valueを数値に変換し、それが数字なら変換したものをvalueに入れる
-    // 一度文字をうったあと数値を入れると型がstringになる。正しく入力したときにnumberに型を変換するために行う
-    for (const item of items) {
-      if (!isNaN((Number(item.value)))) {
-        // ''は０に変換されてしまうのでifで回避
-        if (item.value !== '') {
-          item.value =  Number(item.value);
-        }
-      }
-    }
-
     return {
       defaultValue: this.defaultValue,
       values: items,
@@ -194,7 +182,6 @@ export default class RadioButtonGroup extends Vue {
 @media screen and (max-width: 800px) {
   /*全体*/
   #radio-button-group {
-    box-shadow: 0.5px 0.5px 0.5px 0.5px rgba(85, 145, 160, 0.4);
     border-radius: 3px;
     margin-top: 15px;
     padding-top: 5px;

@@ -92,8 +92,20 @@ export default class Config extends Vue {
     this.sendButton ? this.onChecked = true : this.offChecked = true;
   }
 
-  // amountLimitにエラーがないかチェック
-  private amountLimitCheck(values: RadioGroupValue[]) {
+  private validation(values: RadioGroupValue[]) {
+    // ---------登録した送金量------------
+    // amountが数値になってるかチェック
+    if (values.some(
+      (value: RadioGroupValue) => isNaN(Number(value.value)))
+    ) {
+      const amountError = new InformationData('red', Result.Error, '数量には数字を入力してください');
+      this.information.push(amountError);
+    } else {
+      // 数字がstring型の可能性があるのでnumber型に変換
+      values.map((value) => { value.value = Number(value.value) });
+    }
+
+    // ------------送金上限-----------
     // 数字が入力されているかチェック
     if (isNaN(this.amountLimit)) {
       const amountLimitError = new InformationData('red', Result.Error, '送金上限には数字を入力してください');
@@ -101,7 +113,7 @@ export default class Config extends Vue {
       return;
     }
 
-    // number型に変換
+    // 一応number型に変換
     this.amountLimit = Number(this.amountLimit);
 
     // xemの総発行枚数以下かチェック
@@ -150,20 +162,10 @@ export default class Config extends Vue {
     const refsMessage: any = this.$refs.messageRadio;
     const messageData = refsMessage.passData();
 
-    // amountが数値になってるかチェック
-    if (amountData.values.some(
-      (amount: RadioGroupValue) => typeof(amount.value) !== 'number' )
-    ) {
-      const amountError = new InformationData('red', Result.Error, '数量には数字を入力してください');
-      this.information.push(amountError);
-    }
-
-    this.amountLimitCheck(amountData.values);
+    this.validation(amountData.values);
 
     // informationにエラーがあれば設定を保存せずにreturn
-    if (this.information.some((info) => info.result === 'error')) {
-      return;
-    }
+    if (this.information.some((info) => info.result === 'error')) { return; }
 
     const configData = {
       amount: amountData.values,

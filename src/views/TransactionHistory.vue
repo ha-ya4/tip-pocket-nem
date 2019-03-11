@@ -27,14 +27,7 @@
             <hr>
             quantity: {{ h._xem.quantity / divisibility }}
             <hr>
-            <span v-if="h._assets === undefined || h._assets.length === 0">
-              アセットなし
-            </span>
-            <span v-else>
-              アセットあり
-            </span>
-            <hr>
-            message:<br>{{ h.message.plain() | fStringShort }}
+              message:<br>{{ h.message.plain() | fStringShort }}
             <hr>
           </div>
 
@@ -49,18 +42,16 @@
             <hr>
             quantity: {{ h.otherTransaction._xem.quantity / divisibility }}
             <hr>
-            <span v-if="h.otherTransaction._assets === undefined  || h._assets.length === 0">
-              アセットなし
-            </span>
-            <span v-else>
-              アセットあり
-            </span>
-            <hr>
-            message:<br>{{ h.otherTransaction.message.plain() | fStringShort }}
+              message:<br>{{ h.otherTransaction.message.plain() | fStringShort }}
             <hr>
           </div>
         </a>
       </div>
+
+    </div>
+
+    <div class="to-bottom" v-if="addHistory">
+      <button type="button" class="to-bottom-button" @click="toBottom">↓</button>
     </div>
 
     <div class="add-history-button" v-if="addHistory">
@@ -96,15 +87,31 @@ export default class TransactionHistory extends Vue {
   private divisibility: number = this.wallet.getDivisibility();
   private history: Transaction[] = [];
   private historyDetail: Transaction | null = null;
+  private latestTransactionHash: string;
 
-  private modal: {open: boolean, size: ModalSize} = {
+  private modal: { open: boolean, size: ModalSize } = {
     open: false,
     size: ModalSize.Large,
   };
 
+  // 最後まで履歴を遡ると最初に戻る。最後で止めたいのでハッシュ値を比べて一致したら追加表示するボタンを消す。
   private created() {
+    // 一個目のトランサクションはforの中で処理せずに先にthis.historyへプッシュしてページブルから削除
+    // 一度だけこの処理をしたいのでfirstTime変数で分岐
+    let firstTime = true;
     this.allHistory.subscribe((history) => {
+      if (firstTime) {
+        this.history.push(history[0]);
+        history.shift();
+        firstTime = false;
+      }
+      console.log(history)
+
       for (const h of history) {
+        if (this.history[0].getTransactionInfo().hash.data === h.getTransactionInfo().hash.data) {
+          this.addHistory = false;
+          break;
+        }
         this.history.push(h);
       }
     });
@@ -121,6 +128,13 @@ export default class TransactionHistory extends Vue {
 
   private modalClose() {
     this.modal.open = false;
+  }
+
+  private toBottom() {
+    const el = document.getElementById('transaction-history');
+    if (el) {
+      window.scroll(0, el.clientHeight);
+    }
   }
 }
 </script>
@@ -169,6 +183,25 @@ export default class TransactionHistory extends Vue {
 
   .transaction-type {
     color: rgba(231, 159, 2, 0.911);
+  }
+
+  .to-bottom {
+    position: fixed;
+    left: 87%;
+    bottom: 70px;
+  }
+
+  .to-bottom-button {
+    background-color: rgba(162, 230, 247, 0.63);
+    box-shadow: 0.5px 0.5px 1px 1px rgba(85, 145, 160, 0.4);
+    border-radius: 20px;
+    outline: none;
+    font-size: 22px;
+    border-style: none;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 9px;
+    padding-right: 9px;
   }
 }
 </style>

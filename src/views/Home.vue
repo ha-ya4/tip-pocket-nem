@@ -10,8 +10,9 @@
       <router-link to="/config">設定</router-link>
     </div>
 
-    <div class="balance">
-      {{ balance }}
+    <div class="balance-box">
+      <span class="balance">{{ balance }}</span>
+      <button type="button" class="balance-button" @click="getBalance">更新</button>
     </div>
 
     <div class="main-contents">
@@ -61,19 +62,20 @@ export default class Home extends Vue {
     return true;
   }
 
-  private getBalance() {
-    this.wallet.getBalance().subscribe((balance) => this.balance = balance );
-  }
-
   private modalClose() {
     this.modalOpen = false;
+  }
+
+  private getBalance() {
+    if (this.wallet.address !== '') {
+      this.wallet.getBalance().subscribe((balance) => this.balance = balance );
+    }
   }
 }
 </script>
 
 <style scoped>
 #nav {
-  box-shadow: -0.5px -0.5px 0.5px 0.5px rgba(85, 145, 160, 0.4);
   display: flex;
 }
 
@@ -83,13 +85,8 @@ a {
   color: black;
 }
 
-.balance {
-  background-color: #00bfff42;
-  box-shadow: 1px 1px 5px 0.5px rgba(85, 145, 160, 0.4);
-}
-
 /*PC*/
-@media screen and (min-width: 701px) {
+@media screen and (min-width: 801px) {
   a {
     border-bottom: 1px solid#c9ced4;
     border-left: 0.5px solid#c9ced4;
@@ -111,7 +108,7 @@ a {
 /*スマホ*/
 @media screen and (max-width: 800px) {
   #nav {
-    background-color: rgb(157, 227, 245);
+    background-color: rgba(162, 230, 247, 0.5);
     text-align: center;
     position: fixed;
     bottom: 0;
@@ -120,26 +117,40 @@ a {
   }
 
   a {
-    box-shadow: -0.3px -1.5px 5px 0.5px rgba(85, 145, 160, 0.4);
     padding-top: 17px;
     padding-bottom: 17px;
   }
 
   .main-contents {
-    margin-top: 80px;
+    margin-top: 70px;
     margin-bottom: 75px;
   }
 
   .balance {
-    background-color: rgb(157, 227, 245);
-    text-align: center;
+    background-color: transparent;
+    display: block;
+    margin-top: 9px;
+  }
+
+  .balance-box {
+    background-color: rgba(162, 230, 247, 0.5);
     position: fixed;
     top: 0;
     font-size: 20px;
-    padding-top: 18px;
-    padding-bottom: 18px;
+    text-align: center;
+    height: 40px;
     width: 100%;
     z-index: 999;
+  }
+
+  .balance-button {
+    background-color: transparent;
+    border-style: none;
+    color: rgb(243, 166, 22);
+    position: relative;
+    left: 43%;
+    bottom: 22px;
+    outline: none;
   }
 }
 </style>
