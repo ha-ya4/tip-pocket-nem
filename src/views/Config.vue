@@ -102,7 +102,7 @@ export default class Config extends Vue {
       this.information.push(amountError);
     } else {
       // 数字がstring型の可能性があるのでnumber型に変換
-      values.map((value) => { value.value = Number(value.value) });
+      values.map((value) => { value.value = Number(value.value); });
     }
 
     // ------------送金上限-----------

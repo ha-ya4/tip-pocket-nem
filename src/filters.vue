@@ -1,6 +1,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { PublicAccount } from 'nem-library';
+import { Account, EncryptedMessage, PlainMessage, PublicAccount } from 'nem-library';
+import nemSdk from 'nem-sdk';
 
 import LocalStorage from '@/class/local-storage';
 import Wallet from '@/class/wallet.ts';
@@ -14,17 +15,27 @@ import Wallet from '@/class/wallet.ts';
       return dateTime;
     },
 
-    fGetMessage(message: any, recipientPublicAccount: PublicAccount, wallet: Wallet): string {
-      const mess = message.plain();
-      if (mess) {
-        return mess;
+    fGetMessage(
+      message: PlainMessage | EncryptedMessage,
+      recipientPublicAccount: PublicAccount,
+      wallet: Wallet,
+    ): string {
+      // 暗号化されてなければそのまま返す
+      if (message.isPlain()) {
+        const mess = message as PlainMessage;
+        return mess.plain();
       }
 
+      // 暗号化されていたらencryptoする。毎回createWithPrivateKeyを呼ぶことになってしまってる
       const storageName = wallet.walletName;
-      const keyJson = LocalStorage.getKey(storageName);
-      if (keyJson) {}
+      const encryptedKey = LocalStorage.getKey(storageName);
+      if (encryptedKey) {
+        const key = wallet.decrypto(encryptedKey);
+        const account = Account.createWithPrivateKey(key);
+        return account.decryptMessage(message, recipientPublicAccount).plain();
+      }
 
-      return mess
+      return '';
     },
 
     // ５文字ごとに-を入れる

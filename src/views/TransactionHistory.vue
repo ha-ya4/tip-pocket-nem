@@ -27,7 +27,8 @@
             <hr>
             quantity: {{ h._xem.quantity / divisibility }}
             <hr>
-              message:<br>{{ h.message.plain() | fStringShort }}
+              message:<br>
+              {{ h.message | fGetMessage(h.signer, wallet) | fStringShort }}
             <hr>
           </div>
 
@@ -42,7 +43,8 @@
             <hr>
             quantity: {{ h.otherTransaction._xem.quantity / divisibility }}
             <hr>
-              message:<br>{{ h.otherTransaction.message.plain() | fStringShort }}
+              message:<br>
+              {{ h.otherTransaction.message | fGetMessage(h.otherTransaction.signer, wallet) | fStringShort }}
             <hr>
           </div>
         </a>
@@ -94,25 +96,21 @@ export default class TransactionHistory extends Vue {
     size: ModalSize.Large,
   };
 
-  // 最後まで履歴を遡ると最初に戻る。最後で止めたいのでハッシュ値を比べて一致したら追加表示するボタンを消す。
   private created() {
-    // 一個目のトランサクションはforの中で処理せずに先にthis.historyへプッシュしてページブルから削除
-    // 一度だけこの処理をしたいのでfirstTime変数で分岐
-    let firstTime = true;
     this.allHistory.subscribe((history) => {
-      if (firstTime) {
-        this.history.push(history[0]);
-        history.shift();
-        firstTime = false;
-      }
-      console.log(history)
-
       for (const h of history) {
-        if (this.history[0].getTransactionInfo().hash.data === h.getTransactionInfo().hash.data) {
-          this.addHistory = false;
-          break;
+        // なぜか全く同じものがくるときがあるので前のループでプッシュしたトランサクションハッシュと同じならコンテニューする
+        const previousHash = this.history[this.history.length - 1];
+        if (previousHash) {
+          if (previousHash.getTransactionInfo().hash.data === h.getTransactionInfo().hash.data) { continue; }
         }
+
         this.history.push(h);
+      }
+
+      // 受け取った配列のlengthが１０じゃなければボタンを消す。最後が１０だと失敗するかも？
+      if (history.length !== 10) {
+        this.addHistory = false;
       }
     });
   }

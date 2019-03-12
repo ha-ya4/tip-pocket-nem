@@ -51,7 +51,7 @@ export default class DeleteAccount extends Vue {
   // 画面サイズによってhyphenButtonのテキストを変える
   private created() {
     if (window.parent.screen.width < 800 && window.parent.screen.height < 800) {
-      this.hyphenButtonText = 'tap!'
+      this.hyphenButtonText = 'tap!';
     }
   }
 
