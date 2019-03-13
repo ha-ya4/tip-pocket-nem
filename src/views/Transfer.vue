@@ -30,20 +30,20 @@
 
     <!--アドレス入力欄-->
     <p>
-      アドレス:<br>
-      <input type="text" maxlength="45" v-model="sendParams.address">
+      アドレス:
+      <input type="text" maxlength="45" class="app-input-text address-input" v-model="sendParams.address">
     </p>
 
     <!--数量入力欄-->
     <p>
-      数量:<br>
-      <input type="text" maxlength="17" v-model="sendParams.amount">
+      数量:
+      <input type="text" maxlength="17" class="app-input-text amount-input" v-model="sendParams.amount">
     </p>
 
     <!--メッセージ入力欄-->
     <p>
       メッセージ:
-      <textarea row="1" maxlength="1024" v-model="sendParams.message"></textarea>
+      <input type="text" maxlength="1024"  class="app-input-text" v-model="sendParams.message">
     </p>
 
     <!--送金ボタン-->
@@ -300,37 +300,20 @@ export default class Transfer extends Vue {
     margin: 25px;
   }
 
-  input[type="text"] {
-    background-color: #eaf0f7;
-    border: 0.1px solid #969ca3;
-    border-radius: 5px;
-    width: 90%;
-    margin-top: 5px;
-    margin-left: 5%;
+  .address-input {
+    margin-left: 14.5px;
   }
 
-  textarea {
-    background-color: #eaf0f7;
-    border: 0.1px solid #969ca3;
-    border-radius: 5px;
-    width: 90%;
-    margin-top: 5px;
-    margin-left: 5%;
-  }
-
-  .nis-response {
-    text-align: center;
-    font-size: 20px;
+  .amount-input {
+    margin-left: 35.5px;
   }
 
   .transfer-button {
     text-align: center;
-    font-size: 12px;
   }
 
   .send-button-none {
     text-align: center;
-    font-size: 16px;
     color: red;
   }
 

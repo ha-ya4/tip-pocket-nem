@@ -1,8 +1,6 @@
 <template>
   <div id="delete-account">
-      <button type="button" class="app-button" @click="modalOpen">
-      アカウント削除
-      </button>
+    <button type="button" class="delete-account-button" @click="modalOpen">アカウント削除</button>
 
     <modal-window @modalClose="modalClose" :open="modal.open" :modalSize="modal.size">
       <div v-if="!done">
@@ -66,4 +64,9 @@ export default class DeleteAccount extends Vue {
 </script>
 
 <style scoped>
+.delete-account-button {
+  background-color: transparent;
+  border-style: none;
+  outline: none;
+}
 </style>

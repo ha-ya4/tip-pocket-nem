@@ -10,9 +10,7 @@
       <slot></slot>: {{ defaultValue }}
     </div>
 
-    <form id="target" v-if="expansion">
-
-      <hr size="0.2" color="#969ca3" >
+    <div id="target" v-if="expansion">
 
       <p class="radio-item">
         <input
@@ -35,7 +33,7 @@
           value="item1"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="25" maxlength="25" v-model="value1.value"></textarea>
+        <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value1.value">
       </p>
 
       <p class="radio-item">
@@ -47,7 +45,7 @@
           value="item2"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="25" maxlength="25" v-model="value2.value"></textarea>
+        <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value2.value">
       </p>
 
       <p class="radio-item">
@@ -59,10 +57,9 @@
           value="item3"
           @change="radioChanged"
         >
-        <textarea rows="1" cols="25" maxlength="25" v-model="value3.value">
-        </textarea>
+        <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value3.value">
       </p>
-    </form>
+    </div>
   </div>
 </template>
 
@@ -81,6 +78,7 @@ export default class RadioButtonGroup extends Vue {
   @Prop() private receivedItems: ConfigValue[];
   // IDを書き換えるときに付与する名前
   @Prop() private radioIdName: string;
+  @Prop() private maxLength: number;
 
   private expansion: boolean = false;
   private none: ConfigValue = this.receivedItems[0];
@@ -175,26 +173,15 @@ export default class RadioButtonGroup extends Vue {
 <style scoped>
 /*スマホ*/
 @media screen and (max-width: 800px) {
-  /*全体*/
-  #radio-button-group {
-    border-radius: 3px;
-    margin-top: 15px;
-    padding-top: 5px;
-    padding-bottom: 3px;
-  }
-
-  textarea {
-    display: inline;
-    background-color: #eaf0f7;
-    border: 0.1px solid #969ca3;
-    border-radius: 5px;
-  }
-
   button {
     background-color: transparent;
     color: #959fad;
     outline: none;
     border-style: none;
+  }
+
+  input[type="text"] {
+    width: 90%;
   }
 
   /*ボタンの向きを右にする。*/
@@ -211,14 +198,12 @@ export default class RadioButtonGroup extends Vue {
 
   /*設定する項目とデフォルトの値*/
   .content-title {
-    font-size: 20px;
     margin-left: 5px;
     margin-bottom: 3px;
   }
 
   /*設定する項目のそれぞれのラジオボタンとテキスト*/
   .radio-item {
-    font-size: 18px;
     margin-top: 8px;
     margin-left: 25px;
   }

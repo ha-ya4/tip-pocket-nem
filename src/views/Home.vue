@@ -108,7 +108,7 @@ a {
 /*スマホ*/
 @media screen and (max-width: 800px) {
   #nav {
-    background-color: rgba(162, 230, 247, 0.5);
+    background-color: #a5d1f4;
     text-align: center;
     position: fixed;
     bottom: 0;
@@ -121,11 +121,6 @@ a {
     padding-bottom: 17px;
   }
 
-  .main-contents {
-    margin-top: 70px;
-    margin-bottom: 75px;
-  }
-
   .balance {
     background-color: transparent;
     display: block;
@@ -133,7 +128,7 @@ a {
   }
 
   .balance-box {
-    background-color: rgba(162, 230, 247, 0.5);
+    background-color: #a5d1f4;
     position: fixed;
     top: 0;
     font-size: 20px;
@@ -151,6 +146,11 @@ a {
     left: 43%;
     bottom: 22px;
     outline: none;
+  }
+
+  .main-contents {
+    margin-top: 70px;
+    margin-bottom: 75px;
   }
 }
 </style>

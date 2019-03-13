@@ -14,7 +14,6 @@
     </modal-window>
 
     <div class=transaction-history v-for="h of history">
-
       <div class="history" >
         <a @click="modalContentOpen(h)">
           <div class="transfer" v-if="h._xem">
@@ -163,12 +162,12 @@ export default class TransactionHistory extends Vue {
   }
 
   .transaction-history {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   .history {
-    box-shadow: 0.5px 0.5px 0.5px 0.5px rgba(85, 145, 160, 0.4);
+    box-shadow: 0 0.5px 1px 3px rgba(248, 3, 3, 0.4);
     padding-top: 5px;
     padding-bottom: 5px;
   }

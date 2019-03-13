@@ -20,7 +20,7 @@
       fee: {{ historyDetail.fee / divisibility }}
       <hr>
       message:<br>
-      {{ historyDetail.message | fGetMessage(h.signer, wallet) | fStringShort }}
+      {{ historyDetail.message | fGetMessage(historyDetail.signer, wallet) | fStringShort }}
       <hr>
     </div>
 
@@ -44,7 +44,7 @@
       fee: {{ historyDetail.otherTransaction.fee / divisibility }}
       <hr>
       message:<br>
-      {{ historyDetail.otherTransaction.message | fGetMessage(h.otherTransaction.signer, wallet) | fStringShort }}
+      {{ historyDetail.otherTransaction.message | fGetMessage(historyDetail.otherTransaction.signer, wallet) | fStringShort }}
       <hr>
     </div>
 

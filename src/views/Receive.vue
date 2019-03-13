@@ -11,7 +11,7 @@
 
     <!--walletアドレス-->
     <div class="content">
-      address<br>{{ wallet.address }}
+      アドレス<br>{{ wallet.address }}
     </div>
 
     <private-key-text :keyModalOpen="keyModalOpen"/>
