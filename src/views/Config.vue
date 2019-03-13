@@ -6,25 +6,14 @@
     <!-- offにするとQR読み込みで即送金（できるなら）-->
     <div id="send-button">
       <span class="config-item">送金ボタン:</span>
-
-      <span class="radio-item">
+      <span class="send-radio-item" v-for="label of sendRadio.label">
         <input
           type="radio"
           name="send-radio"
-          value="on"
-          :checked="onChecked"
-          @change="radioChanged">
-        <label>on</label>
-      </span>
-
-      <span class="radio-item">
-        <input
-          type="radio"
-          name="send-radio"
-          value="off"
-          :checked="offChecked"
-          @change="radioChanged">
-        <label>off</label>
+          :value="label"
+          :checked="sendRadio.checked[label]"
+          @change="sendRadioChanged">
+        <label>{{ label }}</label>
       </span>
     </div>
 
@@ -64,7 +53,7 @@ import Information from '@/components/information.vue';
 import Wallet from '@/class/wallet.ts';
 import { InformationData } from '@/types/data-class';
 import { Result } from '@/types/enum';
-import { TypeConfigData, RadioGroupValue } from '@/interface.ts';
+import { ConfigData, ConfigValue } from '@/types/data-class';
 
 @Component({
   components: {
@@ -80,23 +69,27 @@ export default class Config extends Vue {
   // 送金量の上限を決めておける
   private amountLimit: number = this.$store.state.Config.amountLimit;
   // 予め登録しておいて送金画面で選択することができる数量
-  private amount: RadioGroupValue[] = this.$store.state.Config.amount;
+  private amount: ConfigValue[] = this.$store.state.Config.amount;
   // 予め登録しておいて送金画面で選択することができるメッセージ
-  private message: RadioGroupValue[] = this.$store.state.Config.message;
+  private message: ConfigValue[] = this.$store.state.Config.message;
   private information: InformationData[] = [];
-  private onChecked: boolean = false;
-  private offChecked: boolean = false;
+
+  private sendRadio: { label: string[], checked: { on: boolean, off: boolean } } = {
+    label: ['on', 'off'],
+    checked: { on: false, off: false },
+  };
 
   private created() {
-    // trueならon、falseならoffにチェックを入れる
-    this.sendButton ? this.onChecked = true : this.offChecked = true;
+    this.sendButton
+      ? this.sendRadio.checked.on = true
+      : this.sendRadio.checked.off = true;
   }
 
-  private validation(values: RadioGroupValue[]) {
+  private validation(values: ConfigValue[]) {
     // ---------登録した送金量------------
     // amountが数値になってるかチェック
     if (values.some(
-      (value: RadioGroupValue) => isNaN(Number(value.value)))
+      (value: ConfigValue) => isNaN(Number(value.value)))
     ) {
       const amountError = new InformationData('red', Result.Error, '数量には数字を入力してください');
       this.information.push(amountError);
@@ -133,18 +126,18 @@ export default class Config extends Vue {
     }
   }
 
-  private radioChanged(event: any) {
+  private sendRadioChanged(event: any) {
     const value = event.target.value;
     switch (value) {
       case 'on':
         this.sendButton = true;
-        this.onChecked = true;
-        this.offChecked = false;
+        this.sendRadio.checked.on = true;
+        this.sendRadio.checked.off = false;
         break;
       case 'off':
         this.sendButton = false;
-        this.onChecked = false;
-        this.offChecked = true;
+        this.sendRadio.checked.on = false;
+        this.sendRadio.checked.off = true;
         break;
       default:
         break;
@@ -167,12 +160,12 @@ export default class Config extends Vue {
     // informationにエラーがあれば設定を保存せずにreturn
     if (this.information.some((info) => info.result === 'error')) { return; }
 
-    const configData = {
-      amount: amountData.values,
-      message: messageData.values,
-      sendButton: this.sendButton,
-      amountLimit: this.amountLimit,
-    };
+    const configData = new ConfigData(
+      amountData.values,
+      messageData.values,
+      this.sendButton,
+      this.amountLimit,
+    );
 
     this.updateLocalStorage(configData);
     this.updateStore(configData);
@@ -183,7 +176,7 @@ export default class Config extends Vue {
   }
 
   // ローカルストレージに保存してある設定を更新
-  private updateLocalStorage(configData: TypeConfigData) {
+  private updateLocalStorage(configData: ConfigData) {
     const storageName = this.wallet.walletName;
     const accountDataJson = localStorage.getItem(storageName);
     if (accountDataJson) {
@@ -196,7 +189,7 @@ export default class Config extends Vue {
   }
 
   // vuex.storeのstateを更新する
-  private updateStore(configData: TypeConfigData) {
+  private updateStore(configData: ConfigData) {
    this.$store.commit('Config/UPDATE_CONFIG_DATA', configData);
   }
 }

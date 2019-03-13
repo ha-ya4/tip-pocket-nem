@@ -2,7 +2,7 @@ import {
   UPDATE_SEND_BUTTON,
   UPDATE_CONFIG_DATA,
 } from '@/store/mutation-types.ts';
-import { TypeConfigData, RadioGroupValue } from '@/interface.ts';
+import { ConfigData } from '@/types/data-class.ts';
 
 
 
@@ -19,8 +19,8 @@ export default {
 
     message: [
       { value: '', defaultValue: false }, // 書き換え不可
-      { value: 'hello', defaultValue: false },
-      { value: 'world', defaultValue: true },
+      { value: 'hello', defaultValue: true },
+      { value: 'world', defaultValue: false },
       { value: 'hello world', defaultValue: false },
     ],
 
@@ -32,13 +32,15 @@ export default {
 
   getters: {
     defaultAmount(state: any): number {
-      const defaultValue = state.amount.find((item: RadioGroupValue) => item.defaultValue === true);
-      return defaultValue.value;
+      return state.amount.find(
+        (item: { value: number, defaultValue: boolean }) => item.defaultValue === true,
+      ).value;
     },
 
     defaultMessage(state: any): string {
-      const defaultValue = state.message.find((item: RadioGroupValue) => item.defaultValue === true);
-      return defaultValue.value;
+      return state.message.find(
+        (item: { value: string, defaultValue: boolean }) => item.defaultValue === true,
+      ).value;
     },
   },
 
@@ -53,7 +55,7 @@ export default {
     },
 
     // 新たな設定を受け取ってstateを更新する
-    [UPDATE_CONFIG_DATA](state: any, configData: TypeConfigData) {
+    [UPDATE_CONFIG_DATA](state: any, configData: ConfigData) {
       state.amount = configData.amount;
       state.message = configData.message;
       state.sendButton = configData.sendButton;

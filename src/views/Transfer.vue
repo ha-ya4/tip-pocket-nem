@@ -57,12 +57,12 @@
     <!--送金ボタンのon,off設定ボタン-->
     <p id="send-radio-button">
       <span class="config-item">送金ボタン:</span>
-      <span class="send-radio-item" v-for="(label, index) of sendRadioLabel">
+      <span class="send-radio-item" v-for="label of sendRadio.label">
         <input
           type="radio"
           name="send-radio"
           :value="label"
-          :checked="sendRadioChecked[index]"
+          :checked="sendRadio.checked[label]"
           @change="sendRadioChanged">
         <label>{{ label }}</label>
       </span>
@@ -113,7 +113,7 @@ import { InformationData, SendParameters } from '@/types/data-class';
 import { Result } from '@/types/enum';
 import { ModalSize } from '@/types/enum';
 import Wallet from '@/class/wallet.ts';
-import { RadioGroupValue } from '@/interface.ts';
+import { ConfigValue } from '@/types/data-class';
 
 
 @Component({
@@ -142,10 +142,10 @@ export default class Transfer extends Vue {
    // 登録しておいたsendButtonの設定
   private sendButton: boolean = this.$store.state.Config.sendButton;
 
-  // sendButtonラジオのラベル
-  private sendRadioLabel: string[] = ['on', 'off'];
-  // sendButtonラジオのcheckedのon,offを切り替えるためのもの
-  private sendRadioChecked: boolean[] = [false, false];
+  private sendRadio: { label: string[], checked: { on: boolean, off: boolean } } = {
+    label: ['on', 'off'],
+    checked: { on: false, off: false },
+  };
 
   private sendParams: { address: string, amount: number, message: string } = {
     // 送金先アドレス
@@ -156,7 +156,8 @@ export default class Transfer extends Vue {
     message: this.$store.getters['Config/defaultMessage'],
   };
 
-  private userParams: { amount: RadioGroupValue[], message: RadioGroupValue[] } = {
+  // ユーザーが登録しておいた数量とメッセージ
+  private userParams: { amount: ConfigValue[], message: ConfigValue[] } = {
     amount: this.$store.state.Config.amount,
     message: this.$store.state.Config.message,
   };
@@ -164,8 +165,8 @@ export default class Transfer extends Vue {
   // sendButtonの設定値を反映させる
   private created() {
     this.sendButton
-      ? this.sendRadioChecked[0] = true
-      : this.sendRadioChecked[1] = true;
+      ? this.sendRadio.checked.on = true
+      : this.sendRadio.checked.off = true;
   }
 
   private afterSendDisposal(response: NemAnnounceResult) {
@@ -185,7 +186,7 @@ export default class Transfer extends Vue {
   }
 
   // radioボタンのcheckを切り替える
-  private checkChanged(userItems: RadioGroupValue[], index: number) {
+  private checkChanged(userItems: ConfigValue[], index: number) {
     // checkを外す
     for (const item of userItems) {
       item.defaultValue = false;
@@ -250,13 +251,13 @@ export default class Transfer extends Vue {
     switch (value) {
       case 'on':
         this.sendButton = true;
-        this.sendRadioChecked[0] = true;
-        this.sendRadioChecked[1] = false;
+        this.sendRadio.checked.on = true;
+        this.sendRadio.checked.off = false;
         break;
       case 'off':
         this.sendButton = false;
-        this.sendRadioChecked[0] = false;
-        this.sendRadioChecked[1] = true;
+        this.sendRadio.checked.on = false;
+        this.sendRadio.checked.off = true;
         break;
       default:
         break;

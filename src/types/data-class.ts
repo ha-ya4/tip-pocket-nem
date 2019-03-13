@@ -1,12 +1,27 @@
 import { PlainMessage, EncryptedMessage } from 'nem-library';
 
 import { Result } from '@/types/enum';
-import { TypeConfigData } from '@/interface';
 
 export class AccountData {
   constructor(
-    private configData: TypeConfigData,
+    private configData: ConfigData,
     private accountData: { address: string, publicKey: string },
+  ) {}
+}
+
+export class ConfigData {
+  constructor(
+    public amount: ConfigValue[],
+    public message: ConfigValue[],
+    public sendButton: boolean,
+    public amountLimit: number,
+  ) {}
+}
+
+export class ConfigValue {
+  constructor(
+    public value: string | number,
+    public defaultValue: boolean,
   ) {}
 }
 

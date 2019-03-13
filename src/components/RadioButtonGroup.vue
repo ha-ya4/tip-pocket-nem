@@ -69,7 +69,7 @@
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
-import { RadioGroupValue } from '@/interface.ts';
+import { ConfigValue } from '@/types/data-class';
 
 // ID,class名をわかりやすいのに変えたほうがいい？
 // このコンポーネントを複数個使ったとき動きがおかしくなるのでまずラジオボタンのID名をmountedで書き換える
@@ -78,16 +78,15 @@ import { RadioGroupValue } from '@/interface.ts';
 
 @Component
 export default class RadioButtonGroup extends Vue {
-  // 登録されている値。型を指定していたが、プロパティを使ったときに出る赤波線を消せなかったのでany
-  @Prop() private receivedItems: RadioGroupValue[];
+  @Prop() private receivedItems: ConfigValue[];
   // IDを書き換えるときに付与する名前
   @Prop() private radioIdName: string;
 
   private expansion: boolean = false;
-  private none: RadioGroupValue = this.receivedItems[0];
-  private value1: RadioGroupValue  = Object.assign({}, this.receivedItems[1]);
-  private value2: RadioGroupValue = Object.assign({}, this.receivedItems[2]);
-  private value3: RadioGroupValue = Object.assign({}, this.receivedItems[3]);
+  private none: ConfigValue = this.receivedItems[0];
+  private value1: ConfigValue  = Object.assign({}, this.receivedItems[1]);
+  private value2: ConfigValue = Object.assign({}, this.receivedItems[2]);
+  private value3: ConfigValue = Object.assign({}, this.receivedItems[3]);
   private defaultValue: string | number = 0;
 
   // デフォルト値をセットする
@@ -103,12 +102,8 @@ export default class RadioButtonGroup extends Vue {
   }
 
   // 設定値を返す。親から呼ぶ。
-  private passData() {
-    const items = [this.none, this.value1, this.value2, this.value3];
-    return {
-      defaultValue: this.defaultValue,
-      values: items,
-    };
+  private passData(): ConfigValue[] {
+    return [this.none, this.value1, this.value2, this.value3];
   }
 
   // ラジオボタンのチェックが変わったときにチェックされた値をデフォルトの値に書き換える

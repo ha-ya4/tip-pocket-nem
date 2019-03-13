@@ -1,5 +1,4 @@
-import { AccountData } from '@/types/data-class.ts';
-import { TypeConfigData } from '@/interface.ts';
+import { AccountData, ConfigData } from '@/types/data-class.ts';
 
 export default class LocalStorage {
   public static getKey(walletName: string): { encryptedKey: string, iv: string } | null {
@@ -22,7 +21,7 @@ export default class LocalStorage {
     }
   }
 
-  public static setAccountData(walletName: string, configData: TypeConfigData) {
+  public static setAccountData(walletName: string, configData: ConfigData) {
     const config = configData;
     // アカウント作成後にセットするので''をいれておく
     const publicData = { address: '', publicKey: '' };
