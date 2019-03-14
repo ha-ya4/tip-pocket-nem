@@ -194,7 +194,7 @@ export default class TransactionHistory extends Vue {
   .to-bottom-button {
     background-color: rgba(162, 230, 247, 0.63);
     box-shadow: 0.5px 0.5px 1px 1px rgba(85, 145, 160, 0.4);
-    border-radius: 20px;
+    border-radius : 100%;
     outline: none;
     font-size: 22px;
     border-style: none;

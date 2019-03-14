@@ -33,7 +33,9 @@
           value="item1"
           @change="radioChanged"
         >
-        <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value1.value">
+        <label>
+          <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value1.value">
+        </label>
       </p>
 
       <p class="radio-item">
@@ -45,7 +47,9 @@
           value="item2"
           @change="radioChanged"
         >
-        <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value2.value">
+        <label>
+          <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value2.value">
+        </label>
       </p>
 
       <p class="radio-item">
@@ -57,7 +61,9 @@
           value="item3"
           @change="radioChanged"
         >
-        <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value3.value">
+        <label>
+          <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value3.value">
+        </label>
       </p>
     </div>
   </div>
@@ -181,7 +187,7 @@ export default class RadioButtonGroup extends Vue {
   }
 
   input[type="text"] {
-    width: 90%;
+    width: 88%;
   }
 
   /*ボタンの向きを右にする。*/

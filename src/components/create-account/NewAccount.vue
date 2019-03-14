@@ -1,7 +1,7 @@
 <template>
   <div id="new-account">
     <p class="complete">{{ newAccountText }}</p><br>
-    address<br>{{ wallet.address }}
+    アドレス<br>{{ wallet.address }}
 
     <p><private-key-text/></p>
 
@@ -44,7 +44,7 @@ export default class NewAccount extends Vue {
     // １０秒経過で閉じるボタン表示。いらないか？
     setTimeout(() => {
       this.modalCloseButton = true;
-    }, 10000);
+    }, 5000);
   }
 
   private modalClose() {

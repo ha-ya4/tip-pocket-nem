@@ -2,6 +2,7 @@ export enum ModalSize {
   Large = 0,
   Middle,
   Small,
+  Minimum,
 }
 
 export enum Result {

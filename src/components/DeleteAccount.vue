@@ -1,19 +1,25 @@
 <template>
   <div id="delete-account">
+
     <button type="button" class="delete-account-button" @click="modalOpen">アカウント削除</button>
 
     <modal-window @modalClose="modalClose" :open="modal.open" :modalSize="modal.size">
-      <div v-if="!done">
+      <div class="contents" v-if="!done">
         本当に削除しますか？
-        <button type="button" class="app-button" @click="deleteAccount">
-        はい
-        </button>
-        <button type="button" class="app-button" @click="modalClose">
-        いいえ
-        </button>
+
+        <div class="select-button">
+          <button type="button" class="app-button" @click="deleteAccount">
+          はい
+          </button>
+          <button type="button" class="app-button" @click="modalClose">
+          いいえ
+          </button>
+        </div>
       </div>
-      <span v-if="done">アカウントを削除しました</span>
+
+      <div class="delete-message" v-if="done">アカウントを削除しました</div>
     </modal-window>
+
   </div>
 </template>
 
@@ -37,7 +43,7 @@ export default class DeleteAccount extends Vue {
 
   private modal: {open: boolean, size: ModalSize} = {
     open: false,
-    size: ModalSize.Small,
+    size: ModalSize.Minimum,
   };
 
   private deleteAccount() {
@@ -47,10 +53,11 @@ export default class DeleteAccount extends Vue {
     localStorage.removeItem(keyStorageName);
 
     this.done = true;
-
+/*
     setTimeout(() => {
       this.modalClose();
-    }, 2000);
+      this.done = false
+    }, 2000);*/
   }
 
   private modalClose() {
@@ -64,9 +71,28 @@ export default class DeleteAccount extends Vue {
 </script>
 
 <style scoped>
-.delete-account-button {
-  background-color: transparent;
-  border-style: none;
-  outline: none;
+/*スマホ*/
+@media screen and (max-width: 800px) {
+  .contents {
+    text-align: center;
+    margin-top: 7%;
+  }
+
+  .delete-account-button {
+    background-color: transparent;
+    border-style: none;
+    outline: none;
+  }
+
+  .delete-message {
+    text-align: center;
+    margin-top: 15%;
+  }
+
+  .select-button {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+  }
 }
 </style>

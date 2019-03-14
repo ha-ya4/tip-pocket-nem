@@ -43,8 +43,12 @@
     <!--メッセージ入力欄-->
     <p>
       メッセージ:
-      <input type="text" maxlength="1024"  class="app-input-text" v-model="sendParams.message">
+      <input type="text" maxlength="1024"  class="app-input-text message-input" v-model="sendParams.message">
     </p>
+
+    メッセージ暗号化
+    <input type="checkbox" id="toggle-button" class="crypto-toggle">
+    <label for="toggle-button"></label>
 
     <!--送金ボタン-->
     <p class="transfer-button" v-if="sendButton">
@@ -128,11 +132,10 @@ export default class Transfer extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
   private amountLimit: number = this.$store.state.Config.amountLimit;
-
   // QRリーダーを表示するかどうか
   private displayQrReader: boolean = false;
-
   private information: InformationData[] = [];
+  private messageCrypto: boolean = false;
 
   private modal: {open: boolean, size: ModalSize} = {
     open: false,
@@ -302,14 +305,39 @@ export default class Transfer extends Vue {
 
   .address-input {
     margin-left: 14.5px;
+    width: 73%;
   }
 
   .amount-input {
     margin-left: 35.5px;
+    width: 73%;
+  }
+
+  .message-input {
+    width: 73%;
   }
 
   .transfer-button {
     text-align: center;
+  }
+
+  .crypto-toggle {
+    position: absolute;
+    margin-left: -9999;
+    visibility: hidden;
+  }
+
+  .crypto-toggle + label {
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    padding: 2px;
+    width: 10%;
+    height: 10px;
+    background-color: #dddddd;
+    border-radius: 60px;
+    transition: background 0.4s;
   }
 
   .send-button-none {

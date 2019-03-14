@@ -26,7 +26,9 @@
 
     <div class="amount-limit">
       <span class="config-item">送金上限:</span>&nbsp;
-      <input type="text" maxlength="10" class="app-input-text" v-model="amountLimit">
+      <label>
+        <input type="text" maxlength="10" class="app-input-text" v-model="amountLimit">
+      </label>
     </div>
     <hr>
 
@@ -211,7 +213,7 @@ export default class Config extends Vue {
 /*スマホ*/
 @media screen and (max-width: 800px) {
   input[type="text"] {
-    width: 73%;
+    width: 71%;
   }
 
   #config {

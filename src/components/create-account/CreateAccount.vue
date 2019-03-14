@@ -108,7 +108,8 @@ export default class CreateAccount extends Vue {
   }
 
   .select {
-    text-align: center
+    text-align: center;
+    margin-top: 28%;
   }
 
   /*横スライドでけしたかったが保留*/
@@ -140,11 +141,11 @@ export default class CreateAccount extends Vue {
   }
 
   .import-privatekey {
+    margin-top: 22%;
     animation-name: import-privatekey;
     animation-duration: 0.3s;
     animation-fill-mode: forwards;
   }
-
   @keyframes import-privatekey {
     0% {
       transform:translateX(1000px);

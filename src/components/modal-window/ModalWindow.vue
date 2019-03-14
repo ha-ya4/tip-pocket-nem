@@ -9,8 +9,11 @@
 
       <div
         id="modal-content"
-        :class="{ 'large': modalSize === 0, 'middle': modalSize === 1, 'small': modalSize === 2}">
-
+        :class="{
+          'large': modalSize === 0,
+          'middle': modalSize === 1,
+          'small': modalSize === 2,
+          'minimum': modalSize === 3}">
         <div class="modal-item">
           <!--表示したいものを親コンポーネントからスロットに挿入-->
           <slot></slot>
@@ -57,6 +60,15 @@ export default class ModalWindow extends Vue {
     animation-name: modal-fadein;
     animation-duration: 0.3s;
   }
+  @keyframes modal-fadein {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
 
   .large {
     width: 90%;
@@ -79,14 +91,11 @@ export default class ModalWindow extends Vue {
     left: 5%;
   }
 
-  @keyframes modal-fadein {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
+  .minimum {
+    width: 90%;
+    height: 25%;
+    top: 37%;
+    left: 5%;
   }
 
   .modal-item {
@@ -111,7 +120,6 @@ export default class ModalWindow extends Vue {
     animation-name: overlay-fadein;
     animation-duration: 0.3s;
   }
-
   @keyframes overlay-fadein {
     from {
       opacity: 0;

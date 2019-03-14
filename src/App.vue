@@ -31,20 +31,21 @@ body {
     border: none;
     height: 1px;
   }
+
   .app-button {
     background-color: #7fc2ef;
     outline: none;
     border-style: none;
     border-radius: 2px;
-    box-shadow: 0 0.5px 1px 0.5px rgba(6, 7, 7, 0.4);
-    padding: 5px;
+    padding: 7px;
   }
 
    .app-input-text {
-    background-color: #eaf0f7;
+    border-style: none;
     font-size: 18px;
-    border: 0.1px solid #969ca3;
-    border-radius: 5px;
+    border-bottom: 0.1px solid #7fc2ef;
+    padding-left: 5px;
+    padding-right: 5px;
   }
 }
 </style>
