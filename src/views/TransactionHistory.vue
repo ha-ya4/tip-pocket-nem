@@ -14,9 +14,9 @@
     </modal-window>
 
     <div class=transaction-history v-for="h of history">
-      <div class="history" >
+      <div :class="{ 'history-send': isSend(h.signer.address.value), 'history-receive': !isSend(h.signer.address.value)}" >
         <a @click="modalContentOpen(h)">
-          <div class="transfer" v-if="h._xem">
+          <div class="transaction" v-if="h._xem">
             <hr>
             {{ h.timeWindow.timeStamp | fDateTime }}
             <hr>
@@ -24,7 +24,7 @@
             <hr>
             sender:<br>{{ h.signer.address.value }}
             <hr>
-            quantity: {{ h._xem.quantity / divisibility }}
+            quantity: {{ h._xem.quantity / divisibility | fAddOperator(isSend(h.signer.address.value)) }}
             <hr>
               message:<br>
               {{ h.message | fGetMessage(h.signer, wallet) | fStringShort }}
@@ -32,7 +32,7 @@
           </div>
 
           <!--マルチシグの場合はこっち-->
-          <div class="multisig-transaction" v-if="h.otherTransaction">
+          <div class="transaction" v-if="h.otherTransaction">
             <hr>
             {{ h.timeWindow.timeStamp | fDateTime }}
             <hr>
@@ -40,7 +40,7 @@
             <hr>
             sender:<br>{{ h.otherTransaction.signer.address.value }}
             <hr>
-            quantity: {{ h.otherTransaction._xem.quantity / divisibility }}
+            quantity: {{ h.otherTransaction._xem.quantity / divisibility | fAddOperator(isSend(h.otherTransaction.signer.address.value))}}
             <hr>
               message:<br>
               {{ h.otherTransaction.message | fGetMessage(h.otherTransaction.signer, wallet) | fStringShort }}
@@ -107,7 +107,7 @@ export default class TransactionHistory extends Vue {
         this.history.push(h);
       }
 
-      // 受け取った配列のlengthが１０じゃなければボタンを消す。最後が１０だと失敗するかも？
+      // 受け取った配列のlengthが１０じゃなければボタンを消す。最後が１０だと失敗するか？
       if (history.length !== 10) {
         this.addHistory = false;
       }
@@ -116,6 +116,10 @@ export default class TransactionHistory extends Vue {
 
   private addHistoryButton() {
     this.allHistory.nextPage();
+  }
+
+  private isSend(address: string): boolean {
+    return this.wallet.address === address ? true : false;
   }
 
   private modalContentOpen(transaction: Transaction) {
@@ -143,17 +147,11 @@ export default class TransactionHistory extends Vue {
     color: black;
   }
 
-  hr {
-    background-color: #bbb;
-    border: none;
-    height: 1px;
-  }
-
   #transaction-history {
     word-wrap: break-word;
     margin-left: auto;
     margin-right: auto;
-    width: 95%;
+    width: 90%;
   }
 
   .add-history-button {
@@ -166,14 +164,19 @@ export default class TransactionHistory extends Vue {
     margin-bottom: 20px;
   }
 
-  .history {
-    box-shadow: 0 0.5px 1px 3px rgba(248, 3, 3, 0.4);
+  .history-send {
+    border: 1.5px solid #f87777;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  .history-receive {
+    border: 1.5px solid #7fc2ef;
     padding-top: 5px;
     padding-bottom: 5px;
   }
 
-  .transfer {
-    width: 95%;
+  .transaction {
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
   }

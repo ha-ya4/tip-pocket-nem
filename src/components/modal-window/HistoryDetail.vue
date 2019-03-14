@@ -1,7 +1,7 @@
 <template>
   <div id="history-detail" v-if="historyDetail">
 
-    <div class="transfer" v-if="historyDetail._xem">
+    <div v-if="historyDetail._xem">
       <hr>
       {{ historyDetail.timeWindow.timeStamp | fDateTime }}
       <hr>
@@ -15,17 +15,17 @@
       <hr>
       recipient:<br>{{ historyDetail.recipient.value }}
       <hr>
-      quantity: {{ historyDetail._xem.quantity / divisibility }}
+      quantity: {{ historyDetail._xem.quantity / divisibility | fAddOperator(isSend(historyDetail.signer.address.value)) }}
       <hr>
-      fee: {{ historyDetail.fee / divisibility }}
+      fee: {{ historyDetail.fee / divisibility  }}
       <hr>
       message:<br>
-      {{ historyDetail.message | fGetMessage(historyDetail.signer, wallet) | fStringShort }}
+      {{ historyDetail.message | fGetMessage(historyDetail.signer, wallet) }}
       <hr>
     </div>
 
     <!--マルチシグの場合はこっち-->
-    <div class="multisig-transaction" v-if="historyDetail.otherTransaction">
+    <div v-if="historyDetail.otherTransaction">
       <hr>
       {{ historyDetail.timeWindow.timeStamp | fDateTime }}
       <hr>
@@ -39,12 +39,12 @@
       <hr>
       recipient:<br>{{ historyDetail.otherTransaction.recipient.value }}
       <hr>
-      quantity: {{ historyDetail.otherTransaction._xem.quantity / divisibility }}
+      quantity: {{ historyDetail.otherTransaction._xem.quantity / divisibility | fAddOperator(isSend(historyDetail.otherTransaction.signer.address.value))}}
       <hr>
-      fee: {{ historyDetail.otherTransaction.fee / divisibility }}
+      fee: {{ historyDetail.otherTransaction.fee / divisibility  }}
       <hr>
       message:<br>
-      {{ historyDetail.otherTransaction.message | fGetMessage(historyDetail.otherTransaction.signer, wallet) | fStringShort }}
+      {{ historyDetail.otherTransaction.message | fGetMessage(historyDetail.otherTransaction.signer, wallet) }}
       <hr>
     </div>
 
@@ -71,43 +71,20 @@ export default class TransactionHistory extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
   @Prop() private historyDetail: TransferTransaction;
 
-  private assets: AppAsset[] = [];
   private divisibility: number = this.wallet.getDivisibility();
+
+  private isSend(address: string): boolean {
+    return this.wallet.address === address ? true : false;
+  }
 
   // 親のメソッドを呼び出してthis.openをfalseに切り替える。モーダルが消える
   private modalClose() {
     this.$emit('modalClose');
   }
-
-  // 一旦アセットをthis.assetsにいれる。それから可分性かけてthis.assetsをv-forに渡す。
-  // observableでうまいことやる方法が思いつかないのでこうなる
-  // マルチシグだと変わると思うけど試せてない
-  @Watch('historyDetail')
-  private watchDetail() {
-    this.assets = [];
-    try {
-      for (const a of this.historyDetail.assets()) {
-        const asset = new AppAsset(a.assetId.namespaceId, a.assetId.name, a.quantity);
-        this.assets.push(asset);
-      }
-
-      for (const a of this.assets) {
-        this.wallet.getAssetDivisibility(a.namespace, a.name).subscribe((divisibility) => {
-          a.quantity = a.quantity / divisibility;
-        });
-      }
-    } catch {/* 例外発生時は何もしなくて良い */}
-  }
 }
 </script>
 
 <style scoped>
-hr {
-  background-color: #bbb;
-  border: none;
-  height: 1px;
-}
-
 .assets {
   line-height: 1.2;
 }

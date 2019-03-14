@@ -47,6 +47,15 @@ import Wallet from '@/class/wallet.ts';
       return s.slice(0, -1);
     },
 
+    fAddOperator(quantity: number, isSender: boolean): string {
+      const q = quantity.toString();
+      if (isSender) {
+        return '-' + q;
+      } else {
+        return '+' + q;
+      }
+    },
+
     fStringShort(str: string): string {
       const length = 35;
       if (length < str.length) {
