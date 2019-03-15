@@ -46,9 +46,11 @@
       <input type="text" maxlength="1024"  class="app-input-text message-input" v-model="sendParams.message">
     </p>
 
-    メッセージ暗号化
-    <input type="checkbox" id="toggle-button" class="crypto-toggle">
-    <label for="toggle-button"></label>
+    <input
+      type="checkbox"
+      :class="{ 'plain-message': !messageEncrypto, 'encrypto-message': messageEncrypto }"
+      @change="messageCrypto">
+      メッセージ暗号化
 
     <!--送金ボタン-->
     <p class="transfer-button" v-if="sendButton">
@@ -135,7 +137,7 @@ export default class Transfer extends Vue {
   // QRリーダーを表示するかどうか
   private displayQrReader: boolean = false;
   private information: InformationData[] = [];
-  private messageCrypto: boolean = false;
+  private messageEncrypto: boolean = false;
 
   private modal: {open: boolean, size: ModalSize} = {
     open: false,
@@ -199,6 +201,10 @@ export default class Transfer extends Vue {
     userItems[index].defaultValue = true;
   }
 
+  private messageCrypto(event: any) {
+    this.messageEncrypto = event.target.checked;
+  }
+
   private modalClose() {
     this.modal.open = false;
   }
@@ -234,9 +240,12 @@ export default class Transfer extends Vue {
     const validationResult = this.information.some((info) => info.result === Result.Error);
     if (validationResult) { return; }
 
-    const message = PlainMessage.create(this.sendParams.message);
-    const parameters = new SendParameters(this.sendParams.amount, message, this.sendParams.address);
     const key = LocalStorage.getKey(this.wallet.walletName);
+    let message = PlainMessage.create(this.sendParams.message);
+    if (this.messageEncrypto) {
+      //message = PlainMessage.create(this.sendParams.message);
+    }
+    const parameters = new SendParameters(this.sendParams.amount, message, this.sendParams.address);
     // プライベートキーがローカルストレージになければインポート画面へ
     if (!key) {
       this.modal.open = true;
@@ -313,31 +322,18 @@ export default class Transfer extends Vue {
     width: 73%;
   }
 
+  .encrypto-message {}
+
   .message-input {
     width: 73%;
   }
 
-  .transfer-button {
-    text-align: center;
+  .plain-message {
   }
 
-  .crypto-toggle {
-    position: absolute;
-    margin-left: -9999;
-    visibility: hidden;
-  }
-
-  .crypto-toggle + label {
-    display: inline-block;
-    cursor: pointer;
-    outline: none;
-    user-select: none;
-    padding: 2px;
-    width: 10%;
-    height: 10px;
-    background-color: #dddddd;
-    border-radius: 60px;
-    transition: background 0.4s;
+  .radio-button {
+    margin-top: 10px;
+    margin-left: 5%;
   }
 
   .send-button-none {
@@ -349,9 +345,8 @@ export default class Transfer extends Vue {
     margin-left: 10px;
   }
 
-  .radio-button {
-    margin-top: 10px;
-    margin-left: 5%;
+  .transfer-button {
+    text-align: center;
   }
 }
 </style>
