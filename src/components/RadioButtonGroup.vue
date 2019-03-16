@@ -74,12 +74,7 @@ import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
 import { ConfigValue } from '@/types/data-class';
 
-// ID,class名をわかりやすいのに変えたほうがいい？
-// このコンポーネントを複数個使ったとき動きがおかしくなるのでまずラジオボタンのID名をmountedで書き換える
-// ラジオボタンのチェック時とチェックされている項目が書き換えられたときにデフォルトの値も書き換えるようになってる
-// ラジオボタンの数を可変にできないか？
-
-@Component
+@Component({})
 export default class RadioButtonGroup extends Vue {
   @Prop() private receivedItems: ConfigValue[];
   // IDを書き換えるときに付与する名前

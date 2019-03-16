@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 import Config from '@/views/Config.vue';
 import TransactionHistory from '@/views/TransactionHistory.vue';
-import Transfer from '@/views/Transfer.vue';
+import Transfer from '@/views/transfer/Transfer.vue';
 import Receive from '@/views/Receive.vue';
 
 Vue.use(Router);

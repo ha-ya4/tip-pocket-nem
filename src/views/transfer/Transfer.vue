@@ -46,11 +46,7 @@
       <input type="text" maxlength="1024"  class="app-input-text message-input" v-model="sendParams.message">
     </p>
 
-    <input
-      type="checkbox"
-      :class="{ 'plain-message': !messageEncrypto, 'encrypto-message': messageEncrypto }"
-      @change="messageCrypto">
-      メッセージ暗号化
+    <EncrytoCheckbox @messageCrypto="messageCrypto" :encryptoMessage="encryptoMessage"/>
 
     <!--送金ボタン-->
     <p class="transfer-button" v-if="sendButton">
@@ -109,10 +105,11 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import { PlainMessage, EncryptedMessage, NemAnnounceResult } from 'nem-library';
 
+import EncrytoCheckbox from '@/views/transfer/EncryptoCheckbox.vue';
 import Information from '@/components/information.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
-import QrcodeReader from '@/components/QrcodeReader.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
+import QrcodeReader from '@/components/QrcodeReader.vue';
 
 import LocalStorage from '@/class/local-storage';
 import { InformationData, SendParameters } from '@/types/data-class';
@@ -124,6 +121,7 @@ import { ConfigValue } from '@/types/data-class';
 
 @Component({
   components: {
+    EncrytoCheckbox,
     Information,
     ImportPrivateKey,
     ModalWindow,
@@ -137,7 +135,7 @@ export default class Transfer extends Vue {
   // QRリーダーを表示するかどうか
   private displayQrReader: boolean = false;
   private information: InformationData[] = [];
-  private messageEncrypto: boolean = false;
+  private encryptoMessage: boolean = false;
 
   private modal: {open: boolean, size: ModalSize} = {
     open: false,
@@ -181,17 +179,17 @@ export default class Transfer extends Vue {
   }
 
   private amountRadioChanged(event: any) {
-    this.checkChanged(this.userParams.amount, event.target.value);
+    this.radioChanged(this.userParams.amount, event.target.value);
     this.sendParams.amount = event.target.nextSibling.textContent;
   }
 
   private messageRadioChanged(event: any) {
-    this.checkChanged(this.userParams.message, event.target.value);
+    this.radioChanged(this.userParams.message, event.target.value);
     this.sendParams.message = event.target.nextSibling.textContent;
   }
 
   // radioボタンのcheckを切り替える
-  private checkChanged(userItems: ConfigValue[], index: number) {
+  private radioChanged(userItems: ConfigValue[], index: number) {
     // checkを外す
     for (const item of userItems) {
       item.defaultValue = false;
@@ -201,8 +199,8 @@ export default class Transfer extends Vue {
     userItems[index].defaultValue = true;
   }
 
-  private messageCrypto(event: any) {
-    this.messageEncrypto = event.target.checked;
+  private messageCrypto(encrypto: boolean) {
+    this.encryptoMessage = encrypto;
   }
 
   private modalClose() {
@@ -242,7 +240,7 @@ export default class Transfer extends Vue {
 
     const key = LocalStorage.getKey(this.wallet.walletName);
     let message = PlainMessage.create(this.sendParams.message);
-    if (this.messageEncrypto) {
+    if (this.encryptoMessage) {
       //message = PlainMessage.create(this.sendParams.message);
     }
     const parameters = new SendParameters(this.sendParams.amount, message, this.sendParams.address);
@@ -322,13 +320,8 @@ export default class Transfer extends Vue {
     width: 73%;
   }
 
-  .encrypto-message {}
-
   .message-input {
     width: 73%;
-  }
-
-  .plain-message {
   }
 
   .radio-button {

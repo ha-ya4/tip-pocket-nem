@@ -53,11 +53,11 @@ export default class DeleteAccount extends Vue {
     localStorage.removeItem(keyStorageName);
 
     this.done = true;
-/*
+
     setTimeout(() => {
       this.modalClose();
-      this.done = false
-    }, 2000);*/
+      this.done = false;
+    }, 2000);
   }
 
   private modalClose() {
