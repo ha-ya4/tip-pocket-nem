@@ -1,11 +1,13 @@
 <template>
-  <div id="encrypto-checkbox">
+  <div id="single-checkbox">
     <input
       type="checkbox"
-      id="crypto-checkbox"
-      @change="messageCrypto">
-    <label for="crypto-checkbox" class="crypto-label">
-      <span :class="{ 'plain-message': !encryptoMessage }">メッセージ暗号化</span>
+      :id="name + 'checkbox'"
+      @change="changed">
+    <label :for="name + 'checkbox'" class="label">
+      <span :class="{ 'not-checked': !item }">
+        <slot></slot>
+      </span>
     </label>
   </div>
 </template>
@@ -14,11 +16,12 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component({})
-export default class EncryptoCheckbox extends Vue {
-  @Prop() private encryptoMessage: boolean;
+export default class SingleCheckbox extends Vue {
+  @Prop() private item: boolean;
+  @Prop() private name: string;
 
-  private messageCrypto(event: any) {
-    this.$emit('messageCrypto', event.target.checked);
+  private changed(event: any) {
+    this.$emit('checkboxChanged', event.target.checked);
   }
 }
 </script>
@@ -28,27 +31,27 @@ input[type="checkbox"] {
   display: none;
 }
 
-input[type="checkbox"]:checked + .crypto-label:before {
+input[type="checkbox"]:checked + .label:before {
   opacity: 1;
 }
 
-#encrypto-checkbox {
+#single-checkbox {
   margin-left: -18px;
 }
 
-.crypto-label {
+.label {
   content: "";
   position: relative;
   padding: 0 0 0 40px;
 }
 
-.crypto-label:after, .crypto-label:before {
+.label:after, .label:before {
   position: absolute;
   content: "";
   top: 50%;
 }
 
-.crypto-label:after {
+.label:after {
   left: 20px;
   margin-top: -6px;
   width: 10px;
@@ -57,7 +60,7 @@ input[type="checkbox"]:checked + .crypto-label:before {
   border-radius: 4px;
 }
 
-.crypto-label:before {
+.label:before {
   left: 23px;
   margin-top: -10px;
   width: 7px;
@@ -69,7 +72,7 @@ input[type="checkbox"]:checked + .crypto-label:before {
   z-index: 1;
 }
 
-.plain-message {
+.not-checked {
   color: #d1cccc;
 }
 </style>

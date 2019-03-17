@@ -46,7 +46,19 @@
       <input type="text" maxlength="1024"  class="app-input-text message-input" v-model="sendParams.message">
     </p>
 
-    <EncrytoCheckbox @messageCrypto="messageCrypto" :encryptoMessage="encryptoMessage"/>
+    <single-checkbox
+      @checkboxChanged="changeEncryptoMessage"
+      :item="encryptoMessage"
+      :name="'encmess'">
+      メッセージ暗号化
+    </single-checkbox>
+
+    <single-checkbox
+      @checkboxChanged="changeAmountLimitNone"
+      :item="amountLimit.none"
+      :name="'limitnone'">
+      送金上限なし
+    </single-checkbox>
 
     <!--送金ボタン-->
     <p class="transfer-button" v-if="sendButton">
@@ -105,7 +117,7 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import { PlainMessage, EncryptedMessage, NemAnnounceResult } from 'nem-library';
 
-import EncrytoCheckbox from '@/views/transfer/EncryptoCheckbox.vue';
+import SingleCheckbox from '@/views/transfer/SingleCheckbox.vue';
 import Information from '@/components/information.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
@@ -121,7 +133,7 @@ import { ConfigValue } from '@/types/data-class';
 
 @Component({
   components: {
-    EncrytoCheckbox,
+    SingleCheckbox,
     Information,
     ImportPrivateKey,
     ModalWindow,
@@ -131,11 +143,15 @@ import { ConfigValue } from '@/types/data-class';
 export default class Transfer extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
-  private amountLimit: number = this.$store.state.Config.amountLimit;
   // QRリーダーを表示するかどうか
   private displayQrReader: boolean = false;
   private information: InformationData[] = [];
   private encryptoMessage: boolean = false;
+
+  private amountLimit: { limit: number, none: boolean } = {
+    limit: this.$store.state.Config.amountLimit,
+    none: false,
+  }
 
   private modal: {open: boolean, size: ModalSize} = {
     open: false,
@@ -172,6 +188,7 @@ export default class Transfer extends Vue {
       : this.sendRadio.checked.off = true;
   }
 
+  // 送金成功時にアドレス欄をリセットして成功のメッセージを表示する
   private afterSendDisposal(response: NemAnnounceResult) {
     this.sendParams.address = '';
     const info = new InformationData('black', Result.Success, '送金に成功しました');
@@ -199,7 +216,11 @@ export default class Transfer extends Vue {
     userItems[index].defaultValue = true;
   }
 
-  private messageCrypto(encrypto: boolean) {
+  private changeAmountLimitNone(none: boolean) {
+    this.amountLimit.none = none;
+  }
+
+  private changeEncryptoMessage(encrypto: boolean) {
     this.encryptoMessage = encrypto;
   }
 
@@ -239,21 +260,37 @@ export default class Transfer extends Vue {
     if (validationResult) { return; }
 
     const key = LocalStorage.getKey(this.wallet.walletName);
-    let message = PlainMessage.create(this.sendParams.message);
-    if (this.encryptoMessage) {
-      //message = PlainMessage.create(this.sendParams.message);
-    }
-    const parameters = new SendParameters(this.sendParams.amount, message, this.sendParams.address);
     // プライベートキーがローカルストレージになければインポート画面へ
     if (!key) {
       this.modal.open = true;
       return;
     }
+    const privateKey = this.wallet.decrypto(key)
 
-    this.wallet.send(key, parameters).subscribe(
-      (res) => this.afterSendDisposal(res),
-      (err) => this.sendError(err),
-    );
+    let message;
+    if (!this.encryptoMessage) {
+      // 平文
+      message = this.wallet.createPlainMessage(this.sendParams.message);
+    } else {
+      // 暗号化
+      message = this.wallet.createEncryptoMessage(this.sendParams.message, privateKey, this.sendParams.address);
+    }
+
+    // メッセージ暗号化のときに相手の公開鍵をアドレスから取得していてobservableで返ってくる
+    // class Walletでメッセージを作るメソッドがあるがもう少しいいやり方がないか？
+    message.subscribe((mess) => {
+      if (!mess) {
+        const error = new InformationData('red', Result.Error, '送金先アカウントの情報が取得できませんでした');
+        this.information.push(error);
+        return;
+      }
+
+      const parameters = new SendParameters(this.sendParams.amount, mess, this.sendParams.address);
+      this.wallet.send(privateKey, parameters).subscribe(
+        (res) => this.afterSendDisposal(res),
+        (err) => this.sendError(err),
+      );
+    });
   }
 
   private sendRadioChanged(event: any) {
@@ -282,9 +319,12 @@ export default class Transfer extends Vue {
     }
 
     // 設定した送金上限を超えていないか
-    if (this.amountLimit < this.sendParams.amount) {
-      const error = new InformationData('red', Result.Error, '設定された送金量の上限を超えています');
-      this.information.push(error);
+    // 上限なしにチェックがあればここは無視
+    if (!this.amountLimit.none) {
+      if (this.amountLimit.limit < this.sendParams.amount) {
+        const error = new InformationData('red', Result.Error, '設定された送金量の上限を超えています');
+        this.information.push(error);
+      }
     }
 
     // addressが入力されているか
@@ -312,16 +352,16 @@ export default class Transfer extends Vue {
 
   .address-input {
     margin-left: 14.5px;
-    width: 73%;
+    width: 70%;
   }
 
   .amount-input {
     margin-left: 35.5px;
-    width: 73%;
+    width: 70%;
   }
 
   .message-input {
-    width: 73%;
+    width: 70%;
   }
 
   .radio-button {

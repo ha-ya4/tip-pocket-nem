@@ -2,15 +2,17 @@ import nemSdk from 'nem-sdk';
 import {
   Account,
   Address,
-  AssetDefinition,
+  EncryptedMessage,
   Password,
   Pageable,
+  PlainMessage,
+  PublicAccount,
   NemAnnounceResult,
   SimpleWallet,
   Transaction,
   QRService,
 } from 'nem-library';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import Nem from './nem';
@@ -43,6 +45,26 @@ export default class Wallet {
     return account;
   }
 
+  public createPlainMessage(message: string): Observable<PlainMessage> {
+    return of(PlainMessage.create(message));
+  }
+
+  // アドレスから送金先のメタデータを取得してそこから公開鍵を使う
+  public createEncryptoMessage(
+    message: string, privateKey: string, recipientAddress: string,
+  ): Observable<EncryptedMessage | null>
+  {
+    return this.nem.getAccountInfoWithMetaData(recipientAddress).pipe(
+      map((data) => {
+        if (data.publicAccount === undefined) { return null }
+        const publicKey = data.publicAccount.publicKey;
+        const publicAccount = PublicAccount.createWithPublicKey(publicKey);
+        const account = Account.createWithPrivateKey(privateKey);
+        return account.encryptMessage(message, publicAccount)
+      }),
+    );
+  }
+
   // 暗号化してある秘密鍵を複合する
   public decrypto(encryptedKey: {encryptedKey: string, iv: string }): string {
     const common = nemSdk.model.objects.create('common')(this.walletPassword, '');
@@ -57,10 +79,6 @@ export default class Wallet {
   public generateAddressQRText(): string {
     const address = new Address(this.address);
     return new QRService().generateAddressQRText(address);
-  }
-
-  public getAssets(namespace: string): Observable<AssetDefinition[]> {
-    return this.nem.getAllAssetsGivenNamespace(namespace);
   }
 
   public getAssetDivisibility(namespace: string, name: string): Observable<number> {
@@ -81,11 +99,8 @@ export default class Wallet {
     return this.nem.getDivisibility();
   }
 
-  public send(
-    encryptedKey: {encryptedKey: string, iv: string }, parameters: SendParameters,
-  ): Observable<NemAnnounceResult> {
-    const privateKey = this.decrypto(encryptedKey);
-    const account = Account.createWithPrivateKey(privateKey);
+  public send(key: string, parameters: SendParameters): Observable<NemAnnounceResult> {
+    const account = Account.createWithPrivateKey(key);
     return this.nem.send(account, parameters);
   }
 }
