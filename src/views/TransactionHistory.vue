@@ -69,7 +69,8 @@ import Filters from '@/filters.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 import HistoryDetail from '@/components/modal-window/HistoryDetail.vue';
 
-import Wallet from '@/class/wallet.ts';
+import Wallet from '@/ts/wallet';
+import { genarateTransactionType, AppTransaction } from '@/ts/transaction';
 import { ModalSize } from '@/types/enum';
 
 @Component({
@@ -84,7 +85,7 @@ export default class TransactionHistory extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
   private addHistory: boolean = true;
-  private allHistory: Pageable<Transaction[]> = this.wallet.getAllTransactionsPaginated();
+  private pagebleHistory: Pageable<Transaction[]> = this.wallet.getAllTransactionsPaginated();
   private divisibility: number = this.wallet.getDivisibility();
   private history: Transaction[] = [];
   private historyDetail: Transaction | null = null;
@@ -96,7 +97,7 @@ export default class TransactionHistory extends Vue {
   };
 
   private created() {
-    this.allHistory.subscribe((history) => {
+    this.pagebleHistory.subscribe((history) => {
       for (const h of history) {
         // なぜか全く同じものがくるときがあるので前のループでプッシュしたトランサクションハッシュと同じならコンテニューする
         const previousHash = this.history[this.history.length - 1];
@@ -104,6 +105,7 @@ export default class TransactionHistory extends Vue {
           if (previousHash.getTransactionInfo().hash.data === h.getTransactionInfo().hash.data) { continue; }
         }
 
+        const transaction = genarateTransactionType(h);
         this.history.push(h);
       }
 
@@ -115,7 +117,7 @@ export default class TransactionHistory extends Vue {
   }
 
   private addHistoryButton() {
-    this.allHistory.nextPage();
+    this.pagebleHistory.nextPage();
   }
 
   private isSend(address: string): boolean {

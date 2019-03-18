@@ -123,11 +123,11 @@ import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 import QrcodeReader from '@/components/QrcodeReader.vue';
 
-import LocalStorage from '@/class/local-storage';
+import LocalStorage from '@/ts/local-storage';
 import { InformationData, SendParameters } from '@/types/data-class';
 import { Result } from '@/types/enum';
 import { ModalSize } from '@/types/enum';
-import Wallet from '@/class/wallet.ts';
+import Wallet from '@/ts/wallet.ts';
 import { ConfigValue } from '@/types/data-class';
 
 
@@ -151,7 +151,7 @@ export default class Transfer extends Vue {
   private amountLimit: { limit: number, none: boolean } = {
     limit: this.$store.state.Config.amountLimit,
     none: false,
-  }
+  };
 
   private modal: {open: boolean, size: ModalSize} = {
     open: false,
@@ -265,7 +265,7 @@ export default class Transfer extends Vue {
       this.modal.open = true;
       return;
     }
-    const privateKey = this.wallet.decrypto(key)
+    const privateKey = this.wallet.decrypto(key);
 
     let message;
     if (!this.encryptoMessage) {

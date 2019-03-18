@@ -30,8 +30,8 @@ import { Component, Vue, Inject, Prop } from 'vue-property-decorator';
 
 import Filters from '@/filters.vue';
 
-import LocalStorage from '@/class/local-storage';
-import Wallet from '@/class/wallet.ts';
+import LocalStorage from '@/ts/local-storage';
+import Wallet from '@/ts/wallet.ts';
 
 @Component({
   mixins: [Filters],

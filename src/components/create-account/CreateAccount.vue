@@ -51,7 +51,7 @@ import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 
 import { ModalSize } from '@/types/enum';
 import { CreateAcountPages } from '@/components/create-account/types.ts';
-import Wallet from '@/class/wallet.ts';
+import Wallet from '@/ts/wallet.ts';
 
 @Component({
   components: {

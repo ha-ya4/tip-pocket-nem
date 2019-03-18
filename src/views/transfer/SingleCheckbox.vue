@@ -27,6 +27,11 @@ export default class SingleCheckbox extends Vue {
 </script>
 
 <style scoped>
+#single-checkbox {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 input[type="checkbox"] {
   display: none;
 }

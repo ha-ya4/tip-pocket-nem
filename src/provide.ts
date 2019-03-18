@@ -1,4 +1,4 @@
-import Wallet from '@/class/wallet';
+import Wallet from '@/ts/wallet';
 
 export const provide = {
   ['WALLET_SERVICE']: new Wallet(),

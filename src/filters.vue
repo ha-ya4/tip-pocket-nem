@@ -3,8 +3,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Account, EncryptedMessage, PlainMessage, PublicAccount } from 'nem-library';
 import nemSdk from 'nem-sdk';
 
-import LocalStorage from '@/class/local-storage';
-import Wallet from '@/class/wallet.ts';
+import LocalStorage from '@/ts/local-storage';
+import Wallet from '@/ts/wallet.ts';
 
 @Component({
   filters: {

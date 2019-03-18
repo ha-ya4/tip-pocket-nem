@@ -64,7 +64,7 @@ import DeleteAccount from '@/components/DeleteAccount.vue';
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
 import Information from '@/components/information.vue';
 
-import Wallet from '@/class/wallet.ts';
+import Wallet from '@/ts/wallet.ts';
 import { InformationData } from '@/types/data-class';
 import { Result } from '@/types/enum';
 import { ConfigData, ConfigValue } from '@/types/data-class';

@@ -15,7 +15,7 @@ import {
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import Nem from './nem';
+import Nem from '@/ts/nem';
 import { SendParameters } from '@/types/data-class';
 
 export default class Wallet {
@@ -52,15 +52,14 @@ export default class Wallet {
   // アドレスから送金先のメタデータを取得してそこから公開鍵を使う
   public createEncryptoMessage(
     message: string, privateKey: string, recipientAddress: string,
-  ): Observable<EncryptedMessage | null>
-  {
+  ): Observable<EncryptedMessage | null> {
     return this.nem.getAccountInfoWithMetaData(recipientAddress).pipe(
       map((data) => {
-        if (data.publicAccount === undefined) { return null }
+        if (data.publicAccount === undefined) { return null; }
         const publicKey = data.publicAccount.publicKey;
         const publicAccount = PublicAccount.createWithPublicKey(publicKey);
         const account = Account.createWithPrivateKey(privateKey);
-        return account.encryptMessage(message, publicAccount)
+        return account.encryptMessage(message, publicAccount);
       }),
     );
   }
@@ -86,7 +85,7 @@ export default class Wallet {
   }
 
   public getAllTransactionsPaginated(): Pageable<Transaction[]> {
-    return this.nem.getAllTransactionsPaginated(this.address);
+    return this.nem.getAllTransactionsPaginated('NDZG7CEBFVFQAEHRLIWFZV3XRTSTH7BZUPEPOI7J');
   }
 
   public getBalance(): Observable<number> {

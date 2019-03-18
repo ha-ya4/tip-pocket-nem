@@ -19,8 +19,8 @@ import { Component, Vue, Prop, Inject } from 'vue-property-decorator';
 
 import PrivateKeyText from '@/components/PrivateKeyText.vue';
 
-import LocalStorage from '@/class/local-storage';
-import Wallet from '@/class/wallet.ts';
+import LocalStorage from '@/ts/local-storage';
+import Wallet from '@/ts/wallet.ts';
 
 @Component({
   components: {

@@ -62,7 +62,7 @@ import { TransferTransaction } from 'nem-library';
 import Filters from '@/filters.vue';
 
 import { AppAsset } from '@/components/modal-window/data-class';
-import Wallet from '@/class/wallet.ts';
+import Wallet from '@/ts/wallet.ts';
 
 @Component({
   mixins: [Filters],

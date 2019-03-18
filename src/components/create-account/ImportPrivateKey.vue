@@ -22,8 +22,8 @@ import Information from '@/components/information.vue';
 
 import { InformationData } from '@/types/data-class.ts';
 import { Result } from '@/types/enum';
-import LocalStorage from '@/class/local-storage';
-import Wallet from '@/class/wallet.ts';
+import LocalStorage from '@/ts/local-storage';
+import Wallet from '@/ts/wallet.ts';
 import { CreateAcountPages } from '@/components/create-account/types.ts';
 
 
