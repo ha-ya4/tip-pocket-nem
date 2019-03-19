@@ -1,52 +1,26 @@
 <template>
-  <div id="history-detail" v-if="historyDetail">
+  <div id="history-detail" v-if="detail">
 
-    <div v-if="historyDetail._xem">
       <hr>
-      {{ historyDetail.timeWindow.timeStamp | fDateTime }}
+      {{ detail.timeWindow().timeStamp | fDateTime }}
       <hr>
-      <span class="transaction-type">TransferTransaction</span>
+      <span class="transaction-type">{{ detail.type() }}</span>
       <hr>
-      height: {{ historyDetail.transactionInfo.height }}
+      height: {{ detail.height() }}
       <hr>
-      hash:<br>{{ historyDetail.transactionInfo.hash.data }}
+      hash:<br>{{ detail.hash() }}
       <hr>
-      sender:<br>{{ historyDetail.signer.address.value }}
+      sender:<br>{{ detail.sender() }}
       <hr>
-      recipient:<br>{{ historyDetail.recipient.value }}
+      recipient:<br>{{ detail.recipient() }}
       <hr>
-      quantity: {{ historyDetail._xem.quantity / divisibility | fAddOperator(isSend(historyDetail.signer.address.value)) }}
+      quantity: {{ detail.quantity() / divisibility | fAddOperator(isSend(detail.sender())) }}
       <hr>
-      fee: {{ historyDetail.fee / divisibility  }}
+      fee: {{ detail.fee() / divisibility  }}
       <hr>
       message:<br>
-      {{ historyDetail.message | fGetMessage(historyDetail.signer, wallet) }}
+      {{ detail.message() | fGetMessage(detail.publicAccount(), wallet) }}
       <hr>
-    </div>
-
-    <!--マルチシグの場合はこっち-->
-    <div v-if="historyDetail.otherTransaction">
-      <hr>
-      {{ historyDetail.timeWindow.timeStamp | fDateTime }}
-      <hr>
-      <span class="transaction-type">MultisigTransaction</span>
-      <hr>
-      height: {{ historyDetail.otherTransaction.transactionInfo.height }}
-      <hr>
-      hash:<br>{{ historyDetail.otherTransaction.transactionInfo.hash.data }}
-      <hr>
-      sender:<br>{{ historyDetail.otherTransaction.signer.address.value }}
-      <hr>
-      recipient:<br>{{ historyDetail.otherTransaction.recipient.value }}
-      <hr>
-      quantity: {{ historyDetail.otherTransaction._xem.quantity / divisibility | fAddOperator(isSend(historyDetail.otherTransaction.signer.address.value))}}
-      <hr>
-      fee: {{ historyDetail.otherTransaction.fee / divisibility  }}
-      <hr>
-      message:<br>
-      {{ historyDetail.otherTransaction.message | fGetMessage(historyDetail.otherTransaction.signer, wallet) }}
-      <hr>
-    </div>
 
     <div class="close-button">
       <button type="button" class="app-button" @click="modalClose">閉じる</button>
@@ -62,6 +36,7 @@ import { TransferTransaction } from 'nem-library';
 import Filters from '@/filters.vue';
 
 import { AppAsset } from '@/components/modal-window/data-class';
+import { TransactionInterface } from '@/ts/transaction-type';
 import Wallet from '@/ts/wallet.ts';
 
 @Component({
@@ -69,7 +44,7 @@ import Wallet from '@/ts/wallet.ts';
 })
 export default class TransactionHistory extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
-  @Prop() private historyDetail: TransferTransaction;
+  @Prop() private detail: TransactionInterface;
 
   private divisibility: number = this.wallet.getDivisibility();
 

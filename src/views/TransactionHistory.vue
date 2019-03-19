@@ -9,43 +9,25 @@
     >
       <history-detail
         @modalClose="modalClose"
-        :historyDetail="historyDetail"
+        :detail="historyDetail"
       />
     </modal-window>
 
     <div class=transaction-history v-for="h of history">
-      <div :class="{ 'history-send': isSend(h.signer.address.value), 'history-receive': !isSend(h.signer.address.value)}" >
+      <div :class="{ 'history-send': isSend(h.sender()), 'history-receive': !isSend(h.sender()) }" >
         <a @click="modalContentOpen(h)">
-          <div class="transaction" v-if="h._xem">
-            <hr>
-            {{ h.timeWindow.timeStamp | fDateTime }}
-            <hr>
-            <span class="transaction-type">TransferTransaction</span>
-            <hr>
-            sender:<br>{{ h.signer.address.value }}
-            <hr>
-            quantity: {{ h._xem.quantity / divisibility | fAddOperator(isSend(h.signer.address.value)) }}
-            <hr>
-              message:<br>
-              {{ h.message | fGetMessage(h.signer, wallet) | fStringShort }}
-            <hr>
-          </div>
-
-          <!--マルチシグの場合はこっち-->
-          <div class="transaction" v-if="h.otherTransaction">
-            <hr>
-            {{ h.timeWindow.timeStamp | fDateTime }}
-            <hr>
-            <span class="transaction-type">MultisigTransaction</span>
-            <hr>
-            sender:<br>{{ h.otherTransaction.signer.address.value }}
-            <hr>
-            quantity: {{ h.otherTransaction._xem.quantity / divisibility | fAddOperator(isSend(h.otherTransaction.signer.address.value))}}
-            <hr>
-              message:<br>
-              {{ h.otherTransaction.message | fGetMessage(h.otherTransaction.signer, wallet) | fStringShort }}
-            <hr>
-          </div>
+          <hr>
+          {{ h.timeWindow().timeStamp | fDateTime }}
+          <hr>
+          <span class="transaction-type">{{ h.type() }}</span>
+          <hr>
+          sender:<br>{{ h.sender() }}
+          <hr>
+          quantity: {{ h.quantity() / divisibility | fAddOperator(isSend(h.sender())) }}
+          <hr>
+            message:<br>
+            {{ h.message() | fGetMessage(h.publicAccount(), wallet) | fStringShort }}
+          <hr>
         </a>
       </div>
 
@@ -70,7 +52,7 @@ import ModalWindow from '@/components/modal-window/ModalWindow.vue';
 import HistoryDetail from '@/components/modal-window/HistoryDetail.vue';
 
 import Wallet from '@/ts/wallet';
-import { genarateTransactionType, AppTransaction } from '@/ts/transaction';
+import { genarateTransactionType, TransactionInterface, Transfer, Multisig } from '@/ts/transaction-type';
 import { ModalSize } from '@/types/enum';
 
 @Component({
@@ -87,8 +69,8 @@ export default class TransactionHistory extends Vue {
   private addHistory: boolean = true;
   private pagebleHistory: Pageable<Transaction[]> = this.wallet.getAllTransactionsPaginated();
   private divisibility: number = this.wallet.getDivisibility();
-  private history: Transaction[] = [];
-  private historyDetail: Transaction | null = null;
+  private history: TransactionInterface[] = [];
+  private historyDetail: TransactionInterface | null = null;
   private latestTransactionHash: string;
 
   private modal: { open: boolean, size: ModalSize } = {
@@ -99,14 +81,14 @@ export default class TransactionHistory extends Vue {
   private created() {
     this.pagebleHistory.subscribe((history) => {
       for (const h of history) {
+        const transaction = genarateTransactionType(h);
         // なぜか全く同じものがくるときがあるので前のループでプッシュしたトランサクションハッシュと同じならコンテニューする
         const previousHash = this.history[this.history.length - 1];
         if (previousHash) {
-          if (previousHash.getTransactionInfo().hash.data === h.getTransactionInfo().hash.data) { continue; }
+          if (previousHash.hash() === h.getTransactionInfo().hash.data) { continue; }
         }
 
-        const transaction = genarateTransactionType(h);
-        this.history.push(h);
+        this.history.push(transaction);
       }
 
       // 受け取った配列のlengthが１０じゃなければボタンを消す。最後が１０だと失敗するか？
@@ -124,7 +106,7 @@ export default class TransactionHistory extends Vue {
     return this.wallet.address === address ? true : false;
   }
 
-  private modalContentOpen(transaction: Transaction) {
+  private modalContentOpen(transaction: TransactionInterface) {
     this.historyDetail = transaction;
     this.modal.open = true;
   }

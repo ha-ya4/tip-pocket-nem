@@ -2,11 +2,13 @@ import {
   EncryptedMessage,
   MultisigTransaction,
   PlainMessage,
+  PublicAccount,
   TimeWindow,
   TransferTransaction,
 } from 'nem-library';
 
-export function genarateTransactionType(transaction: any): AppTransaction {
+// transaction部分をひとまずany。どうしたらうまくできるのかわかんない。
+export function genarateTransactionType(transaction: any): TransactionInterface {
   if (transaction.otherTransaction) {
     return new Multisig(TransactionType.Multisig, transaction);
   }
@@ -14,14 +16,16 @@ export function genarateTransactionType(transaction: any): AppTransaction {
   return new Transfer(TransactionType.Transfer, transaction);
 }
 
-export interface AppTransaction {
+export interface TransactionInterface {
   transactionType: TransactionType;
 
-  timeStamp(): TimeWindow;
+  timeWindow(): TimeWindow;
+  type(): string;
   height(): number;
   hash(): string;
   sender(): string | null;
   recipient(): string;
+  publicAccount(): PublicAccount;
   quantity(): number;
   fee(): number;
   message(): PlainMessage | EncryptedMessage;
@@ -32,13 +36,15 @@ enum TransactionType {
   Multisig = 'MultisigTransaction',
 }
 
-class Transfer implements AppTransaction {
+class AppTransaction {
   constructor(
     public transactionType: TransactionType,
-    private transaction: TransferTransaction,
+    protected transaction: any,
   ) {}
 
-  public timeStamp(): TimeWindow { return this.transaction.timeWindow; }
+  public timeWindow(): TimeWindow { return this.transaction.timeWindow; }
+
+  public type(): string { return this.transactionType; }
 
   public height(): number { return this.transaction.getTransactionInfo().height; }
 
@@ -51,6 +57,8 @@ class Transfer implements AppTransaction {
 
   public recipient(): string {  return this.transaction.recipient.pretty(); }
 
+  public publicAccount(): PublicAccount { return this.transaction.signer; }
+
   public quantity(): number { return this.transaction.xem().quantity; }
 
   public fee(): number { return this.transaction.fee; }
@@ -58,21 +66,15 @@ class Transfer implements AppTransaction {
   public message(): PlainMessage | EncryptedMessage { return this.transaction.message; }
 }
 
-class Multisig implements AppTransaction {
-  constructor(
-    public transactionType: TransactionType,
-    private transaction: MultisigTransaction,
-  ) {}
+export class Transfer extends AppTransaction implements TransactionInterface {
+  constructor(transactionType: TransactionType, transaction: TransferTransaction) {
+    super(transactionType, transaction);
+  }
+}
 
-  public timeStamp(): TimeWindow { return this.transaction.timeWindow; }
-
-  public height(): number { return this.transaction.getTransactionInfo().height; }
-
-  public hash(): string { return this.transaction.getTransactionInfo().hash.data; }
-
-  public sender(): string | null {
-    if (!this.transaction.signer) { return null; }
-    return this.transaction.signer.address.pretty();
+export class Multisig  extends AppTransaction implements TransactionInterface {
+  constructor(transactionType: TransactionType, transaction: MultisigTransaction) {
+    super(transactionType, transaction);
   }
 
   public recipient(): string {
@@ -80,12 +82,12 @@ class Multisig implements AppTransaction {
     return transaction.recipient.pretty();
   }
 
+  public publicAccount(): PublicAccount { return this.transaction.otherTransaction.signer; }
+
   public quantity(): number {
     const transaction = this.transaction.otherTransaction as TransferTransaction;
     return transaction.xem().quantity;
   }
-
-  public fee(): number { return this.transaction.fee; }
 
   public message(): PlainMessage | EncryptedMessage {
     const transaction = this.transaction.otherTransaction as TransferTransaction;
