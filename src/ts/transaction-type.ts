@@ -9,6 +9,14 @@ import {
 
 // transaction部分をひとまずany。どうしたらうまくできるのかわかんない。
 export function genarateTransactionType(transaction: any): TransactionInterface {
+  // MultisigTransactionとTransaferTransaction以外はこのwalletになくてもいいと思うのでErrorを投げる
+  if (transaction.mosaicDefinition) { throw new Error('AssetDefinitionCreationTransaction サポート外のトランザクション'); }
+  if (transaction.delta) { throw new Error('AssetSupplyChangeTransaction サポート外のトランザクション'); }
+  if (transaction.remoteAccount) { throw new Error('ImportanceTransferTransaction サポート外のトランザクション'); }
+  if (transaction.modifications) { throw new Error('MultisigAggregateModificationTransaction サポート外のトランザクション'); }
+  if (transaction.otherAccount) { throw new Error('MultisigSignatureTransaction サポート外のトランザクション'); }
+  if (transaction.rentalFeeSink) { throw new Error('ProvisionNamespaceTransaction サポート外のトランザクション'); }
+
   if (transaction.otherTransaction) {
     return new Multisig(TransactionType.Multisig, transaction);
   }
@@ -59,7 +67,7 @@ class AppTransaction {
 
   public publicAccount(): PublicAccount { return this.transaction.signer; }
 
-  public quantity(): number { return this.transaction.xem().quantity; }
+  public quantity(): number { return this.transaction._xem.quantity; }
 
   public fee(): number { return this.transaction.fee; }
 
@@ -78,19 +86,15 @@ export class Multisig  extends AppTransaction implements TransactionInterface {
   }
 
   public recipient(): string {
-    const transaction = this.transaction.otherTransaction as TransferTransaction;
+    const transaction = this.transaction.otherTransaction;
     return transaction.recipient.pretty();
   }
 
   public publicAccount(): PublicAccount { return this.transaction.otherTransaction.signer; }
 
-  public quantity(): number {
-    const transaction = this.transaction.otherTransaction as TransferTransaction;
-    return transaction.xem().quantity;
-  }
+  public quantity(): number { return this.transaction.otherTransaction._xem.quantity; }
 
   public message(): PlainMessage | EncryptedMessage {
-    const transaction = this.transaction.otherTransaction as TransferTransaction;
-    return transaction.message;
-   }
+    return this.transaction.otherTransaction.message;
+  }
 }

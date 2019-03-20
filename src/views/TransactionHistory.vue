@@ -81,14 +81,19 @@ export default class TransactionHistory extends Vue {
   private created() {
     this.pagebleHistory.subscribe((history) => {
       for (const h of history) {
-        const transaction = genarateTransactionType(h);
-        // なぜか全く同じものがくるときがあるので前のループでプッシュしたトランサクションハッシュと同じならコンテニューする
-        const previousHash = this.history[this.history.length - 1];
-        if (previousHash) {
-          if (previousHash.hash() === h.getTransactionInfo().hash.data) { continue; }
-        }
+        // MultisigTransactionとTransaferTransaction以外は無視する
+        try {
+          const transaction = genarateTransactionType(h);
+          // なぜか全く同じものがくるときがあるので前のループでプッシュしたトランサクションハッシュと同じならコンテニューする
+          const previousHash = this.history[this.history.length - 1];
+          if (previousHash) {
+            if (previousHash.hash() === h.getTransactionInfo().hash.data) { continue; }
+          }
 
-        this.history.push(transaction);
+          this.history.push(transaction);
+        } catch　(err) {
+          // 例外発生時は何もしなくていい
+        }
       }
 
       // 受け取った配列のlengthが１０じゃなければボタンを消す。最後が１０だと失敗するか？
