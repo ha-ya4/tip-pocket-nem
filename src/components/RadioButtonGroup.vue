@@ -10,7 +10,7 @@
       <slot></slot>: {{ defaultValue }}
     </div>
 
-    <div id="target" v-if="expansion">
+    <div v-if="expansion">
 
       <p class="radio-item">
         <input
@@ -21,7 +21,7 @@
           value="none"
           @change="radioChanged"
         >
-        <label>{{ none.value }}</label>
+        <label id="ss">{{ none.value }}</label>
       </p>
 
       <p class="radio-item">
@@ -33,9 +33,7 @@
           value="item1"
           @change="radioChanged"
         >
-        <label>
-          <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value1.value">
-        </label>
+        <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value1.value">
       </p>
 
       <p class="radio-item">
@@ -47,9 +45,7 @@
           value="item2"
           @change="radioChanged"
         >
-        <label>
-          <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value2.value">
-        </label>
+        <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value2.value">
       </p>
 
       <p class="radio-item">
@@ -61,9 +57,7 @@
           value="item3"
           @change="radioChanged"
         >
-        <label>
-          <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value3.value">
-        </label>
+        <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value3.value">
       </p>
     </div>
   </div>
@@ -110,9 +104,7 @@ export default class RadioButtonGroup extends Vue {
   private radioChanged(event: any) {
     // 前回どこがチェックされていたかわからないので全てのdefaultValueをfalseに変える
     const items = [this.none, this.value1, this.value2, this.value3];
-    for (const item of items) {
-      item.defaultValue = false;
-    }
+    items.forEach((item) => item.defaultValue = false);
 
     // target.valueの値を取得してifで対応する項目のdefaultValueをtrueに切り替え
     const value = event.target.value;
@@ -142,30 +134,6 @@ export default class RadioButtonGroup extends Vue {
       this.expansion = false;
     } else if (!this.expansion) {
       this.expansion = true;
-    }
-  }
-
-  // １つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
-  @Watch('value1.value')
-  private valueChanged1() {
-    if (this.value1.defaultValue) {
-      this.defaultValue = this.value1.value;
-    }
-  }
-
-  // ２つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
-  @Watch('value2.value')
-  private valueChanged2() {
-    if (this.value2.defaultValue) {
-      this.defaultValue = this.value2.value;
-    }
-  }
-
-  // 3つ目のラジオボタンのアイテムが書き換えられたときにデフォルトの値を書き換える
-  @Watch('value3.value')
-  private valueChanged3() {
-    if (this.value3.defaultValue) {
-      this.defaultValue = this.value3.value;
     }
   }
 }

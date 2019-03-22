@@ -11,16 +11,7 @@
 
     <!-- offにするとQR読み込みで即送金-->
     <div class="send-button">
-      <span class="config-item">送金ボタン:</span>
-      <span class="send-radio-item" v-for="label of sendRadio.label">
-        <input
-          type="radio"
-          name="send-radio"
-          :value="label"
-          :checked="sendRadio.checked[label]"
-          @change="sendRadioChanged">
-        <label>{{ label }}</label>
-      </span>
+      <send-radio-button @bool="sendRadioBool" />
     </div>
     <hr>
 
@@ -63,6 +54,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import DeleteAccount from '@/components/DeleteAccount.vue';
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
 import Information from '@/components/information.vue';
+import SendRadioButton from '@/components/SendRadioButton.vue';
 
 import Wallet from '@/ts/wallet.ts';
 import { InformationData } from '@/types/data-class';
@@ -74,6 +66,7 @@ import { ConfigData, ConfigValue } from '@/types/data-class';
     DeleteAccount,
     RadioButtonGroup,
     Information,
+    SendRadioButton,
   },
 })
 export default class Config extends Vue {
@@ -87,17 +80,6 @@ export default class Config extends Vue {
   // 予め登録しておいて送金画面で選択することができるメッセージ
   private message: ConfigValue[] = this.$store.state.Config.message;
   private information: InformationData[] = [];
-
-  private sendRadio: { label: string[], checked: { on: boolean, off: boolean } } = {
-    label: ['on', 'off'],
-    checked: { on: false, off: false },
-  };
-
-  private created() {
-    this.sendButton
-      ? this.sendRadio.checked.on = true
-      : this.sendRadio.checked.off = true;
-  }
 
   private validation(values: ConfigValue[]) {
     // ---------登録した送金量------------
@@ -140,22 +122,8 @@ export default class Config extends Vue {
     }
   }
 
-  private sendRadioChanged(event: any) {
-    const value = event.target.value;
-    switch (value) {
-      case 'on':
-        this.sendButton = true;
-        this.sendRadio.checked.on = true;
-        this.sendRadio.checked.off = false;
-        break;
-      case 'off':
-        this.sendButton = false;
-        this.sendRadio.checked.on = false;
-        this.sendRadio.checked.off = true;
-        break;
-      default:
-        break;
-    }
+  private sendRadioBool(bool: boolean) {
+    this.sendButton = bool;
   }
 
   // 設定したデータを保存。ローカルストレージとVuexのstoreを更新する

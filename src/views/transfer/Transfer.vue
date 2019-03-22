@@ -69,17 +69,8 @@
     </p>
 
     <!--送金ボタンのon,off設定ボタン-->
-    <p id="send-radio-button">
-      <span class="config-item">送金ボタン:</span>
-      <span class="send-radio-item" v-for="label of sendRadio.label">
-        <input
-          type="radio"
-          name="send-radio"
-          :value="label"
-          :checked="sendRadio.checked[label]"
-          @change="sendRadioChanged">
-        <label>{{ label }}</label>
-      </span>
+    <p>
+      <send-radio-button @bool="sendRadioBool" />
     </p>
 
     <!--設定しておいた数量の中から選択できる-->
@@ -117,6 +108,7 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 import { PlainMessage, EncryptedMessage, NemAnnounceResult } from 'nem-library';
 
+import SendRadioButton from '@/components/SendRadioButton.vue';
 import SingleCheckbox from '@/views/transfer/SingleCheckbox.vue';
 import Information from '@/components/information.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
@@ -133,6 +125,7 @@ import { ConfigValue } from '@/types/data-class';
 
 @Component({
   components: {
+    SendRadioButton,
     SingleCheckbox,
     Information,
     ImportPrivateKey,
@@ -161,11 +154,6 @@ export default class Transfer extends Vue {
    // 登録しておいたsendButtonの設定
   private sendButton: boolean = this.$store.state.Config.sendButton;
 
-  private sendRadio: { label: string[], checked: { on: boolean, off: boolean } } = {
-    label: ['on', 'off'],
-    checked: { on: false, off: false },
-  };
-
   private sendParams: { address: string, amount: number, message: string } = {
     // 送金先アドレス
     address: '',
@@ -180,13 +168,6 @@ export default class Transfer extends Vue {
     amount: this.$store.state.Config.amount,
     message: this.$store.state.Config.message,
   };
-
-  // sendButtonの設定値を反映させる
-  private created() {
-    this.sendButton
-      ? this.sendRadio.checked.on = true
-      : this.sendRadio.checked.off = true;
-  }
 
   // 送金成功時にアドレス欄をリセットして成功のメッセージを表示する
   private afterSendDisposal(response: NemAnnounceResult) {
@@ -293,22 +274,8 @@ export default class Transfer extends Vue {
     });
   }
 
-  private sendRadioChanged(event: any) {
-    const value = event.target.value;
-    switch (value) {
-      case 'on':
-        this.sendButton = true;
-        this.sendRadio.checked.on = true;
-        this.sendRadio.checked.off = false;
-        break;
-      case 'off':
-        this.sendButton = false;
-        this.sendRadio.checked.on = false;
-        this.sendRadio.checked.off = true;
-        break;
-      default:
-        break;
-    }
+  private sendRadioBool(bool: boolean) {
+    this.sendButton = bool;
   }
 
   private validation() {
