@@ -47,7 +47,7 @@ import { Component, Vue, Inject, Prop } from 'vue-property-decorator';
 
 import NewAccount from '@/components/create-account/NewAccount.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
-import ModalWindow from '@/components/modal-window/ModalWindow.vue';
+import ModalWindow from '@/components/ModalWindow.vue';
 
 import { ModalSize } from '@/types/enum';
 import { CreateAcountPages } from '@/components/create-account/types.ts';

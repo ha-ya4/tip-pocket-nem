@@ -24,7 +24,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import Filters from '@/filters.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
-import ModalWindow from '@/components/modal-window/ModalWindow.vue';
+import ModalWindow from '@/components/ModalWindow.vue';
 import PrivateKeyText from '@/components/PrivateKeyText.vue';
 
 import LocalStorage from '@/ts/local-storage';

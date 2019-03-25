@@ -1,7 +1,6 @@
 <template>
   <div id="radio-button-group">
     <div class="content-title">
-      <!--messageとamountを分ける?-->
       <!--v-bind:classでthis.expansionがfalseならbefore,trueならafterにclassを切り替える-->
       <button
         :class="{ 'button-rotate-before': !expansion,  'button-rotate-after': expansion }"
@@ -12,21 +11,19 @@
 
     <div v-if="expansion">
 
-      <p class="radio-item">
+      <div class="radio-item">
         <input
-          :id="'radio-item0-' + radioIdName"
           :checked="none.defaultValue"
           type="radio"
           name="radio-item"
           value="none"
           @change="radioChanged"
         >
-        <label id="ss">{{ none.value }}</label>
-      </p>
+        <label>{{ none.value }}</label>
+      </div>
 
-      <p class="radio-item">
+      <div class="radio-item">
         <input
-          :id="'radio-item1-' + radioIdName"
           :checked="value1.defaultValue"
           type="radio"
           name="radio-item"
@@ -34,11 +31,10 @@
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value1.value">
-      </p>
+      </div>
 
-      <p class="radio-item">
+      <div class="radio-item">
         <input
-          :id="'radio-item2-' + radioIdName"
           :checked="value2.defaultValue"
           type="radio"
           name="radio-item"
@@ -46,11 +42,10 @@
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value2.value">
-      </p>
+      </div>
 
       <p class="radio-item">
         <input
-          :id="'radio-item3-' + radioIdName"
           :checked="value3.defaultValue"
           type="radio"
           name="radio-item"
@@ -71,8 +66,6 @@ import { ConfigValue } from '@/types/data-class';
 @Component({})
 export default class RadioButtonGroup extends Vue {
   @Prop() private receivedItems: ConfigValue[];
-  // IDを書き換えるときに付与する名前
-  @Prop() private radioIdName: string;
   @Prop() private maxLength: number;
 
   private expansion: boolean = false;

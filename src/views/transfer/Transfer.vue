@@ -14,37 +14,37 @@
     </div>
 
     <!--QRリーダー起動ボタン-->
-    <p class="transfer-button">
+    <div class="qr-button">
       <button
         type="button"
         class="app-button"
         @click="qrButton">QR</button>
-    </p>
+    </div>
 
     <!--送金ボタンをoffにしたときに表示する警告文-->
-    <p class="send-button-none" v-if="!sendButton">
+    <div class="send-button-none" v-if="!sendButton">
       QRコードを読み取ると確認なしで送金します
-    </p>
+    </div>
 
     <Information :messages="information"/>
 
     <!--アドレス入力欄-->
-    <p>
+    <div class="address">
       アドレス:
       <input type="text" maxlength="45" class="app-input-text address-input" v-model="sendParams.address">
-    </p>
+    </div>
 
     <!--数量入力欄-->
-    <p>
+    <div class="amount">
       数量:
       <input type="text" maxlength="17" class="app-input-text amount-input" v-model="sendParams.amount">
-    </p>
+    </div>
 
     <!--メッセージ入力欄-->
-    <p>
+    <div class="message">
       メッセージ:
       <input type="text" maxlength="1024"  class="app-input-text message-input" v-model="sendParams.message">
-    </p>
+    </div>
 
     <single-checkbox
       @checkboxChanged="changeEncryptoMessage"
@@ -61,22 +61,22 @@
     </single-checkbox>
 
     <!--送金ボタン-->
-    <p class="transfer-button" v-if="sendButton">
+    <div class="send-button" v-if="sendButton">
       <button
         type="button"
         class="app-button"
         @click="send">送金</button>
-    </p>
+    </div>
 
     <!--送金ボタンのon,off設定ボタン-->
-    <p>
+    <div>
       <send-radio-button @bool="sendRadioBool" />
-    </p>
+    </div>
 
     <!--設定しておいた数量の中から選択できる-->
     数量：
     <div class="radio-button" v-for="(a, index) of userParams.amount">
-      <p>
+      <div>
         <input
           type="radio"
           name="amount-radio"
@@ -84,13 +84,13 @@
           :checked="a.defaultValue"
           @change="amountRadioChanged">
         <label>{{ a.value }}</label>
-      </p>
+      </div>
     </div>
 
     <!--設定しておいたメッセージの中から選択できる-->
     メッセージ：
     <div class="radio-button" v-for="(m, index) of userParams.message">
-      <p>
+      <div>
         <input
           type="radio"
           name="message-radio"
@@ -98,7 +98,7 @@
           :checked="m.defaultValue"
           @change="messageRadioChanged">
         <label>{{ m.value }}</label>
-      </p>
+      </div>
     </div>
 
   </div>
@@ -112,8 +112,8 @@ import SendRadioButton from '@/components/SendRadioButton.vue';
 import SingleCheckbox from '@/views/transfer/SingleCheckbox.vue';
 import Information from '@/components/information.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
-import ModalWindow from '@/components/modal-window/ModalWindow.vue';
-import QrcodeReader from '@/components/QrcodeReader.vue';
+import ModalWindow from '@/components/ModalWindow.vue';
+import QrcodeReader from '@/views/transfer/QrcodeReader.vue';
 
 import LocalStorage from '@/ts/local-storage';
 import { InformationData, SendParameters } from '@/types/data-class';
@@ -314,7 +314,12 @@ export default class Transfer extends Vue {
 /*スマホ*/
 @media screen and (max-width: 800px) {
   #transfer {
+    line-height: 150%;
     margin: 25px;
+  }
+
+  .address {
+    margin-top: 5px;
   }
 
   .address-input {
@@ -322,9 +327,18 @@ export default class Transfer extends Vue {
     width: 70%;
   }
 
+  .amount {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
   .amount-input {
     margin-left: 35.5px;
     width: 70%;
+  }
+
+  .message {
+    margin-bottom: 10px;
   }
 
   .message-input {
@@ -332,8 +346,13 @@ export default class Transfer extends Vue {
   }
 
   .radio-button {
-    margin-top: 10px;
+    margin-top: 5px;
     margin-left: 5%;
+  }
+
+  .send-button, .qr-button  {
+    margin-bottom: 5px;
+    text-align: center;
   }
 
   .send-button-none {
@@ -343,10 +362,6 @@ export default class Transfer extends Vue {
 
   .send-radio-item {
     margin-left: 10px;
-  }
-
-  .transfer-button {
-    text-align: center;
   }
 }
 </style>

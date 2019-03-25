@@ -48,8 +48,8 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import { Transaction, Pageable } from 'nem-library';
 
 import Filters from '@/filters.vue';
-import ModalWindow from '@/components/modal-window/ModalWindow.vue';
-import HistoryDetail from '@/components/modal-window/HistoryDetail.vue';
+import ModalWindow from '@/components/ModalWindow.vue';
+import HistoryDetail from '@/views/history/HistoryDetail.vue';
 
 import Wallet from '@/ts/wallet';
 import { genarateTransactionType, TransactionInterface, Transfer, Multisig } from '@/ts/transaction-type';

@@ -27,7 +27,6 @@
     <radio-button-group
       ref="amountRadio"
       :receivedItems="amount"
-      :radioIdName="'amount'"
       :maxLength="10">数量</radio-button-group>
     <hr>
 
@@ -35,7 +34,6 @@
     <radio-button-group
       ref="messageRadio"
       :receivedItems="message"
-      :radioIdName="'message'"
       :maxLength="1024">メッセージ</radio-button-group>
     <hr>
 
@@ -52,7 +50,7 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import DeleteAccount from '@/components/DeleteAccount.vue';
-import RadioButtonGroup from '@/components/RadioButtonGroup.vue';
+import RadioButtonGroup from '@/views/config/RadioButtonGroup.vue';
 import Information from '@/components/information.vue';
 import SendRadioButton from '@/components/SendRadioButton.vue';
 
@@ -80,47 +78,6 @@ export default class Config extends Vue {
   // 予め登録しておいて送金画面で選択することができるメッセージ
   private message: ConfigValue[] = this.$store.state.Config.message;
   private information: InformationData[] = [];
-
-  private validation(values: ConfigValue[]) {
-    // ---------登録した送金量------------
-    // amountが数値になってるかチェック
-    if (values.some(
-      (value: ConfigValue) => isNaN(Number(value.value)))
-    ) {
-      const amountError = new InformationData('red', Result.Error, '数量には数字を入力してください');
-      this.information.push(amountError);
-    } else {
-      // 数字がstring型の可能性があるのでnumber型に変換
-      values.map((value) => { value.value = Number(value.value); });
-    }
-
-    // ------------送金上限-----------
-    // 数字が入力されているかチェック
-    if (isNaN(this.amountLimit)) {
-      const amountLimitError = new InformationData('red', Result.Error, '送金上限には数字を入力してください');
-      this.information.push(amountLimitError);
-      return;
-    }
-
-    // 一応number型に変換
-    this.amountLimit = Number(this.amountLimit);
-
-    // xemの総発行枚数以下かチェック
-    const xemMaxAmount = 8_999_999_999;
-    if (xemMaxAmount < this.amountLimit) {
-      const amountLimitError = new InformationData('red', Result.Error, 'xemの総発行枚数8,999,999,999より小さい数字を入力してください');
-      this.information.push(amountLimitError);
-      return;
-    }
-
-    // 数量に入力された数字が送金量の上限を超えていないかチェック。送金上限を超えていたときにtrueが返る
-    const amountLimitResult = values.some((value) => this.amountLimit < value.value );
-    if (amountLimitResult) {
-      const amountLimitError = new InformationData('red', Result.Error, '送金上限を超えた数量が入力されています');
-      this.information.push(amountLimitError);
-      return;
-    }
-  }
 
   private sendRadioBool(bool: boolean) {
     this.sendButton = bool;
@@ -173,6 +130,47 @@ export default class Config extends Vue {
   // vuex.storeのstateを更新する
   private updateStore(configData: ConfigData) {
    this.$store.commit('Config/UPDATE_CONFIG_DATA', configData);
+  }
+
+  private validation(values: ConfigValue[]) {
+    // ---------登録した送金量------------
+    // amountが数値になってるかチェック
+    if (values.some(
+      (value: ConfigValue) => isNaN(Number(value.value)))
+    ) {
+      const amountError = new InformationData('red', Result.Error, '数量には数字を入力してください');
+      this.information.push(amountError);
+    } else {
+      // 数字がstring型の可能性があるのでnumber型に変換
+      values.map((value) => { value.value = Number(value.value); });
+    }
+
+    // ------------送金上限-----------
+    // 数字が入力されているかチェック
+    if (isNaN(this.amountLimit)) {
+      const amountLimitError = new InformationData('red', Result.Error, '送金上限には数字を入力してください');
+      this.information.push(amountLimitError);
+      return;
+    }
+
+    // 一応number型に変換
+    this.amountLimit = Number(this.amountLimit);
+
+    // xemの総発行枚数以下かチェック
+    const xemMaxAmount = 8_999_999_999;
+    if (xemMaxAmount < this.amountLimit) {
+      const amountLimitError = new InformationData('red', Result.Error, 'xemの総発行枚数8,999,999,999より小さい数字を入力してください');
+      this.information.push(amountLimitError);
+      return;
+    }
+
+    // 数量に入力された数字が送金量の上限を超えていないかチェック。送金上限を超えていたときにtrueが返る
+    const amountLimitResult = values.some((value) => this.amountLimit < value.value );
+    if (amountLimitResult) {
+      const amountLimitError = new InformationData('red', Result.Error, '送金上限を超えた数量が入力されています');
+      this.information.push(amountLimitError);
+      return;
+    }
   }
 }
 </script>
