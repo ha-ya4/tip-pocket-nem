@@ -143,7 +143,7 @@ export default class RadioButtonGroup extends Vue {
   }
 
   input[type="text"] {
-    width: 88%;
+    width: 80%;
   }
 
   /*ボタンの向きを右にする。*/

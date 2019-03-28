@@ -49,7 +49,7 @@
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import DeleteAccount from '@/components/DeleteAccount.vue';
+import DeleteAccount from '@/views/config/DeleteAccount.vue';
 import RadioButtonGroup from '@/views/config/RadioButtonGroup.vue';
 import Information from '@/components/information.vue';
 import SendRadioButton from '@/components/SendRadioButton.vue';
@@ -179,7 +179,7 @@ export default class Config extends Vue {
 /*スマホ*/
 @media screen and (max-width: 800px) {
   input[type="text"] {
-    width: 71%;
+    width: 63%;
   }
 
   #config {

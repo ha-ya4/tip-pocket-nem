@@ -20,12 +20,13 @@ export default class App extends Vue {}
 
 <style>
 body {
+  font-size: 5vw;
   margin: 0;
   word-wrap: break-word;
 }
 
 /*スマホ*/
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 500px) {
   hr {
     background-color: #bbb;
     border: none;

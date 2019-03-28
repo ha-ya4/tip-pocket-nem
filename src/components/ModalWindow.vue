@@ -72,28 +72,28 @@ export default class ModalWindow extends Vue {
 
   .large {
     width: 90%;
-    height: 70%;
-    top: 15%;
+    height: 75%;
+    top: 12%;
     left: 5%;
   }
 
   .middle {
     width: 90%;
-    height: 50%;
-    top: 25%;
+    height: 22em;
+    top: 20%;
     left: 5%;
   }
 
   .small {
     width: 90%;
-    height: 40%;
-    top: 30%;
+    height: 17em;
+    top: 28%;
     left: 5%;
   }
 
   .minimum {
     width: 90%;
-    height: 25%;
+    height: 10em;
     top: 37%;
     left: 5%;
   }

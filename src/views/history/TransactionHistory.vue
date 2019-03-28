@@ -155,13 +155,9 @@ export default class TransactionHistory extends Vue {
 
   .history-send {
     border: 1.5px solid #f87777;
-    padding-top: 5px;
-    padding-bottom: 5px;
   }
   .history-receive {
     border: 1.5px solid #7fc2ef;
-    padding-top: 5px;
-    padding-bottom: 5px;
   }
 
   .transaction {

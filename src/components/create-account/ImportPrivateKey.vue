@@ -3,7 +3,7 @@
 
     <p>秘密鍵を入力してください</p>
 
-    <textarea rows="2" cols="30" maxlength="66" v-model="privateKey"></textarea>
+    <input type="text" maxlength="66" class="app-input-text" v-model="privateKey">
 
     <button type="button" class="app-button" @click="importPrivateKey">インポート</button>
 
@@ -91,20 +91,17 @@ export default class ImportPrivateKey extends Vue {
 </script>
 
 <style scoped>
-@media screen and (max-width: 800px) {
-  #import-private-key {
-    text-align: center;
-  }
-
-  textarea {
-    display: inline;
-    background-color: #fbfcfd;
-    border: 0.1px solid #969ca3;
-    border-radius: 5px;
+@media screen and (max-width: 500px) {
+  input[type="text"] {
+    width: 80%;
   }
 
   button {
-    margin-top: 10px;
+    margin-top: 2em;
+  }
+
+  #import-private-key {
+    text-align: center;
   }
 }
 </style>

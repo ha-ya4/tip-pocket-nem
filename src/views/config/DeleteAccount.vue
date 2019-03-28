@@ -75,7 +75,7 @@ export default class DeleteAccount extends Vue {
 @media screen and (max-width: 800px) {
   .contents {
     text-align: center;
-    margin-top: 7%;
+    margin-top: 1.3em;
   }
 
   .delete-account-button {

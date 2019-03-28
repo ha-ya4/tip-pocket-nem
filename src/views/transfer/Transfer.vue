@@ -9,7 +9,7 @@
       <import-private-key @modalClose="modalClose"/>
     </modal-window>
 
-    <div v-if="displayQrReader">
+    <div class="qr-reader" v-if="displayQrReader">
       <qrcode-reader @passAddress="setAddressAndConditionallyTransfer"></qrcode-reader>
     </div>
 
@@ -30,20 +30,20 @@
 
     <!--アドレス入力欄-->
     <div class="address">
-      アドレス:
-      <input type="text" maxlength="45" class="app-input-text address-input" v-model="sendParams.address">
+      <span class="address-string">アドレス</span>:
+      <input type="text" maxlength="45" class="app-input-text" v-model="sendParams.address">
     </div>
 
     <!--数量入力欄-->
     <div class="amount">
-      数量:
-      <input type="text" maxlength="17" class="app-input-text amount-input" v-model="sendParams.amount">
+      <span class="amount-string">数</span>量:
+      <input type="text" maxlength="17" class="app-input-text" v-model="sendParams.amount">
     </div>
 
     <!--メッセージ入力欄-->
     <div class="message">
-      メッセージ:
-      <input type="text" maxlength="1024"  class="app-input-text message-input" v-model="sendParams.message">
+      <span class="message-string">メッセージ</span>:
+      <input type="text" maxlength="1024"  class="app-input-text" v-model="sendParams.message">
     </div>
 
     <single-checkbox
@@ -299,32 +299,27 @@ export default class Transfer extends Vue {
       const error = new InformationData('red', Result.Error, 'アドレスが入力されていません');
       this.information.push(error);
     }
-
-    // 先頭がNから始まる40文字か
-    const pattern = /^[n,N].{39}$/;
-    if (!pattern.test(this.sendParams.address.trim())) {
-      const error = new InformationData('red', Result.Error, 'アドレスの形式が間違っています');
-      this.information.push(error);
-    }
   }
 }
 </script>
 
 <style scoped>
-/*スマホ*/
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 500px) {
+  input[type="text"] {
+    width: 69%;
+  }
+
   #transfer {
-    line-height: 150%;
+    line-height: 160%;
     margin: 25px;
   }
 
   .address {
-    margin-top: 5px;
+    margin-top: 10px;
   }
 
-  .address-input {
-    margin-left: 14.5px;
-    width: 70%;
+  .address-string {
+    letter-spacing: 0.1em;
   }
 
   .amount {
@@ -332,17 +327,16 @@ export default class Transfer extends Vue {
     margin-bottom: 5px;
   }
 
-  .amount-input {
-    margin-left: 35.5px;
-    width: 70%;
+  .amount-string {
+    letter-spacing: 1.72em;
   }
 
   .message {
     margin-bottom: 10px;
   }
 
-  .message-input {
-    width: 70%;
+  .message-string {
+    font-size: 0.88em;
   }
 
   .radio-button {
@@ -351,7 +345,7 @@ export default class Transfer extends Vue {
   }
 
   .send-button, .qr-button  {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     text-align: center;
   }
 

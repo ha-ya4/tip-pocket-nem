@@ -124,7 +124,7 @@ a {
   .balance {
     background-color: transparent;
     display: block;
-    margin-top: 9px;
+    margin-top: 0.55em;
   }
 
   .balance-box {
@@ -133,7 +133,7 @@ a {
     top: 0;
     font-size: 20px;
     text-align: center;
-    height: 40px;
+    height: 2.2em;
     width: 100%;
     z-index: 999;
   }
@@ -144,7 +144,7 @@ a {
     color: rgb(243, 166, 22);
     position: relative;
     left: 43%;
-    bottom: 22px;
+    bottom: 1.65em;
     outline: none;
   }
 

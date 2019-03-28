@@ -85,7 +85,7 @@ export default class Wallet {
   }
 
   public getAllTransactionsPaginated(): Pageable<Transaction[]> {
-    return this.nem.getAllTransactionsPaginated('NDZG7CEBFVFQAEHRLIWFZV3XRTSTH7BZUPEPOI7J');
+    return this.nem.getAllTransactionsPaginated(this.address);
   }
 
   public getBalance(): Observable<number> {

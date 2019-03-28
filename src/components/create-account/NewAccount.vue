@@ -56,7 +56,7 @@ export default class NewAccount extends Vue {
 <style scoped>
 @media screen and (max-width: 800px) {
   #new-account {
-    font-size: 3vw;
+    font-size: 0.8em;
     text-align: center;
   }
 }

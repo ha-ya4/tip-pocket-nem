@@ -83,10 +83,6 @@ export default class DeleteAccount extends Vue {
 </script>
 
 <style scoped>
-  .account-privatekey {
-    font-size: 3.6vw;
-  }
-
   .content {
     margin-top: 15px;
     margin-bottom: 15px;
@@ -100,7 +96,6 @@ export default class DeleteAccount extends Vue {
 
   .privatekey-description {
     color: red;
-    font-size: 3.8vw;
   }
 
   .hyphen-button {
