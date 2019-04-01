@@ -72,7 +72,7 @@ export default class DeleteAccount extends Vue {
 
 <style scoped>
 /*スマホ*/
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 500px) {
   .contents {
     text-align: center;
     margin-top: 1.3em;

@@ -19,14 +19,13 @@ export default class App extends Vue {}
 
 
 <style>
-body {
-  font-size: 5vw;
-  margin: 0;
-  word-wrap: break-word;
-}
-
-/*スマホ*/
 @media screen and (max-width: 500px) {
+  body {
+    font-size: 4.8vw;
+    margin: 0;
+    word-wrap: break-word;
+  }
+
   hr {
     background-color: #bbb;
     border: none;
@@ -38,7 +37,7 @@ body {
     outline: none;
     border-style: none;
     border-radius: 2px;
-    padding: 7px;
+    padding: 8px;
   }
 
    .app-input-text {

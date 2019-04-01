@@ -25,15 +25,15 @@ import { SendParameters } from '@/types/data-class';
 
 NEMLibrary.bootstrap(NetworkTypes.MAIN_NET);
 
-const NODES: Array<{ protocol: 'http' | 'https' | undefined, domain: string, port: number }> = [
-  { protocol: 'http', domain: '176.9.68.110', port: 7890 },
-  { protocol: 'http', domain: '108.61.182.27', port: 7890 },
-  { protocol: 'http', domain: '104.238.161.61', port: 7890 },
-  { protocol: 'http', domain: '185.122.58.130', port: 7890 },
-  { protocol: 'http', domain: 'nempragt5.manitpro.be', port: 7890 },
-  { protocol: 'http', domain: 'asia.manitpro.be', port: 7890 },
-  { protocol: 'http', domain: 'rabanne.manitpro.be', port: 7890 },
-  { protocol: 'http', domain: '153.122.85.177', port: 7890 },
+const NODES: Array<{ protocol: 'https' | 'https' | undefined, domain: string, port: number }> = [
+  { protocol: 'https', domain: 'aqualife1.supernode.me', port: 7891 },
+  { protocol: 'https', domain: 'xemcat.supernode.me', port: 7891 },
+  { protocol: 'https', domain: 'snnode.supernode.me', port: 7891 },
+  { protocol: 'https', domain: 'nemlovely1.supernode.me', port: 7891 },
+  { protocol: 'https', domain: 'nemlovely2.supernode.me', port: 7891 },
+  { protocol: 'https', domain: 'nemstrunk.supernode.me', port: 7891 },
+  { protocol: 'https', domain: 'nemlovely6.supernode.me', port: 7891 },
+  { protocol: 'https', domain: 'mnbhsgwgamma.supernode.me', port: 7891 },
 ];
 
 export default class Nem {

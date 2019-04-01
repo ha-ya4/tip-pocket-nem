@@ -306,7 +306,7 @@ export default class Transfer extends Vue {
 <style scoped>
 @media screen and (max-width: 500px) {
   input[type="text"] {
-    width: 69%;
+    width: 66%;
   }
 
   #transfer {

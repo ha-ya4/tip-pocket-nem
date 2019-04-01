@@ -87,7 +87,7 @@ export default class Receive extends Vue {
 </script>
 
 <style scoped>
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 500px) {
   #receive {
     text-align: center;
     padding: 3%;

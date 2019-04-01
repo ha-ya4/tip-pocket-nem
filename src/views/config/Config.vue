@@ -177,7 +177,7 @@ export default class Config extends Vue {
 
 <style scoped>
 /*スマホ*/
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 500px) {
   input[type="text"] {
     width: 63%;
   }

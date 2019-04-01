@@ -134,7 +134,7 @@ export default class RadioButtonGroup extends Vue {
 
 <style scoped>
 /*スマホ*/
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 500px) {
   button {
     background-color: transparent;
     color: #959fad;

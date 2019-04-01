@@ -130,7 +130,7 @@ export default class TransactionHistory extends Vue {
 </script>
 
 <style scoped>
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 500px) {
   a {
     text-decoration: none;
     color: black;

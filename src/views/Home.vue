@@ -11,8 +11,8 @@
     </div>
 
     <div class="balance-box">
-      <span class="balance">{{ balance }}</span>
-      <button type="button" class="balance-button" @click="getBalance">更新</button>
+      <span clas="balance">{{ balance }}</span>
+      <span class="balance-button-span"><button type="button" class="balance-button" @click="getBalance">更新</button></span>
     </div>
 
     <div class="main-contents">
@@ -85,8 +85,8 @@ a {
   color: black;
 }
 
-/*PC*/
-@media screen and (min-width: 801px) {
+
+@media screen and (min-width: 501px) {
   a {
     border-bottom: 1px solid#c9ced4;
     border-left: 0.5px solid#c9ced4;
@@ -105,8 +105,7 @@ a {
   }
 }
 
-/*スマホ*/
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 500px) {
   #nav {
     background-color: #a5d1f4;
     text-align: center;
@@ -117,35 +116,38 @@ a {
   }
 
   a {
-    padding-top: 17px;
-    padding-bottom: 17px;
+    padding-top: 15px;
+    padding-bottom: 15px;
   }
 
   .balance {
     background-color: transparent;
-    display: block;
-    margin-top: 0.55em;
+    margin-right: -3em;
   }
 
   .balance-box {
     background-color: #a5d1f4;
     position: fixed;
     top: 0;
-    font-size: 20px;
+    height: 40px;
     text-align: center;
-    height: 2.2em;
     width: 100%;
     z-index: 999;
   }
 
+  /*うまく配置できなかったのでmarginで*/
   .balance-button {
     background-color: transparent;
     border-style: none;
     color: rgb(243, 166, 22);
-    position: relative;
-    left: 43%;
-    bottom: 1.65em;
+    margin-top: 14px;
+    margin-left: 34.5%;
+    margin-right: -45%;
     outline: none;
+  }
+
+  .balance-item {
+    margin: 3em;
   }
 
   .main-contents {

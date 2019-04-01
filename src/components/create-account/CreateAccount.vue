@@ -98,7 +98,7 @@ export default class CreateAccount extends Vue {
 </script>
 
 <style scoped>
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 500px) {
   #create-account {
     margin-top: 5%;
   }

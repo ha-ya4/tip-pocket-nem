@@ -17,9 +17,3 @@ new Vue({
   provide,
   render: (h) => h(App),
 }).$mount('#app');
-
-
-/*
-２．メッセージのテキストエリアの自動
-3.configのsendButtonのところv-for
-*/
