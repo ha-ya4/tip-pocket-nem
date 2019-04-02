@@ -1,6 +1,6 @@
 <template>
   <div id="send-radio-button">
-    <span class="config-item">送金ボタン:</span>
+    <span class="config-item">送金ボタン:</span>&nbsp;
       <span class="send-radio-item" v-for="label of sendRadio.label">
         <input
           type="radio"

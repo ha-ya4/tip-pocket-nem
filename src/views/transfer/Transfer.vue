@@ -319,7 +319,7 @@ export default class Transfer extends Vue {
   }
 
   .address-string {
-    letter-spacing: 0.1em;
+    letter-spacing: 0.42vw;
   }
 
   .amount {
@@ -328,7 +328,7 @@ export default class Transfer extends Vue {
   }
 
   .amount-string {
-    letter-spacing: 1.72em;
+    letter-spacing: 8vw;
   }
 
   .message {

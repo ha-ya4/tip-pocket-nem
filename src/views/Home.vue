@@ -11,8 +11,16 @@
     </div>
 
     <div class="balance-box">
-      <span clas="balance">{{ balance }}</span>
-      <span class="balance-button-span"><button type="button" class="balance-button" @click="getBalance">更新</button></span>
+      <div class="balance">{{ balance }}</div>
+
+      <button type="button" class="balance-button" @click="getBalance">
+        <span v-if="!updateBalance">
+          <img src="../assets/gray-circle.png" width="20px">
+        </span>
+        <span v-if="updateBalance">
+          <img src="../assets/gray-update.png" width="20px" class="update-balance">
+        </span>
+      </button>
     </div>
 
     <div class="main-contents">
@@ -38,6 +46,7 @@ export default class Home extends Vue {
   @Inject('WALLET_SERVICE') private wallet: Wallet;
 
   private balance: number = 0;
+  private updateBalance: boolean = false;
   private modalOpen: boolean = false;
 
   private created() {
@@ -67,8 +76,12 @@ export default class Home extends Vue {
   }
 
   private getBalance() {
+    this.updateBalance = true;
     if (this.wallet.address !== '') {
-      this.wallet.getBalance().subscribe((balance) => this.balance = balance );
+      this.wallet.getBalance().subscribe((balance) => {
+        this.balance = balance;
+        this.updateBalance = false;
+      });
     }
   }
 }
@@ -122,7 +135,8 @@ a {
 
   .balance {
     background-color: transparent;
-    margin-right: -3em;
+    margin-top: 12px;
+    text-align: center;
   }
 
   .balance-box {
@@ -130,7 +144,6 @@ a {
     position: fixed;
     top: 0;
     height: 40px;
-    text-align: center;
     width: 100%;
     z-index: 999;
   }
@@ -140,9 +153,9 @@ a {
     background-color: transparent;
     border-style: none;
     color: rgb(243, 166, 22);
-    margin-top: 14px;
-    margin-left: 34.5%;
-    margin-right: -45%;
+    position: absolute;
+    left: 90%;
+    bottom: 7px;
     outline: none;
   }
 
@@ -153,6 +166,19 @@ a {
   .main-contents {
     margin-top: 70px;
     margin-bottom: 75px;
+  }
+
+  .update-balance {
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotateZ(0deg);
+    }
+
+    100% {
+      transform: rotateZ(360deg);
+    }
   }
 }
 </style>

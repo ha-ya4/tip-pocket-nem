@@ -84,7 +84,7 @@ export default class Nem {
       parameters.message,
     );
 
-    const transactionHttp = new TransactionHttp();
+    const transactionHttp = new TransactionHttp(NODES);
 
     const signedTransaction: SignedTransaction = account.signTransaction(transferTransaction);
 
