@@ -31,12 +31,12 @@
     <!--アドレス入力欄-->
     <div class="address">
       <span class="address-string">アドレス</span>:
-      <input type="text" maxlength="45" class="app-input-text" v-model="sendParams.address">
+      <input type="text" maxlength="51" class="app-input-text" v-model="sendParams.address">
     </div>
 
     <!--数量入力欄-->
     <div class="amount">
-      <span class="amount-string">数</span>量:
+      <span class="amount-string">数量</span><span class="amount-colon">:</span>
       <input type="text" maxlength="17" class="app-input-text" v-model="sendParams.amount">
     </div>
 
@@ -319,12 +319,17 @@ export default class Transfer extends Vue {
   }
 
   .address-string {
-    letter-spacing: 0.42vw;
+    letter-spacing: 0.46vw;
   }
 
   .amount {
     margin-top: 5px;
     margin-bottom: 5px;
+  }
+
+  .amount-colon {
+    margin-left: -9%;
+    margin-right: 1.7%;
   }
 
   .amount-string {
@@ -342,6 +347,10 @@ export default class Transfer extends Vue {
   .radio-button {
     margin-top: 5px;
     margin-left: 5%;
+  }
+
+  .qr-button {
+    margin-top: 20px;
   }
 
   .send-button, .qr-button  {

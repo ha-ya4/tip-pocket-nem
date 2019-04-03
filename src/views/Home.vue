@@ -15,10 +15,10 @@
 
       <button type="button" class="balance-button" @click="getBalance">
         <span v-if="!updateBalance">
-          <img src="../assets/gray-circle.png" width="20px">
+          <img src="../assets/gray-circle.png" width="22px">
         </span>
         <span v-if="updateBalance">
-          <img src="../assets/gray-update.png" width="20px" class="update-balance">
+          <img src="../assets/gray-update.png" width="22px" class="update-balance">
         </span>
       </button>
     </div>
@@ -135,7 +135,7 @@ a {
 
   .balance {
     background-color: transparent;
-    margin-top: 12px;
+    margin-top: 11px;
     text-align: center;
   }
 
@@ -154,8 +154,8 @@ a {
     border-style: none;
     color: rgb(243, 166, 22);
     position: absolute;
-    left: 90%;
-    bottom: 7px;
+    left: 88%;
+    bottom: 4.7px;
     outline: none;
   }
 
