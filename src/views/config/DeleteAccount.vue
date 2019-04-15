@@ -71,28 +71,25 @@ export default class DeleteAccount extends Vue {
 </script>
 
 <style scoped>
-/*スマホ*/
-@media screen and (max-width: 500px) {
-  .contents {
-    text-align: center;
-    margin-top: 1.3em;
-  }
+.contents {
+  text-align: center;
+  margin-top: 1.3em;
+}
 
-  .delete-account-button {
-    background-color: transparent;
-    border-style: none;
-    outline: none;
-  }
+.delete-account-button {
+  background-color: transparent;
+  border-style: none;
+  outline: none;
+}
 
-  .delete-message {
-    text-align: center;
-    margin-top: 15%;
-  }
+.delete-message {
+  text-align: center;
+  margin-top: 15%;
+}
 
-  .select-button {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 15px;
-  }
+.select-button {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
 }
 </style>

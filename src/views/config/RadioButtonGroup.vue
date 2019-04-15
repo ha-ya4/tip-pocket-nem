@@ -133,29 +133,47 @@ export default class RadioButtonGroup extends Vue {
 </script>
 
 <style scoped>
+button {
+  background-color: transparent;
+  color: #959fad;
+  outline: none;
+  border-style: none;
+}
+
+/*ボタンの向きを右にする。*/
+.button-rotate-before {
+  transform: rotate(90deg);
+  transition: 0.05s;
+}
+
+/*ボタンクリックで向きを下に回転させる*/
+.button-rotate-after {
+  transform: rotate(180deg);
+  transition: 0.05s;
+}
+
+/*設定する項目とデフォルトの値*/
+.content-title {
+  margin-left: 5px;
+  margin-bottom: 3px;
+}
+
+/*設定する項目のそれぞれのラジオボタンとテキスト*/
+.radio-item {
+  margin-top: 8px;
+  margin-left: 25px;
+}
+
+@media screen and (min-width: 501px) {
+  input[type="text"] {
+  width: 94%;
+}
+}
+
 /*スマホ*/
 @media screen and (max-width: 500px) {
-  button {
-    background-color: transparent;
-    color: #959fad;
-    outline: none;
-    border-style: none;
-  }
-
   input[type="text"] {
     width: 80%;
-  }
-
-  /*ボタンの向きを右にする。*/
-  .button-rotate-before {
-    transform: rotate(90deg);
-    transition: 0.05s;
-  }
-
-  /*ボタンクリックで向きを下に回転させる*/
-  .button-rotate-after {
-    transform: rotate(180deg);
-    transition: 0.05s;
   }
 
   /*設定する項目とデフォルトの値*/

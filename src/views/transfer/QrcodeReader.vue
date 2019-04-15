@@ -1,12 +1,11 @@
 <template>
   <div id="qrcode-reader">
-    <div :class="{ failure: !QRreader }">
-      <qrcode-stream
-        :paused="paused"
-        @decode="onDecode"
-        @init="onInit">
-      </qrcode-stream>
-    </div>
+
+    <qrcode-reader
+      :paused="paused"
+      @decode="onDecode"
+      @init="onInit">
+    </qrcode-reader>
 
     <div class="error-message" v-if="errorMessage !== ''">{{ errorMessage }}</div>
   </div>
@@ -14,18 +13,16 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-
-import { QrcodeStream } from 'vue-qrcode-reader';
+import { QrcodeReader } from 'vue-qrcode-reader';
 
 @Component({
   components: {
-    QrcodeStream,
+    QrcodeReader,
   },
 })
 export default class QrReader extends Vue {
   private errorMessage: string = '';
   private paused: boolean = false;
-  private QRreader: boolean = false;
 
   private onDecode(decodedString: string) {
     this.paused = true;
@@ -41,11 +38,8 @@ export default class QrReader extends Vue {
   private async onInit(promise: any) {
     try {
       await promise;
-      this.QRreader = true;
       this.errorMessage = '';
     } catch (err) {
-      this.QRreader = false;
-
       if (err.name === 'NotAllowedError') {
         this.errorMessage = 'カメラへのアクセス権がありません';
         return;
@@ -68,9 +62,5 @@ export default class QrReader extends Vue {
 .error-message {
   color: red;
   text-align: center;
-}
-
-.failure {
-  margin-top: -50%
 }
 </style>

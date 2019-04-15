@@ -31,4 +31,10 @@ export default class Information extends Vue {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+@media screen and (min-width: 501px) {
+  .message-content {
+    font-size: 1.5em;
+  }
+}
 </style>

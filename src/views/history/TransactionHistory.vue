@@ -13,9 +13,9 @@
       />
     </modal-window>
 
-    <div class=transaction-history v-for="h of history">
+    <div class=transaction-history v-for="h of history" @click="modalContentOpen(h)">
       <div :class="{ 'history-send': isSend(h.sender()), 'history-receive': !isSend(h.sender()) }" >
-        <a @click="modalContentOpen(h)">
+        <a>
           <hr>
           {{ h.timeWindow().timeStamp | fDateTime }}
           <hr>
@@ -130,63 +130,67 @@ export default class TransactionHistory extends Vue {
 </script>
 
 <style scoped>
-@media screen and (max-width: 500px) {
-  a {
-    text-decoration: none;
-    color: black;
-  }
+a {
+  text-decoration: none;
+  color: black;
+}
 
+#transaction-history {
+  word-wrap: break-word;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+}
+
+.add-history-button {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.transaction-history {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.history-send {
+  border: 1.5px solid #f87777;
+}
+.history-receive {
+  border: 1.5px solid #7fc2ef;
+}
+
+.transaction {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.transaction-type {
+  color: rgba(231, 159, 2, 0.911);
+}
+
+.to-bottom {
+  position: fixed;
+  left: 87%;
+  bottom: 70px;
+}
+
+.to-bottom-button {
+  background-color: rgba(162, 230, 247, 0.63);
+  box-shadow: 0.5px 0.5px 1px 1px rgba(85, 145, 160, 0.4);
+  border-radius : 100%;
+  outline: none;
+  font-size: 22px;
+  border-style: none;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
+@media screen and (min-width: 501px) {
   #transaction-history {
-    word-wrap: break-word;
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%;
-  }
-
-  .add-history-button {
-    text-align: center;
-    margin-top: 5px;
-  }
-
-  .transaction-history {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-
-  .history-send {
-    border: 1.5px solid #f87777;
-  }
-  .history-receive {
-    border: 1.5px solid #7fc2ef;
-  }
-
-  .transaction {
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .transaction-type {
-    color: rgba(231, 159, 2, 0.911);
-  }
-
-  .to-bottom {
-    position: fixed;
-    left: 87%;
-    bottom: 70px;
-  }
-
-  .to-bottom-button {
-    background-color: rgba(162, 230, 247, 0.63);
-    box-shadow: 0.5px 0.5px 1px 1px rgba(85, 145, 160, 0.4);
-    border-radius : 100%;
-    outline: none;
-    font-size: 22px;
-    border-style: none;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    padding-left: 9px;
-    padding-right: 9px;
-  }
+  width: 100%;
+}
 }
 </style>

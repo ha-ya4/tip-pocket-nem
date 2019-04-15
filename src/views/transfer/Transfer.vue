@@ -304,9 +304,13 @@ export default class Transfer extends Vue {
 </script>
 
 <style scoped>
+@media screen and (min-width: 501px) {
+  
+}
+
 @media screen and (max-width: 500px) {
   input[type="text"] {
-    width: 66%;
+    width: 67%;
   }
 
   #transfer {
@@ -319,7 +323,8 @@ export default class Transfer extends Vue {
   }
 
   .address-string {
-    letter-spacing: 0.46vw;
+    font-size: 15px;
+    letter-spacing: 3.2px;
   }
 
   .amount {
@@ -328,12 +333,13 @@ export default class Transfer extends Vue {
   }
 
   .amount-colon {
-    margin-left: -9%;
-    margin-right: 1.7%;
+    margin-left: -26.5px;
+    margin-right: 5px;
   }
 
   .amount-string {
-    letter-spacing: 8vw;
+    font-size: 15px;
+    letter-spacing: 29.8px;
   }
 
   .message {
@@ -341,7 +347,7 @@ export default class Transfer extends Vue {
   }
 
   .message-string {
-    font-size: 0.88em;
+    font-size: 15px;
   }
 
   .radio-button {

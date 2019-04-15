@@ -176,6 +176,38 @@ export default class Config extends Vue {
 </script>
 
 <style scoped>
+.amount-limit {
+  margin-left: 5px;
+}
+
+.send-button {
+  margin-left: 5px;
+}
+
+.save-button {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 20px;
+}
+
+@media screen and (min-width: 501px) {
+  input[type="text"] {
+  width: 90%;
+}
+
+.group-title {
+  font-size: 1.5em;
+  margin-top: 40px;
+}
+
+.send-button {
+  margin-left: 5px;
+}
+
+.save-button {
+  text-align: center;
+}
+}
 /*スマホ*/
 @media screen and (max-width: 500px) {
   input[type="text"] {
@@ -186,21 +218,12 @@ export default class Config extends Vue {
     margin: 25px;
   }
 
-  .amount-limit {
-    margin-left: 5px;
-  }
-
   .group-title {
     font-size: 25px;
     margin-top: 30px;
   }
 
-  .send-button {
-    margin-left: 5px;
-  }
-
   .save-button {
-    text-align: center;
     font-size: 12px;
     margin-top: 20px;
   }
