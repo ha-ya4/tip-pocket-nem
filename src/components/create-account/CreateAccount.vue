@@ -98,62 +98,66 @@ export default class CreateAccount extends Vue {
 </script>
 
 <style scoped>
-@media screen and (max-width: 500px) {
-  #create-account {
-    margin-top: 5%;
+#create-account {
+  margin-top: 5%;
+}
+
+.error {
+  color: red;
+}
+
+.select {
+  text-align: center;
+  margin-top: 28%;
+}
+
+/*横スライドでけしたかったが保留*/
+.select-create-next {
+  display: none;
+  animation-name: select-create-next;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+@keyframes select-create-next {}
+
+.next-button {
+  margin: 15px;
+}
+
+.new-account {
+  animation-name: new-account;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+@keyframes new-account {
+  0% {
+    transform:translateX(1000px);
   }
 
-  .error {
-    color: red;
+  100% {
+    transform:translateX(0px);
+  }
+}
+
+.import-privatekey {
+  margin-top: 22%;
+  animation-name: import-privatekey;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+@keyframes import-privatekey {
+  0% {
+    transform:translateX(1000px);
   }
 
+  100% {
+    transform:translateX(0px);
+  }
+}
+
+@media screen and (min-width: 501px) {
   .select {
-    text-align: center;
-    margin-top: 28%;
-  }
-
-  /*横スライドでけしたかったが保留*/
-  .select-create-next {
-    display: none;
-    animation-name: select-create-next;
-    animation-duration: 0.3s;
-    animation-fill-mode: forwards;
-  }
-  @keyframes select-create-next {}
-
-  .next-button {
-    margin: 15px;
-  }
-
-  .new-account {
-    animation-name: new-account;
-    animation-duration: 0.3s;
-    animation-fill-mode: forwards;
-  }
-  @keyframes new-account {
-    0% {
-      transform:translateX(1000px);
-    }
-
-    100% {
-      transform:translateX(0px);
-    }
-  }
-
-  .import-privatekey {
-    margin-top: 22%;
-    animation-name: import-privatekey;
-    animation-duration: 0.3s;
-    animation-fill-mode: forwards;
-  }
-  @keyframes import-privatekey {
-    0% {
-      transform:translateX(1000px);
-    }
-
-    100% {
-      transform:translateX(0px);
-    }
+    margin-top: 15%;
   }
 }
 </style>

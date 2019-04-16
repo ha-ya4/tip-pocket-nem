@@ -87,13 +87,35 @@ export default class Receive extends Vue {
 </script>
 
 <style scoped>
-@media screen and (max-width: 500px) {
-  #receive {
-    text-align: center;
-    padding: 3%;
-    word-wrap: break-word;
-  }
+#receive {
+  text-align: center;
+  padding: 3%;
+  word-wrap: break-word;
+}
 
+.content {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.privatekey {
+  color: red;
+  padding: 5px;
+  border: 1px solid red;
+}
+
+.privatekey-description {
+  color: red;
+}
+
+.hyphen-button {
+  background-color: #b5def585;
+  color: red;
+  border-style: none;
+  outline: none;
+}
+
+@media screen and (max-width: 500px) {
   .account-privatekey {
     font-size: 3.6vw;
   }
@@ -104,21 +126,12 @@ export default class Receive extends Vue {
   }
 
   .privatekey {
-    color: red;
     padding: 5px;
     border: 1px solid red;
   }
 
   .privatekey-description {
-    color: red;
     font-size: 3.8vw;
-  }
-
-  .hyphen-button {
-    background-color: #b5def585;
-    color: red;
-    border-style: none;
-    outline: none;
   }
 }
 </style>

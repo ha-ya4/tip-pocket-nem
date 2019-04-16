@@ -59,41 +59,13 @@ export default class ModalWindow extends Vue {
   animation-duration: 0.3s;
 }
 @keyframes modal-fadein {
-from {
-  opacity: 0;
-}
+  from {
+    opacity: 0;
+  }
 
-to {
-  opacity: 1;
-}
-}
-
-.large {
-  width: 90%;
-  height: 75%;
-  top: 12%;
-  left: 5%;
-}
-
-.middle {
-  width: 90%;
-  height: 22em;
-  top: 20%;
-  left: 5%;
-}
-
-.small {
-  width: 90%;
-  height: 17em;
-  top: 28%;
-  left: 5%;
-}
-
-.minimum {
-  width: 90%;
-  height: 10em;
-  top: 37%;
-  left: 5%;
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-item {
@@ -119,12 +91,72 @@ to {
   animation-duration: 0.3s;
 }
 @keyframes overlay-fadein {
-from {
-  opacity: 0;
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.65;
+  }
 }
 
-to {
-  opacity: 0.65;
+@media screen and (min-width: 501px) {
+  .large {
+    width: 60%;
+    height: 75%;
+    top: 12%;
+    left: 20%;
+  }
+
+  .middle {
+    width: 45%;
+    height: 22em;
+    top: 20%;
+    left: 28%;
+  }
+
+  .small {
+    width: 50%;
+    height: 17em;
+    top: 28%;
+    left: 25%;
+  }
+
+  .minimum {
+    width: 40%;
+    height: 25%;
+    top: 37%;
+    left: 30%;
+  }
 }
+
+@media screen and (max-width: 500px) {
+  .large {
+    width: 90%;
+    height: 75%;
+    top: 12%;
+    left: 5%;
+  }
+
+  .middle {
+    width: 90%;
+    height: 22em;
+    top: 20%;
+    left: 5%;
+  }
+
+  .small {
+    width: 90%;
+    height: 17em;
+    top: 28%;
+    left: 5%;
+  }
+
+  .minimum {
+    width: 90%;
+    height: 10em;
+    top: 37%;
+    left: 5%;
+  }
 }
 </style>

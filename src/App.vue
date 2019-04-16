@@ -48,7 +48,7 @@ hr {
 
 @media screen and (min-width: 501px) {
   body {
-    font-size: 1vw;
+    font-size: 1.05vw;
     width: 70%;
     margin-left: 15%;
     margin-right: 15%;

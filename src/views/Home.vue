@@ -139,8 +139,8 @@ a {
     border-style: none;
     color: rgb(243, 166, 22);
     position: absolute;
-    left: 88%;
-    bottom: 5%;
+    left: 95%;
+    top: 26%;
     outline: none;
   }
 

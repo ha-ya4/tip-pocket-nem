@@ -91,17 +91,25 @@ export default class ImportPrivateKey extends Vue {
 </script>
 
 <style scoped>
-@media screen and (max-width: 500px) {
-  input[type="text"] {
-    width: 80%;
-  }
+input[type="text"] {
+  width: 80%;
+}
 
-  button {
-    margin-top: 2em;
+button {
+  margin-top: 2em;
+}
+
+#import-private-key {
+  text-align: center;
+}
+
+@media screen and (min-width: 501px) {
+  input[type="text"] {
+    width: 90%;
   }
 
   #import-private-key {
-    text-align: center;
+    margin-top: -1em;
   }
 }
 </style>

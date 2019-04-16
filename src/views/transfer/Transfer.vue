@@ -304,73 +304,73 @@ export default class Transfer extends Vue {
 </script>
 
 <style scoped>
-@media screen and (min-width: 501px) {
-  
+input[type="text"] {
+  width: 67%;
 }
 
-@media screen and (max-width: 500px) {
+#transfer {
+  line-height: 160%;
+  margin: 25px;
+}
+
+.address {
+  margin-top: 10px;
+}
+
+.address-string {
+  font-size: 15px;
+  letter-spacing: 3.2px;
+}
+
+.amount {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.amount-colon {
+  margin-left: -26.5px;
+  margin-right: 5px;
+}
+
+.amount-string {
+  font-size: 15px;
+  letter-spacing: 29.8px;
+}
+
+.message {
+  margin-bottom: 10px;
+}
+
+.message-string {
+  font-size: 15px;
+}
+
+.radio-button {
+  margin-top: 5px;
+  margin-left: 5%;
+}
+
+.qr-button {
+  margin-top: 20px;
+}
+
+.send-button, .qr-button  {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.send-button-none {
+  text-align: center;
+  color: red;
+}
+
+.send-radio-item {
+  margin-left: 10px;
+}
+
+@media screen and (min-width: 501px) {
   input[type="text"] {
-    width: 67%;
-  }
-
-  #transfer {
-    line-height: 160%;
-    margin: 25px;
-  }
-
-  .address {
-    margin-top: 10px;
-  }
-
-  .address-string {
-    font-size: 15px;
-    letter-spacing: 3.2px;
-  }
-
-  .amount {
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-
-  .amount-colon {
-    margin-left: -26.5px;
-    margin-right: 5px;
-  }
-
-  .amount-string {
-    font-size: 15px;
-    letter-spacing: 29.8px;
-  }
-
-  .message {
-    margin-bottom: 10px;
-  }
-
-  .message-string {
-    font-size: 15px;
-  }
-
-  .radio-button {
-    margin-top: 5px;
-    margin-left: 5%;
-  }
-
-  .qr-button {
-    margin-top: 20px;
-  }
-
-  .send-button, .qr-button  {
-    margin-bottom: 10px;
-    text-align: center;
-  }
-
-  .send-button-none {
-    text-align: center;
-    color: red;
-  }
-
-  .send-radio-item {
-    margin-left: 10px;
+    width: 87%;
   }
 }
 </style>
