@@ -115,12 +115,12 @@ import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 import ModalWindow from '@/components/ModalWindow.vue';
 import QrcodeReader from '@/views/transfer/QrcodeReader.vue';
 
-import LocalStorage from '@/ts/local-storage';
-import { InformationData, SendParameters } from '@/types/data-class';
-import { Result } from '@/types/enum';
-import { ModalSize } from '@/types/enum';
-import Wallet from '@/ts/wallet.ts';
-import { ConfigValue } from '@/types/data-class';
+import LocalStorage from '../../ts/local-storage';
+import { InformationData, SendParameters } from '../..//types/data-class';
+import { Result } from '../..//types/enum';
+import { ModalSize } from '../..//types/enum';
+import Wallet from '../..//ts/wallet';
+import { ConfigValue } from '../..//types/data-class';
 
 
 @Component({

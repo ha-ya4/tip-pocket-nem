@@ -35,9 +35,9 @@ import { TransferTransaction } from 'nem-library';
 
 import Filters from '@/filters.vue';
 
-import { AppAsset } from '@/views/history/data-class';
-import { TransactionInterface } from '@/ts/transaction-type';
-import Wallet from '@/ts/wallet.ts';
+import { AppAsset } from '../../views/history/data-class';
+import { TransactionInterface } from '../../ts/transaction-type';
+import Wallet from '../../ts/wallet';
 
 @Component({
   mixins: [Filters],

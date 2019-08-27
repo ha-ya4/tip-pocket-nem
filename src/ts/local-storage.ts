@@ -1,4 +1,4 @@
-import { AccountData, ConfigData } from '@/types/data-class.ts';
+import { AccountData, ConfigData } from '../types/data-class';
 
 export default class LocalStorage {
   public static getKey(walletName: string): { encryptedKey: string, iv: string } | null {

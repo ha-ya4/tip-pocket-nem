@@ -15,8 +15,8 @@ import {
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import Nem from '@/ts/nem';
-import { SendParameters } from '@/types/data-class';
+import Nem from '../ts/nem';
+import { SendParameters } from '../types/data-class';
 
 export default class Wallet {
   public address: string = '';

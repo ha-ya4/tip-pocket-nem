@@ -35,7 +35,7 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import CreateAccount from '@/components/create-account/CreateAccount.vue';
 
-import Wallet from '@/ts/wallet.ts';
+import Wallet from '../ts/wallet';
 
 @Component({
   components: {

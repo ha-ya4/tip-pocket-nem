@@ -1,6 +1,6 @@
 import { PlainMessage, EncryptedMessage } from 'nem-library';
 
-import { Result } from '@/types/enum';
+import { Result } from '../types/enum';
 
 export class AccountData {
   constructor(

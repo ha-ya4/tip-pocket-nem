@@ -21,7 +21,7 @@ import {
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { SendParameters } from '@/types/data-class';
+import { SendParameters } from '../types/data-class';
 
 NEMLibrary.bootstrap(NetworkTypes.MAIN_NET);
 

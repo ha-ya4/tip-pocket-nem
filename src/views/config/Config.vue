@@ -54,10 +54,10 @@ import RadioButtonGroup from '@/views/config/RadioButtonGroup.vue';
 import Information from '@/components/information.vue';
 import SendRadioButton from '@/components/SendRadioButton.vue';
 
-import Wallet from '@/ts/wallet.ts';
-import { InformationData } from '@/types/data-class';
-import { Result } from '@/types/enum';
-import { ConfigData, ConfigValue } from '@/types/data-class';
+import Wallet from '../../ts/wallet';
+import { InformationData } from '../../types/data-class';
+import { Result } from '../../types/enum';
+import { ConfigData, ConfigValue } from '../../types/data-class';
 
 @Component({
   components: {

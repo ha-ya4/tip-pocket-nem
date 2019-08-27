@@ -27,9 +27,9 @@ import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 import ModalWindow from '@/components/ModalWindow.vue';
 import PrivateKeyText from '@/components/PrivateKeyText.vue';
 
-import LocalStorage from '@/ts/local-storage';
-import { ModalSize } from '@/types/enum';
-import Wallet from '@/ts/wallet.ts';
+import LocalStorage from '../ts/local-storage';
+import { ModalSize } from '../types/enum';
+import Wallet from '../ts/wallet';
 
 @Component({
   components: {

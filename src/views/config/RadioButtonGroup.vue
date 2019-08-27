@@ -61,7 +61,7 @@
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
 
-import { ConfigValue } from '@/types/data-class';
+import { ConfigValue } from '../../types/data-class';
 
 @Component({})
 export default class RadioButtonGroup extends Vue {

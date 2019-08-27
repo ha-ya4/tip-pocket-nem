@@ -28,8 +28,8 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import ModalWindow from '@/components/ModalWindow.vue';
 
-import { ModalSize } from '@/types/enum';
-import Wallet from '@/ts/wallet.ts';
+import { ModalSize } from '../../types/enum';
+import Wallet from '../../ts/wallet';
 
 @Component({
   components: {

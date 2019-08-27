@@ -51,9 +51,9 @@ import Filters from '@/filters.vue';
 import ModalWindow from '@/components/ModalWindow.vue';
 import HistoryDetail from '@/views/history/HistoryDetail.vue';
 
-import Wallet from '@/ts/wallet';
-import { genarateTransactionType, TransactionInterface, Transfer, Multisig } from '@/ts/transaction-type';
-import { ModalSize } from '@/types/enum';
+import Wallet from '../../ts/wallet';
+import { genarateTransactionType, TransactionInterface, Transfer, Multisig } from '../../ts/transaction-type';
+import { ModalSize } from '../../types/enum';
 
 @Component({
   components: {
