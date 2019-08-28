@@ -38,7 +38,7 @@ hr {
   padding: 10px;
 }
 
-  .app-input-text {
+.app-input-text {
   border-style: none;
   font-size: 18px;
   border-bottom: 0.1px solid #7fc2ef;

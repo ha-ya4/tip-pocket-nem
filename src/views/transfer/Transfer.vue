@@ -62,10 +62,7 @@
 
     <!--送金ボタン-->
     <div class="send-button" v-if="sendButton">
-      <button
-        type="button"
-        class="app-button"
-        @click="send">送金</button>
+      <button type="button" class="app-button" @click="send">送金</button>
     </div>
 
     <!--送金ボタンのon,off設定ボタン-->
@@ -76,7 +73,6 @@
     <!--設定しておいた数量の中から選択できる-->
     数量：
     <div class="radio-button" v-for="(a, index) of userParams.amount">
-      <div>
         <input
           type="radio"
           name="amount-radio"
@@ -84,13 +80,11 @@
           :checked="a.defaultValue"
           @change="amountRadioChanged">
         <label>{{ a.value }}</label>
-      </div>
     </div>
 
     <!--設定しておいたメッセージの中から選択できる-->
     メッセージ：
     <div class="radio-button" v-for="(m, index) of userParams.message">
-      <div>
         <input
           type="radio"
           name="message-radio"
@@ -98,7 +92,6 @@
           :checked="m.defaultValue"
           @change="messageRadioChanged">
         <label>{{ m.value }}</label>
-      </div>
     </div>
 
   </div>
@@ -170,7 +163,7 @@ export default class Transfer extends Vue {
   };
 
   // 送金成功時にアドレス欄をリセットして成功のメッセージを表示する
-  private afterSendDisposal(response: NemAnnounceResult) {
+  private afterSendDisposal() {
     this.sendParams.address = '';
     const info = new InformationData('black', Result.Success, '送金に成功しました');
     this.information.push(info);
@@ -254,7 +247,12 @@ export default class Transfer extends Vue {
       message = this.wallet.createPlainMessage(this.sendParams.message);
     } else {
       // 暗号化
-      message = this.wallet.createEncryptoMessage(this.sendParams.message, privateKey, this.sendParams.address);
+      try {
+        message = this.wallet.createEncryptoMessage(this.sendParams.message, privateKey, this.sendParams.address);
+      } catch (err) {
+        this.sendError(err);
+        return;
+      }
     }
 
     // メッセージ暗号化のときに相手の公開鍵をアドレスから取得していてobservableで返ってくる
@@ -267,10 +265,14 @@ export default class Transfer extends Vue {
       }
 
       const parameters = new SendParameters(this.sendParams.amount, mess, this.sendParams.address);
-      this.wallet.send(privateKey, parameters).subscribe(
-        (res) => this.afterSendDisposal(res),
-        (err) => this.sendError(err),
-      );
+      try {
+        this.wallet.send(privateKey, parameters).subscribe(
+          (res) => this.afterSendDisposal(),
+          (err) => this.sendError(err),
+        );
+      } catch (err) {
+        this.sendError(err);
+      }
     });
   }
 

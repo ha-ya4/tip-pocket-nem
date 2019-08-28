@@ -12,12 +12,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { QrcodeStream, QrcodeDropZone } from 'vue-qrcode-reader';
+import { QrcodeStream } from 'vue-qrcode-reader';
 
 @Component({
   components: {
     QrcodeStream,
-    QrcodeDropZone,
   },
 })
 export default class QrcodeReader extends Vue {
