@@ -65,5 +65,6 @@ import Wallet from './ts/wallet';
     },
   },
 })
+
 export default class Filters extends Vue {}
 </script>

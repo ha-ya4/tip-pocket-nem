@@ -1,4 +1,5 @@
 <template>
+
   <div id="import-private-key">
 
     <p>秘密鍵を入力してください</p>
@@ -12,6 +13,7 @@
     <p v-if="success">インポートに成功しました!</p>
 
   </div>
+
 </template>
 
 <script lang="ts">

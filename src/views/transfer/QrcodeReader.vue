@@ -1,13 +1,13 @@
 <template>
+
   <div id="qrcode-reader">
 
-    <qrcode-stream
-      @decode="onDecode"
-      @init="onInit">
-    </qrcode-stream>
+    <qrcode-stream @decode="onDecode" @init="onInit" />
 
     <div class="error-message" v-if="errorMessage !== ''">{{ errorMessage }}</div>
+
   </div>
+
 </template>
 
 <script lang="ts">

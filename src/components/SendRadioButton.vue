@@ -1,16 +1,18 @@
 <template>
+
   <div id="send-radio-button">
+
     <span class="config-item">送金ボタン:</span>&nbsp;
-      <span class="send-radio-item" v-for="label of sendRadio.label">
-        <input
-          type="radio"
-          name="send-radi"
-          :value="label"
-          :checked="sendRadio.checked[label]"
-          @change="sendRadioChanged">
-        <label>{{ label }}</label>
-      </span>
+
+    <span class="send-radio-item" v-for="label of sendRadio.label">
+
+      <input type="radio" name="send-radi" :value="label" :checked="sendRadio.checked[label]" @change="sendRadioChanged">
+      <label>{{ label }}</label>
+
+    </span>
+
   </div>
+
 </template>
 
 <script lang="ts">

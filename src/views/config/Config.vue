@@ -1,5 +1,7 @@
 <template>
+
   <div id="config">
+
     <div class="group-title">アカウント</div>
     <hr>
 
@@ -11,39 +13,42 @@
 
     <!-- offにするとQR読み込みで即送金-->
     <div class="send-button">
+
       <send-radio-button @bool="sendRadioBool" />
+
     </div>
     <hr>
 
     <div class="amount-limit">
+
       <span class="config-item">送金上限:</span>&nbsp;
       <label>
+
         <input type="text" maxlength="10" class="app-input-text" v-model="amountLimit">
+
       </label>
+
     </div>
     <hr>
 
     <!-- 数量の登録とデフォルトを決めておける-->
-    <radio-button-group
-      ref="amountRadio"
-      :receivedItems="amount"
-      :maxLength="10">数量</radio-button-group>
+    <radio-button-group ref="amountRadio" :receivedItems="amount" :maxLength="10">数量</radio-button-group>
     <hr>
 
     <!-- メッセージの登録とデフォルトを決めておける-->
-    <radio-button-group
-      ref="messageRadio"
-      :receivedItems="message"
-      :maxLength="1024">メッセージ</radio-button-group>
+    <radio-button-group ref="messageRadio" :receivedItems="message" :maxLength="1024">メッセージ</radio-button-group>
     <hr>
 
     <Information :messages="information"/>
 
     <div class="save-button">
+
       <button type="button" class="app-button" @click="save">保存</button>
+
     </div>
 
   </div>
+
 </template>
 
 <script lang="ts">

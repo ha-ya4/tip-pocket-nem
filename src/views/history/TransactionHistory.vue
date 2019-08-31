@@ -1,20 +1,18 @@
 <template>
+
   <div id="transaction-history">
 
     <!--トランサクションの詳細を表示する-->
-    <modal-window
-      @modalClose="modalClose"
-      :open="modal.open"
-      :modalSize="modal.size"
-    >
-      <history-detail
-        @modalClose="modalClose"
-        :detail="historyDetail"
-      />
+    <modal-window @modalClose="modalClose" :open="modal.open" :modalSize="modal.size">
+
+      <history-detail @modalClose="modalClose" :detail="historyDetail" />
+
     </modal-window>
 
     <div class=transaction-history v-for="h of history" @click="modalContentOpen(h)">
+
       <div :class="{ 'history-send': isSend(h.sender()), 'history-receive': !isSend(h.sender()) }" >
+
         <a>
           <hr>
           {{ h.timeWindow().timeStamp | fDateTime }}
@@ -29,18 +27,25 @@
             {{ h.message() | fGetMessage(h.publicAccount(), wallet) | fStringShort }}
           <hr>
         </a>
+
       </div>
 
     </div>
 
     <div class="to-bottom" v-if="addHistory">
+
       <window-scroll-button :direction="windowScrollDirection" />
+
     </div>
 
     <div class="add-history-button" v-if="addHistory">
+
       <button type="button" class="app-button" @click="addHistoryButton">さらに表示</button>
+
     </div>
+
   </div>
+
 </template>
 
 <script lang="ts">

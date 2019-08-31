@@ -1,24 +1,16 @@
 <template>
+
   <div id="create-account">
 
-    <modal-window
-      :open="modalOpen"
-      :modalSize="modalSize"
-    >
+    <modal-window :open="modalOpen" :modalSize="modalSize">
+
       <!--アカウントの作成方法を選択する画面-->
       <div class="select" :class="{ 'select-create-next': pages !== 0 }">
-        <input type="radio"
-          name="radio-item"
-          value="new-account"
-          @change="radioChanged"
-        >
+
+        <input type="radio" name="radio-item" value="new-account" @change="radioChanged">
         <label>新規アカウント作成</label><br>
 
-        <input type="radio"
-          name="radio-item"
-          value="from-privatekey"
-          @change="radioChanged"
-        >
+        <input type="radio" name="radio-item" value="from-privatekey" @change="radioChanged">
         <label>秘密鍵をインポート</label><br>
 
         <span class="error" v-if="error">どちらか選択してください</span>
@@ -26,20 +18,27 @@
         <div class="next-button">
           <button type="button" class="app-button" @click="nextPage">次へ</button>
         </div>
+
       </div>
 
       <!--新規アカウントを作成-->
       <div v-if="pages === 1" :class="{ 'new-account': pages === 1 }">
+
         <new-account @modalClose="modalClose"/>
+
       </div>
 
       <!--秘密鍵をインポート-->
       <div v-if="pages === 2" :class="{ 'import-privatekey': pages === 2 }">
+
         <import-private-key @modalClose="modalClose"/>
+
       </div>
+
     </modal-window>
 
   </div>
+
 </template>
 
 <script lang="ts">

@@ -1,22 +1,27 @@
 <template>
+
   <div id="receive">
 
     <!--秘密鍵がローカルストレージになかった場合-->
     <modal-window :open="privateKeyModal.open" :modalSize="privateKeyModal.size">
+
       <p>秘密鍵が見つかりませんでした</p>
-      <import-private-key @modalClose="modalClose"/>
+      <import-private-key @modalClose="modalClose" />
+
     </modal-window>
 
     <qriously v-model="QR.text" :size="QR.size"></qriously>
 
     <!--walletアドレス-->
     <div class="content">
-      アドレス<br>{{ wallet.address }}
+      アドレス<br>
+      {{ wallet.address }}
     </div>
 
     <private-key-text :keyModalOpen="keyModalOpen"/>
 
   </div>
+
 </template>
 
 <script lang="ts">

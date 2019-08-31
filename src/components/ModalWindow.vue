@@ -1,4 +1,5 @@
 <template>
+
   <div id="modal-window">
 
     <!--親コンポーネントから渡されたbool値でモーダルの表示、非表示を切り替える-->
@@ -14,15 +15,18 @@
           'middle': modalSize === 1,
           'small': modalSize === 2,
           'minimum': modalSize === 3}">
+
         <div class="modal-item">
           <!--表示したいものを親コンポーネントからスロットに挿入-->
           <slot></slot>
         </div>
+
       </div>
 
     </div>
 
   </div>
+
 </template>
 
 <script lang="ts">

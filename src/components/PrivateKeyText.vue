@@ -1,28 +1,37 @@
 <template>
+
   <div id="private-key-text">
 
     <!--押すと秘密鍵を表示するボタン-->
     <div class="openPrivateKey">
+
       <button type="button" class="app-button" @click="displayPrivateKeyButton">
         {{ displayPrivateKeyButtonText }}
       </button>
+
     </div>
 
     <!--秘密鍵と説明-->
     <div class="content" v-if="displayPrivateKey">
+
       <p class="privatekey-description">
         秘密鍵は最も重要なものです。秘密鍵を忘れてしまったり、他人に知られてしまうと大事な資産を失うことになります。
         あなたが管理するもので、誰かが変わりに管理してはくれません。必ず紙に書いて厳重に保管してください。
       </p>
+
       <div class="privatekey">
+
         <span class="account-privatekey" v-if="!insHyphen">{{ privateKey }}</span>
         <span class="account-privatekey" v-if="insHyphen">{{ privateKey | fInsertHyphen }}</span>
+
       </div>
 
       <button type="button" class="hyphen-button" @click="insertHyphen">{{ hyphenButtonText }}</button>
+
     </div>
 
   </div>
+
 </template>
 
 <script lang="ts">

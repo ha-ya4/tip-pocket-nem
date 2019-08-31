@@ -1,24 +1,25 @@
 <template>
+
   <div id="transfer">
 
-    <modal-window
-      :open="modal.open"
-      :modalSize="modal.size"
-    >
+    <modal-window :open="modal.open" :modalSize="modal.size">
+
       <p style="text-align: center;">秘密鍵が見つかりませんでした</p>
       <import-private-key @modalClose="modalClose"/>
+
     </modal-window>
 
     <div class="qr-reader" v-if="displayQrReader">
+
       <qrcode-reader @passAddress="setAddressAndConditionallyTransfer"></qrcode-reader>
+
     </div>
 
     <!--QRリーダー起動ボタン-->
     <div class="qr-button">
-      <button
-        type="button"
-        class="app-button"
-        @click="qrButton">QR</button>
+
+      <button type="button" class="app-button" @click="qrButton">QR</button>
+
     </div>
 
     <!--送金ボタンをoffにしたときに表示する警告文-->
@@ -30,49 +31,54 @@
 
     <!--アドレス入力欄-->
     <div class="address">
+
       <span class="address-string">アドレス</span>:
       <input type="text" maxlength="51" class="app-input-text" v-model="sendParams.address">
+
     </div>
 
     <!--数量入力欄-->
     <div class="amount">
+
       <span class="amount-string">数量</span><span class="amount-colon">:</span>
       <input type="text" maxlength="17" class="app-input-text" v-model="sendParams.amount">
+
     </div>
 
     <!--メッセージ入力欄-->
     <div class="message">
+
       <span class="message-string">メッセージ</span>:
       <input type="text" maxlength="1024"  class="app-input-text" v-model="sendParams.message">
+
     </div>
 
-    <single-checkbox
-      @checkboxChanged="changeEncryptoMessage"
-      :item="encryptoMessage"
-      :name="'encmess'">
+    <single-checkbox @checkboxChanged="changeEncryptoMessage" :item="encryptoMessage" :name="'encmess'">
       メッセージ暗号化
     </single-checkbox>
 
-    <single-checkbox
-      @checkboxChanged="changeAmountLimitNone"
-      :item="amountLimit.none"
-      :name="'limitnone'">
+    <single-checkbox @checkboxChanged="changeAmountLimitNone" :item="amountLimit.none" :name="'limitnone'">
       送金上限なし
     </single-checkbox>
 
     <!--送金ボタン-->
     <div class="send-button" v-if="sendButton">
+
       <button type="button" class="app-button" @click="send">送金</button>
+
     </div>
 
     <!--送金ボタンのon,off設定ボタン-->
     <div>
+
       <send-radio-button @bool="sendRadioBool" />
+
     </div>
 
     <!--設定しておいた数量の中から選択できる-->
     数量：
     <div class="radio-button" v-for="(a, index) of userParams.amount">
+
         <input
           type="radio"
           name="amount-radio"
@@ -80,11 +86,13 @@
           :checked="a.defaultValue"
           @change="amountRadioChanged">
         <label>{{ a.value }}</label>
+
     </div>
 
     <!--設定しておいたメッセージの中から選択できる-->
     メッセージ：
     <div class="radio-button" v-for="(m, index) of userParams.message">
+
         <input
           type="radio"
           name="message-radio"
@@ -92,11 +100,13 @@
           :checked="m.defaultValue"
           @change="messageRadioChanged">
         <label>{{ m.value }}</label>
+
     </div>
 
     <window-scroll-button :direction="windowScrollDirection" />
 
   </div>
+
 </template>
 
 <script lang="ts">

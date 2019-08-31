@@ -1,17 +1,25 @@
 <template>
+
   <div id="radio-button-group">
+
     <div class="content-title">
+
       <!--v-bind:classでthis.expansionがfalseならbefore,trueならafterにclassを切り替える-->
       <button
         :class="{ 'button-rotate-before': !expansion,  'button-rotate-after': expansion }"
-        @click="radioExpansion"><font size="4"> &#9651;</font></button>
+        @click="radioExpansion"
+      >
+        <font size="4"> &#9651;</font>
+      </button>
 
       <slot></slot>: {{ defaultValue }}
+
     </div>
 
     <div v-if="expansion">
 
       <div class="radio-item">
+
         <input
           :checked="none.defaultValue"
           type="radio"
@@ -20,9 +28,11 @@
           @change="radioChanged"
         >
         <label>{{ none.value }}</label>
+
       </div>
 
       <div class="radio-item">
+
         <input
           :checked="value1.defaultValue"
           type="radio"
@@ -31,9 +41,11 @@
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value1.value">
+
       </div>
 
       <div class="radio-item">
+
         <input
           :checked="value2.defaultValue"
           type="radio"
@@ -42,9 +54,11 @@
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value2.value">
+
       </div>
 
-      <p class="radio-item">
+      <div class="radio-item">
+
         <input
           :checked="value3.defaultValue"
           type="radio"
@@ -53,9 +67,13 @@
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value3.value">
-      </p>
+
+      </div>
+
     </div>
+
   </div>
+
 </template>
 
 <script lang="ts">

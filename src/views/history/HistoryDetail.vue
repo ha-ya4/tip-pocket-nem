@@ -1,4 +1,5 @@
 <template>
+
   <div id="history-detail" v-if="detail">
 
       <hr>
@@ -23,10 +24,13 @@
       <hr>
 
     <div class="close-button">
+
       <button type="button" class="app-button" @click="modalClose">閉じる</button>
+
     </div>
 
   </div>
+
 </template>
 
 <script lang="ts">

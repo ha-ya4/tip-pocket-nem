@@ -1,26 +1,29 @@
 <template>
+
   <div id="delete-account">
 
     <button type="button" class="delete-account-button" @click="modalOpen">アカウント削除</button>
 
     <modal-window @modalClose="modalClose" :open="modal.open" :modalSize="modal.size">
+
       <div class="contents" v-if="!done">
         本当に削除しますか？
 
         <div class="select-button">
-          <button type="button" class="app-button" @click="deleteAccount">
-          はい
-          </button>
-          <button type="button" class="app-button" @click="modalClose">
-          いいえ
-          </button>
+
+          <button type="button" class="app-button" @click="deleteAccount">はい</button>
+          <button type="button" class="app-button" @click="modalClose">いいえ</button>
+
         </div>
+
       </div>
 
       <div class="delete-message" v-if="done">アカウントを削除しました</div>
+
     </modal-window>
 
   </div>
+
 </template>
 
 <script lang="ts">

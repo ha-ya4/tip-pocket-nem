@@ -1,15 +1,18 @@
 <template>
+
   <div id="single-checkbox">
-    <input
-      type="checkbox"
-      :id="name + 'checkbox'"
-      @change="changed">
+
+    <input type="checkbox" :id="name + 'checkbox'" @change="changed">
     <label :for="name + 'checkbox'" class="label">
+
       <span :class="{ 'not-checked': !item }">
         <slot></slot>
       </span>
+
     </label>
+
   </div>
+
 </template>
 
 <script lang="ts">

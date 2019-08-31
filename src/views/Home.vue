@@ -1,33 +1,44 @@
 <template>
+
   <div id="home">
 
     <create-account @modalClose="modalClose" :modalOpen="modalOpen"/>
 
     <div id="nav">
+
       <router-link to="/transfer">チップ</router-link>
       <router-link to="/history">履歴</router-link>
       <router-link to="/receive">入金</router-link>
       <router-link to="/config">設定</router-link>
+
     </div>
 
     <div class="balance-box">
+
       <div class="balance">{{ balance }}</div>
 
       <button type="button" class="balance-button" @click="getBalance">
+
         <span v-if="!updateBalance">
           <img src="../assets/gray-circle.png" width="22px">
         </span>
+
         <span v-if="updateBalance">
           <img src="../assets/gray-update.png" width="22px" class="update-balance">
         </span>
+
       </button>
+
     </div>
 
     <div class="main-contents">
+
       <router-view/>
+
     </div>
 
   </div>
+
 </template>
 
 <script lang="ts">

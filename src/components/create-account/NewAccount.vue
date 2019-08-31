@@ -1,17 +1,20 @@
 <template>
+
   <div id="new-account">
+
     <p class="complete">{{ newAccountText }}</p><br>
     アドレス<br>{{ wallet.address }}
 
     <p><private-key-text/></p>
 
     <div class="button" v-if="modalCloseButton">
-      <button type="button" class="app-button" @click="modalClose">
-        閉じる
-      </button>
+
+      <button type="button" class="app-button" @click="modalClose">閉じる</button>
+
     </div>
 
   </div>
+
 </template>
 
 <script lang="ts">
