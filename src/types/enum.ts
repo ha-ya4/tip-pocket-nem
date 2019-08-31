@@ -9,3 +9,8 @@ export enum Result {
   Success = 'success',
   Error = 'error',
 }
+
+export enum ScrollDirection {
+  Top = '↑',
+  Bottom = '↓',
+}

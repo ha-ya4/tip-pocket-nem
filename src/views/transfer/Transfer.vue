@@ -94,12 +94,14 @@
         <label>{{ m.value }}</label>
     </div>
 
+    <window-scroll-button :direction="windowScrollDirection" />
+
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Inject } from 'vue-property-decorator';
-import { PlainMessage, EncryptedMessage, NemAnnounceResult } from 'nem-library';
+import { PlainMessage, EncryptedMessage } from 'nem-library';
 
 import SendRadioButton from '@/components/SendRadioButton.vue';
 import SingleCheckbox from '@/views/transfer/SingleCheckbox.vue';
@@ -107,13 +109,13 @@ import Information from '@/components/information.vue';
 import ImportPrivateKey from '@/components/create-account/ImportPrivateKey.vue';
 import ModalWindow from '@/components/ModalWindow.vue';
 import QrcodeReader from '@/views/transfer/QrcodeReader.vue';
+import WindowScrollButton from '@/components/WindowScrollButton.vue';
 
 import LocalStorage from '../../ts/local-storage';
 import { InformationData, SendParameters } from '../..//types/data-class';
-import { Result } from '../..//types/enum';
-import { ModalSize } from '../..//types/enum';
+import { ModalSize, Result, ScrollDirection } from '../../types/enum';
 import Wallet from '../..//ts/wallet';
-import { ConfigValue } from '../..//types/data-class';
+import { ConfigValue } from '../../types/data-class';
 
 
 @Component({
@@ -124,6 +126,7 @@ import { ConfigValue } from '../..//types/data-class';
     ImportPrivateKey,
     ModalWindow,
     QrcodeReader,
+    WindowScrollButton,
   },
 })
 export default class Transfer extends Vue {
@@ -133,6 +136,7 @@ export default class Transfer extends Vue {
   private displayQrReader: boolean = false;
   private information: InformationData[] = [];
   private encryptoMessage: boolean = false;
+  private windowScrollDirection: ScrollDirection = ScrollDirection.Top;
 
   private amountLimit: { limit: number, none: boolean } = {
     limit: this.$store.state.Config.amountLimit,

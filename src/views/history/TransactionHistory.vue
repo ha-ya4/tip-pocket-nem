@@ -34,7 +34,7 @@
     </div>
 
     <div class="to-bottom" v-if="addHistory">
-      <button type="button" class="to-bottom-button" @click="toBottom">↓</button>
+      <window-scroll-button :direction="windowScrollDirection" />
     </div>
 
     <div class="add-history-button" v-if="addHistory">
@@ -50,15 +50,17 @@ import { Transaction, Pageable } from 'nem-library';
 import Filters from '@/filters.vue';
 import ModalWindow from '@/components/ModalWindow.vue';
 import HistoryDetail from '@/views/history/HistoryDetail.vue';
+import WindowScrollButton from '@/components/WindowScrollButton.vue';
 
 import Wallet from '../../ts/wallet';
 import { genarateTransactionType, TransactionInterface, Transfer, Multisig } from '../../ts/transaction-type';
-import { ModalSize } from '../../types/enum';
+import { ModalSize, ScrollDirection } from '../../types/enum';
 
 @Component({
   components: {
     ModalWindow,
     HistoryDetail,
+    WindowScrollButton,
   },
 
   mixins: [Filters],
@@ -72,12 +74,14 @@ export default class TransactionHistory extends Vue {
   private history: TransactionInterface[] = [];
   private historyDetail: TransactionInterface | null = null;
   private latestTransactionHash: string;
+  private windowScrollDirection: ScrollDirection = ScrollDirection.Bottom;
 
   private modal: { open: boolean, size: ModalSize } = {
     open: false,
     size: ModalSize.Large,
   };
 
+  // トランザクション履歴を取得する
   private created() {
     this.pagebleHistory.subscribe((history) => {
       for (const h of history) {
@@ -118,13 +122,6 @@ export default class TransactionHistory extends Vue {
 
   private modalClose() {
     this.modal.open = false;
-  }
-
-  private toBottom() {
-    const el = document.getElementById('transaction-history');
-    if (el) {
-      window.scroll(0, el.clientHeight);
-    }
   }
 }
 </script>
@@ -167,25 +164,6 @@ a {
 
 .transaction-type {
   color: rgba(231, 159, 2, 0.911);
-}
-
-.to-bottom {
-  position: fixed;
-  left: 87%;
-  bottom: 70px;
-}
-
-.to-bottom-button {
-  background-color: rgba(162, 230, 247, 0.63);
-  box-shadow: 0.5px 0.5px 1px 1px rgba(85, 145, 160, 0.4);
-  border-radius : 100%;
-  outline: none;
-  font-size: 22px;
-  border-style: none;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  padding-left: 9px;
-  padding-right: 9px;
 }
 
 @media screen and (min-width: 501px) {
