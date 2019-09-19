@@ -3,13 +3,13 @@
   <div id="config">
 
     <div class="group-title">アカウント</div>
-    <hr>
+    <hr class="line">
 
     <delete-account/>
-    <hr>
+    <hr class="line">
 
     <div class="group-title">アプリ設定</div>
-    <hr>
+    <hr class="line">
 
     <!-- offにするとQR読み込みで即送金-->
     <div class="send-button">
@@ -17,7 +17,7 @@
       <send-radio-button @bool="sendRadioBool" />
 
     </div>
-    <hr>
+    <hr class="line">
 
     <div class="amount-limit">
 
@@ -29,15 +29,15 @@
       </label>
 
     </div>
-    <hr>
+    <hr class="line">
 
     <!-- 数量の登録とデフォルトを決めておける-->
     <radio-button-group ref="amountRadio" :receivedItems="amount" :maxLength="10">数量</radio-button-group>
-    <hr>
+    <hr class="line">
 
     <!-- メッセージの登録とデフォルトを決めておける-->
     <radio-button-group ref="messageRadio" :receivedItems="message" :maxLength="1024">メッセージ</radio-button-group>
-    <hr>
+    <hr class="line">
 
     <Information :messages="information"/>
 

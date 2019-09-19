@@ -34,6 +34,7 @@
 
       <span class="address-string">アドレス</span>:
       <input type="text" maxlength="51" class="app-input-text" v-model="sendParams.address">
+      <hr class="underline">
 
     </div>
 
@@ -42,6 +43,7 @@
 
       <span class="amount-string">数量</span><span class="amount-colon">:</span>
       <input type="text" maxlength="17" class="app-input-text" v-model="sendParams.amount">
+      <hr class="underline">
 
     </div>
 
@@ -50,6 +52,7 @@
 
       <span class="message-string">メッセージ</span>:
       <input type="text" maxlength="1024"  class="app-input-text" v-model="sendParams.message">
+      <hr class="underline">
 
     </div>
 

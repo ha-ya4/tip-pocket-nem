@@ -28,6 +28,7 @@
           @change="radioChanged"
         >
         <label>{{ none.value }}</label>
+        <hr class="underline">
 
       </div>
 
@@ -41,6 +42,7 @@
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value1.value">
+        <hr class="underline">
 
       </div>
 
@@ -54,6 +56,7 @@
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value2.value">
+        <hr class="underline">
 
       </div>
 
@@ -67,6 +70,7 @@
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value3.value">
+        <hr class="underline">
 
       </div>
 

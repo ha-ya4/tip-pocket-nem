@@ -14,18 +14,18 @@
       <div :class="{ 'history-send': isSend(h.sender()), 'history-receive': !isSend(h.sender()) }" >
 
         <a>
-          <hr>
+          <hr class="line">
           {{ h.timeWindow().timeStamp | fDateTime }}
-          <hr>
+          <hr class="line">
           <span class="transaction-type">{{ h.type() }}</span>
-          <hr>
+          <hr class="line">
           sender:<br>{{ h.sender() }}
-          <hr>
+          <hr class="line">
           quantity: {{ h.quantity() / divisibility | fAddOperator(isSend(h.sender())) }}
-          <hr>
+          <hr class="line">
             message:<br>
             {{ h.message() | fGetMessage(h.publicAccount(), wallet) | fStringShort }}
-          <hr>
+          <hr class="line">
         </a>
 
       </div>

@@ -2,26 +2,26 @@
 
   <div id="history-detail" v-if="detail">
 
-      <hr>
+      <hr class="line">
       {{ detail.timeWindow().timeStamp | fDateTime }}
-      <hr>
+      <hr class="line">
       <span class="transaction-type">{{ detail.type() }}</span>
-      <hr>
+      <hr class="line">
       height: {{ detail.height() }}
-      <hr>
+      <hr class="line">
       hash:<br>{{ detail.hash() }}
-      <hr>
+      <hr class="line">
       sender:<br>{{ detail.sender() }}
-      <hr>
+      <hr class="line">
       recipient:<br>{{ detail.recipient() }}
-      <hr>
+      <hr class="line">
       quantity: {{ detail.quantity() / divisibility | fAddOperator(isSend(detail.sender())) }}
-      <hr>
+      <hr class="line">
       fee: {{ detail.fee() / divisibility  }}
-      <hr>
-      message:<br>
+      <hr class="line">
+      message:<br class="line">
       {{ detail.message() | fGetMessage(detail.publicAccount(), wallet) }}
-      <hr>
+      <hr class="line">
 
     <div class="close-button">
 
