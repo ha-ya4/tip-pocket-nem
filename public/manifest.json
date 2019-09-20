@@ -13,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "./transfer",
+  "start_url": ".",
   "display": "browser",
   "orientation": "portrait",
   "background_color": "#000000",

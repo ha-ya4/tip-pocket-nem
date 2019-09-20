@@ -237,6 +237,9 @@ export default class Transfer extends Vue {
   // qrで読み取ったアドレスを受け取る。sendButtonがFALSEならそのまま送金
   private setAddressAndConditionallyTransfer(address: string) {
     this.sendParams.address = address;
+    this.displayQrReader = false;
+    const windowTop = 0;
+    window.scroll(0, windowTop);
 
     if (!this.sendButton) {
       this.send();
@@ -245,6 +248,8 @@ export default class Transfer extends Vue {
 
   private send() {
     this.information = [];
+    const windowTop = 0;
+    window.scroll(0, windowTop);
     this.validation();
     // errorがあればリターン
     const validationResult = this.information.some((info) => info.result === Result.Error);

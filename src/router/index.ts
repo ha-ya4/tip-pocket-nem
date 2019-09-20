@@ -9,7 +9,6 @@ import Receive from '@/views/Receive.vue';
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '/transfer',

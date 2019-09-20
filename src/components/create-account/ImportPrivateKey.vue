@@ -5,6 +5,7 @@
     <p>秘密鍵を入力してください</p>
 
     <input type="text" maxlength="66" class="app-input-text" v-model="privateKey">
+    <hr class="underline">
 
     <button type="button" class="app-button" @click="importPrivateKey">インポート</button>
 

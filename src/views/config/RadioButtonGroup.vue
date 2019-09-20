@@ -28,7 +28,6 @@
           @change="radioChanged"
         >
         <label>{{ none.value }}</label>
-        <hr class="underline">
 
       </div>
 
