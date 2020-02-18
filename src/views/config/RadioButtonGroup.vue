@@ -23,8 +23,7 @@
         <input
           :checked="none.defaultValue"
           type="radio"
-          name="radio-item"
-          value="none"
+          :name="name + '-radio1'"
           @change="radioChanged"
         >
         <label>{{ none.value }}</label>
@@ -36,8 +35,7 @@
         <input
           :checked="value1.defaultValue"
           type="radio"
-          name="radio-item"
-          value="item1"
+          :name="name + '-radio2'"
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value1.value">
@@ -50,8 +48,7 @@
         <input
           :checked="value2.defaultValue"
           type="radio"
-          name="radio-item"
-          value="item2"
+          :name="name + '-radio3'"
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value2.value">
@@ -64,8 +61,7 @@
         <input
           :checked="value3.defaultValue"
           type="radio"
-          name="radio-item"
-          value="item3"
+          :name="name + '-radio4'"
           @change="radioChanged"
         >
         <input type="text" :maxlength="maxLength" class="app-input-text" v-model="value3.value">
@@ -88,6 +84,7 @@ import { ConfigValue } from '../../types/data-class';
 export default class RadioButtonGroup extends Vue {
   @Prop() private receivedItems: ConfigValue[];
   @Prop() private maxLength: number;
+  @Prop() private name: string;
 
   private expansion: boolean = false;
   private none: ConfigValue = this.receivedItems[0];
@@ -121,18 +118,18 @@ export default class RadioButtonGroup extends Vue {
     items.forEach((item) => item.defaultValue = false);
 
     // target.valueの値を取得してifで対応する項目のdefaultValueをtrueに切り替え
-    const value = event.target.value;
-    switch (value) {
-      case 'none':
+    const name = event.target.name;
+    switch (name) {
+      case this.name + '-radio1':
         this.none.defaultValue = true;
         break;
-      case 'item1':
+      case this.name + '-radio2':
         this.value1.defaultValue = true;
         break;
-      case 'item2':
+      case this.name + '-radio3':
         this.value2.defaultValue = true;
         break;
-      case 'item3':
+      case this.name + '-radio4':
         this.value3.defaultValue = true;
         break;
       default:
@@ -144,11 +141,7 @@ export default class RadioButtonGroup extends Vue {
   }
 
   private radioExpansion() {
-    if (this.expansion) {
-      this.expansion = false;
-    } else if (!this.expansion) {
-      this.expansion = true;
-    }
+    this.expansion ? this.expansion = false : this.expansion = true;
   }
 }
 </script>

@@ -32,11 +32,11 @@
     <hr class="line">
 
     <!-- 数量の登録とデフォルトを決めておける-->
-    <radio-button-group ref="amountRadio" :receivedItems="amount" :maxLength="10">数量</radio-button-group>
+    <radio-button-group ref="amountRadio" :receivedItems="amount" :maxLength="10" :name="'message'">数量</radio-button-group>
     <hr class="line">
 
     <!-- メッセージの登録とデフォルトを決めておける-->
-    <radio-button-group ref="messageRadio" :receivedItems="message" :maxLength="1024">メッセージ</radio-button-group>
+    <radio-button-group ref="messageRadio" :receivedItems="message" :maxLength="1024" :name="'amount'">メッセージ</radio-button-group>
     <hr class="line">
 
     <Information :messages="information"/>
@@ -78,11 +78,14 @@ export default class Config extends Vue {
   private sendButton: boolean = this.$store.state.Config.sendButton;
   // 送金量の上限を決めておける
   private amountLimit: number = this.$store.state.Config.amountLimit;
+
   // 予め登録しておいて送金画面で選択することができる数量
   private amount: ConfigValue[] = this.$store.state.Config.amount;
   // 予め登録しておいて送金画面で選択することができるメッセージ
   private message: ConfigValue[] = this.$store.state.Config.message;
+
   private information: InformationData[] = [];
+
 
   private sendRadioBool(bool: boolean) {
     this.sendButton = bool;
